@@ -1,74 +1,57 @@
 import router from './router'
-import store from './store'
-import { Message } from 'element-ui'
-import NProgress from 'nprogress' // progress bar
-import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
-import getPageTitle from '@/utils/get-page-title'
+import { store } from '@/store/index'
+import getPageTitle from '@/utils/page'
+let asyncRouterFlag = 0
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+const whiteList = ['Login', 'Init']
 
-const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
+const getRouter = async() => {
+  await store.dispatch('router/SetAsyncRouter')
+  await store.dispatch('user/GetUserInfo')
+  const asyncRouters = store.getters['router/asyncRouters']
+  asyncRouters.forEach(asyncRouter => {
+    router.addRoute(asyncRouter)
+  })
+}
 
 router.beforeEach(async(to, from, next) => {
-  // start progress bar
-  NProgress.start()
-
-  // set page title
+  const token = store.getters['user/token']
+  // 在白名单中的判断情况
   document.title = getPageTitle(to.meta.title)
-
-  // determine whether the user has logged in
-  const hasToken = getToken()
-
-  if (hasToken) {
-    if (to.path === '/login') {
-      // if is logged in, redirect to the home page
-      next({ path: '/' })
-      NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
+  if (whiteList.indexOf(to.name) > -1) {
+    if (token) {
+      if (!asyncRouterFlag) {
+        asyncRouterFlag++
+        await getRouter()
+      }
+      next({ name: store.getters['user/userInfo'].authority.defaultRouter })
     } else {
-      // determine whether the user has obtained his permission roles through getInfo
-      const hasRoles = store.getters.roles && store.getters.roles.length > 0
-      if (hasRoles) {
-        next()
+      next()
+    }
+  } else {
+    // 不在白名单中并且已经登陆的时候
+    if (token) {
+      // 添加flag防止多次获取动态路由和栈溢出
+      if (!asyncRouterFlag) {
+        asyncRouterFlag++
+        await getRouter()
+        next({ ...to, replace: true })
       } else {
-        try {
-          // get user info
-          // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          const { roles } = await store.dispatch('user/getInfo')
-
-          // generate accessible routes map based on roles
-          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-
-          // dynamically add accessible routes
-          router.addRoutes(accessRoutes)
-
-          // hack method to ensure that addRoutes is complete
-          // set the replace: true, so the navigation will not leave a history record
-          next({ ...to, replace: true })
-        } catch (error) {
-          // remove token and go to login page to re-login
-          await store.dispatch('user/resetToken')
-          Message.error(error || 'Has Error')
-          next(`/login?redirect=${to.path}`)
-          NProgress.done()
+        if (to.matched.length) {
+          next()
+        } else {
+          next({ path: '/layout/404' })
         }
       }
     }
-  } else {
-    /* has no token*/
-
-    if (whiteList.indexOf(to.path) !== -1) {
-      // in the free login whitelist, go directly
-      next()
-    } else {
-      // other pages that do not have permission to access are redirected to the login page.
-      next(`/login?redirect=${to.path}`)
-      NProgress.done()
+    // 不在白名单中并且未登陆的时候
+    if (!token) {
+      next({
+        name: 'Login',
+        query: {
+          redirect: document.location.hash
+        }
+      })
     }
   }
-})
-
-router.afterEach(() => {
-  // finish progress bar
-  NProgress.done()
 })
