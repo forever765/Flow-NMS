@@ -61,7 +61,8 @@
               type="primary"
               style="width: 46%; margin-left: 28%"
               @click="submitForm"
-              >登 录</el-button
+              :loading="isLogining"
+              >{{isLogining?'登 录 中':'登 录'}}</el-button
             >
           </el-form-item>
         </el-form>
@@ -97,6 +98,7 @@ export default {
       }
     }
     return {
+      isLogining: false,
       curYear: 0,
       lock: 'lock',
       loginForm: {
@@ -144,13 +146,16 @@ export default {
       return await this.LoginIn(this.loginForm)
     },
     async submitForm() {
+      this.isLogining=true;
       this.$refs.loginForm.validate(async(v) => {
         if (v) {
           const flag = await this.login()
           if (!flag) {
+            this.isLogining= false
             this.loginVerify()
           }
         } else {
+          this.isLogining=false
           this.$message({
             type: 'error',
             message: '请正确填写登录信息',
