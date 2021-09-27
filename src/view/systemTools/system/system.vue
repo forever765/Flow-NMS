@@ -108,7 +108,7 @@
         <el-input :type="pwd" v-model="config.email.secret" @focus="showPass(true)" @blur="showPass(false)" />
       </el-form-item>
       <el-form-item label="测试邮件">
-        <el-button @click="email">测试邮件</el-button>
+        <el-button @click="email">测试邮件 (修改后先保存再测试)</el-button>
       </el-form-item>
       <!--  Email end  -->
 
