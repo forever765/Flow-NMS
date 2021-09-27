@@ -1,7 +1,8 @@
 # qm-plus-vue-page
 
 ## base gin-vue-admin v2.4.5 beta1
-commit-id `3183f55ae20d0a5433ac5b58f983f558fe3c337f`
+commit-id `49b64ed6eaba3a53c62c74e54ae3138378081b73`
+commit date: 2021-09-26
 
 ## Project setup
 ```
