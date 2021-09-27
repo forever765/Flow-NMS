@@ -41,3 +41,17 @@ export const getSystemState = () => {
     donNotShowLoading: true
   })
 }
+
+// @Tags system
+// @Summary 获取Clickhouse运行状态
+// @Security ApiKeyAuth
+// @Produce  application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
+// @Router /system/getClickhouseInfo [post]
+export const getClickhouseState = () => {
+  return service({
+    url: '/system/getClickhouseInfo',
+    method: 'post',
+    donNotShowLoading: true
+  })
+}
