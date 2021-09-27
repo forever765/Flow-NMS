@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 node_modules/*
 *.log
+=======
+node_modules/*
+>>>>>>> upstream/master

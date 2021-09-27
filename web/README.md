@@ -1,9 +1,12 @@
 # qm-plus-vue-page
 
+<<<<<<< HEAD
 ## base gin-vue-admin v2.4.5 beta1
 commit-id `49b64ed6eaba3a53c62c74e54ae3138378081b73`
 commit date: 2021-09-26
 
+=======
+>>>>>>> upstream/master
 ## Project setup
 ```
 npm install
@@ -88,4 +91,8 @@ web
 ├── .travis.yml -- 自动化CI配置
 ├── vue.config.js  -- vue-cli 配置
 └── package.json  -- package.json
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> upstream/master

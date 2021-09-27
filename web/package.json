@@ -3,7 +3,11 @@
 	"version": "2.3.5",
 	"private": true,
 	"scripts": {
+<<<<<<< HEAD
 		"serve": "vite --host --mode development",
+=======
+		"serve": "node openDocument.js && vite --host --mode development",
+>>>>>>> upstream/master
 		"build": "vite build --mode production",
 		"preview": "vite preview"
 	},
@@ -16,7 +20,10 @@
 		"highlight.js": "^10.6.0",
 		"marked": "^2.0.0",
 		"mitt": "^3.0.0",
+<<<<<<< HEAD
 		"nprogress": "^0.2.0",
+=======
+>>>>>>> upstream/master
 		"path": "^0.12.7",
 		"qs": "^6.8.0",
 		"quill": "^1.3.7",

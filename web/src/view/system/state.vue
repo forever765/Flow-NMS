@@ -159,7 +159,11 @@ export default {
       this.reload()
     }, 1000 * 10)
   },
+<<<<<<< HEAD
   beforeDestroy() {
+=======
+  beforeUnmount() {
+>>>>>>> upstream/master
     clearInterval(this.timer)
     this.timer = null
   },
