@@ -3,12 +3,9 @@ import 'element-plus/dist/index.css'
 import './style/element_visiable.scss'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-<<<<<<< HEAD
 // 引入 NProgress显示页面加载进度条
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-=======
->>>>>>> upstream/master
 // 引入gin-vue-admin前端初始化相关内容
 import './core/gin-vue-admin'
 // 引入封装的router
@@ -20,7 +17,6 @@ import '@/permission'
 import { store } from '@/store/index'
 
 import App from './App.vue'
-<<<<<<< HEAD
 
 NProgress.configure({
   easing: 'ease',
@@ -39,8 +35,6 @@ router.afterEach(() => {
   NProgress.done()
 })
 
-=======
->>>>>>> upstream/master
 const app = createApp(App)
 app.config.productionTip = false
 app.use(run)

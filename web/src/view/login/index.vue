@@ -54,7 +54,6 @@
             </div>
           </el-form-item>
           <el-form-item>
-<<<<<<< HEAD
             <!-- <el-button type="primary" style="width: 46%" @click="checkInit" -->
               <!-- >前往初始化</el-button
             > -->
@@ -64,43 +63,14 @@
               @click="submitForm"
               :loading="isLogining"
               >{{isLogining?'登 录 中':'登 录'}}</el-button
-=======
-            <el-button type="primary" style="width: 46%" @click="checkInit"
-              >前往初始化</el-button
-            >
-            <el-button
-              type="primary"
-              style="width: 46%; margin-left: 8%"
-              @click="submitForm"
-              >登 录</el-button
->>>>>>> upstream/master
             >
           </el-form-item>
         </el-form>
       </div>
       <div class="login_panle_right" />
       <div class="login_panle_foot">
-<<<<<<< HEAD
         <div class="copyright">
           Copyright &copy; {{ curYear }} ⭐ forever765
-=======
-        <div class="links">
-          <a href="http://doc.henrongyi.top/">
-            <img src="@/assets/docs.png" class="link-icon" />
-          </a>
-          <a href="https://www.yuque.com/flipped-aurora/">
-            <img src="@/assets/yuque.png" class="link-icon" />
-          </a>
-          <a href="https://github.com/flipped-aurora/gin-vue-admin">
-            <img src="@/assets/github.png" class="link-icon" />
-          </a>
-          <a href="https://space.bilibili.com/322210472">
-            <img src="@/assets/video.png" class="link-icon" />
-          </a>
-        </div>
-        <div class="copyright">
-          Copyright &copy; {{ curYear }} 💖 flipped-aurora
->>>>>>> upstream/master
         </div>
       </div>
     </div>
@@ -128,10 +98,7 @@ export default {
       }
     }
     return {
-<<<<<<< HEAD
       isLogining: false,
-=======
->>>>>>> upstream/master
       curYear: 0,
       lock: 'lock',
       loginForm: {
@@ -145,13 +112,8 @@ export default {
         password: [{ validator: checkPassword, trigger: 'blur' }],
         captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' },
           {
-<<<<<<< HEAD
             min: 4,
             max: 8,
-=======
-            min: 5,
-            max: 6,
->>>>>>> upstream/master
             message: '验证码格式不正确',
             trigger: 'blur',
           }]
@@ -184,25 +146,16 @@ export default {
       return await this.LoginIn(this.loginForm)
     },
     async submitForm() {
-<<<<<<< HEAD
       this.isLogining=true;
-=======
->>>>>>> upstream/master
       this.$refs.loginForm.validate(async(v) => {
         if (v) {
           const flag = await this.login()
           if (!flag) {
-<<<<<<< HEAD
             this.isLogining= false
             this.loginVerify()
           }
         } else {
           this.isLogining=false
-=======
-            this.loginVerify()
-          }
-        } else {
->>>>>>> upstream/master
           this.$message({
             type: 'error',
             message: '请正确填写登录信息',

@@ -162,11 +162,7 @@ export default {
   methods: {
     setAuthorityIds() {
       this.tableData && this.tableData.forEach((user) => {
-<<<<<<< HEAD
-        const authorityIds = user.authorities && user.authorities.forEach(i => {
-=======
         const authorityIds = user.authorities && user.authorities.map(i => {
->>>>>>> upstream/master
           return i.authorityId
         })
         user.authorityIds = authorityIds

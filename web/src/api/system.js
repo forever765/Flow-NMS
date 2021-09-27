@@ -41,7 +41,6 @@ export const getSystemState = () => {
     donNotShowLoading: true
   })
 }
-<<<<<<< HEAD
 
 // @Tags system
 // @Summary 获取Clickhouse运行状态
@@ -56,5 +55,3 @@ export const getClickhouseState = () => {
     donNotShowLoading: true
   })
 }
-=======
->>>>>>> upstream/master

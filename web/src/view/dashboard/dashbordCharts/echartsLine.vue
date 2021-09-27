@@ -51,11 +51,7 @@ export default {
       this.initChart()
     })
   },
-<<<<<<< HEAD
-  beforeDestroy() {
-=======
   beforeUnmount() {
->>>>>>> upstream/master
     if (!this.chart) {
       return
     }

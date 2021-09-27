@@ -105,17 +105,10 @@
         <el-checkbox v-model="config.email.isSSL" />
       </el-form-item>
       <el-form-item label="secret">
-<<<<<<< HEAD
         <el-input :type="pwd" v-model="config.email.secret" @focus="showPass(true)" @blur="showPass(false)" />
       </el-form-item>
       <el-form-item label="测试邮件">
         <el-button @click="email">测试邮件 (修改后先保存再测试)</el-button>
-=======
-        <el-input v-model="config.email.secret" />
-      </el-form-item>
-      <el-form-item label="测试邮件">
-        <el-button @click="email">测试邮件</el-button>
->>>>>>> upstream/master
       </el-form-item>
       <!--  Email end  -->
 
@@ -321,12 +314,8 @@ export default {
   name: 'Config',
   data() {
     return {
-<<<<<<< HEAD
       pwd:"password",
-      icon:"el-input__icon el-icon-view",
       isFocus: false,
-=======
->>>>>>> upstream/master
       config: {
         system: {},
         jwt: {},
@@ -348,7 +337,6 @@ export default {
     await this.initForm()
   },
   methods: {
-<<<<<<< HEAD
     showPass(isFocus){
       if (isFocus){
         this.pwd="text";
@@ -356,8 +344,6 @@ export default {
         this.pwd="password";
       }
     },
-=======
->>>>>>> upstream/master
     async initForm() {
       const res = await getSystemConfig()
       if (res.code === 0) {
