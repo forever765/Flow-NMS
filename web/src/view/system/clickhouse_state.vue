@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import { getSystemState } from '@/api/system'
+import { getClickhouseState } from '@/api/system'
 export default {
   name: 'State',
   data() {
@@ -165,7 +165,7 @@ export default {
   },
   methods: {
     async reload() {
-      const { data } = await getSystemState()
+      const { data } = await getClickhouseState()
       this.state = data.server
     }
   }

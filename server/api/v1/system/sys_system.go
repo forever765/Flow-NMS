@@ -77,3 +77,33 @@ func (s *SystemApi) GetServerInfo(c *gin.Context) {
 		response.OkWithDetailed(gin.H{"server": server}, "获取成功", c)
 	}
 }
+
+// @Tags System
+// @Summary 获取Clickhouse状态
+// @Security ApiKeyAuth
+// @Produce  application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /system/GetClickhouseInfo [post]
+func (s *SystemApi) GetClickhouseInfo(c *gin.Context) {
+	if server, err := systemConfigService.GetClickhouseInfo(); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"server": server}, "获取成功", c)
+	}
+}
+
+// @Tags System
+// @Summary 获取Clickhouse_Sinker状态
+// @Security ApiKeyAuth
+// @Produce  application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /system/getChSinkerInfo [post]
+func (s *SystemApi) GetChSinkerInfo(c *gin.Context) {
+	if server, err := systemConfigService.GetChSinkerInfo(); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"server": server}, "获取成功", c)
+	}
+}
