@@ -37,8 +37,8 @@
       <!--  System end  -->
 
       <!--  JWT start  -->
-      <h2>jwt签名</h2>
-      <el-form-item label="jwt签名">
+      <h2>JWT 签名Token</h2>
+      <el-form-item label="JWT Token">
         <el-input  v-model="config.jwt.signingKey" :type="pwd" @focus="showPass(true)" @blur="showPass()"/>
       </el-form-item>
       <!--  JWT end  -->
@@ -75,7 +75,7 @@
       <!--  Zap end  -->
 
       <!--  Redis start  -->
-      <h2>Redis admin数据库配置</h2>
+      <h2>Redis 数据库配置</h2>
       <el-form-item label="db">
         <el-input v-model="config.redis.db" />
       </el-form-item>
@@ -134,7 +134,7 @@
 
       <!--  dbType start  -->
       <template v-if="config.system.dbType === 'mysql'">
-        <h2>mysql admin数据库配置</h2>
+        <h2>MySQL admin数据库配置</h2>
         <el-form-item label="username">
           <el-input v-model="config.mysql.username" />
         </el-form-item>
@@ -158,7 +158,7 @@
         </el-form-item>
       </template>
       <template v-if="config.system.dbType === 'sqlite'">
-        <h2>sqlite admin数据库配置</h2>
+        <h2>Sqlite admin数据库配置</h2>
         <el-form-item label="path">
           <el-input v-model="config.mysql.path" />
         </el-form-item>
@@ -173,7 +173,7 @@
         </el-form-item>
       </template>
       <template v-if="config.system.dbType === 'sqlserver'">
-        <h2>sqlserver admin数据库配置</h2>
+        <h2>MS SQLServer admin数据库配置</h2>
         <el-form-item label="username">
           <el-input v-model="config.sqlserver.username" />
         </el-form-item>
@@ -197,7 +197,7 @@
         </el-form-item>
       </template>
       <template v-if="config.system.dbType === 'postgresql'">
-        <h2>postgresql admin数据库配置</h2>
+        <h2>PostgreSQL admin数据库配置</h2>
         <el-form-item label="username">
           <el-input v-model="config.mysql.username" />
         </el-form-item>
