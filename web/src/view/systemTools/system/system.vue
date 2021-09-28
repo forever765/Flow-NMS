@@ -39,7 +39,7 @@
       <!--  JWT start  -->
       <h2>jwt签名</h2>
       <el-form-item label="jwt签名">
-        <el-input :type="pwd" v-model="config.jwt.signingKey"  @focus="showPass(true)" @blur="showPass()"/>
+        <el-input  v-model="config.jwt.signingKey" :type="pwd" @focus="showPass(true)" @blur="showPass()"/>
       </el-form-item>
       <!--  JWT end  -->
 
@@ -105,7 +105,7 @@
         <el-checkbox v-model="config.email.isSSL" />
       </el-form-item>
       <el-form-item label="secret">
-        <el-input :type="pwd" v-model="config.email.secret" @focus="showPass(true)" @blur="showPass()" />
+        <el-input v-model="config.email.secret" :type="pwd" @focus="showPass(true)" @blur="showPass()" />
       </el-form-item>
       <el-form-item label="测试邮件">
         <el-button @click="email">测试邮件 (修改后先保存再测试)</el-button>
@@ -139,7 +139,7 @@
           <el-input v-model="config.mysql.username" />
         </el-form-item>
         <el-form-item label="password">
-          <el-input :type="pwd" v-model="config.mysql.password" @focus="showPass(true)" @blur="showPass()"/>
+          <el-input v-model="config.mysql.password" :type="pwd" @focus="showPass(true)" @blur="showPass()"/>
         </el-form-item>
         <el-form-item label="path">
           <el-input v-model="config.mysql.path" />
@@ -178,7 +178,7 @@
           <el-input v-model="config.sqlserver.username" />
         </el-form-item>
         <el-form-item label="password">
-          <el-input v-model="config.sqlserver.password" />
+          <el-input v-model="config.sqlserver.password" :type="pwd" @focus="showPass(true)" @blur="showPass()"/>
         </el-form-item>
         <el-form-item label="path">
           <el-input v-model="config.sqlserver.path" />
@@ -202,7 +202,7 @@
           <el-input v-model="config.mysql.username" />
         </el-form-item>
         <el-form-item label="password">
-          <el-input v-model="config.mysql.password" />
+          <el-input v-model="config.mysql.password" :type="pwd" @focus="showPass(true)" @blur="showPass()"/>
         </el-form-item>
         <el-form-item label="dbName">
           <el-input v-model="config.mysql.dbName" />
@@ -227,6 +227,25 @@
         </el-form-item>
       </template>
       <!--  dbType end  -->
+
+      <!--  Clickhouse start  -->
+      <h2>Clickhouse 数据库配置（可设置，但未有实质使用）</h2>
+      <el-form-item label="cluster">
+        <el-input v-model="config.clickhouse.cluster" />
+      </el-form-item>
+      <el-form-item label="db">
+        <el-input v-model="config.clickhouse.db" />
+      </el-form-item>
+      <el-form-item label="addr">
+        <el-input v-model="config.clickhouse.addr" />
+      </el-form-item>
+      <el-form-item label="username">
+        <el-input v-model="config.clickhouse.username" />
+      </el-form-item>
+      <el-form-item label="password">
+        <el-input v-model="config.clickhouse.password" :type="pwd" @focus="showPass(true)" @blur="showPass()"/>
+      </el-form-item>
+      <!--  Clickhouse end  -->
 
       <!--  ossType start  -->
       <template v-if="config.system.ossType === 'local'">
@@ -323,6 +342,7 @@ export default {
         mysql: {},
         sqlite: {},
         redis: {},
+        clickhouse: {},
         qiniu: {},
         tencentCOS: {},
         aliyunOSS: {},

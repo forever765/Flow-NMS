@@ -7,7 +7,7 @@ aliyun-oss:
   base-path: yourBasePath
 autocode:
   transfer-restart: true
-  root: D:\Script\毕业设计相关
+  root: D:\Script\毕业设计相关\Flow-NMS
   server: /server
   server-api: /api/v1/autocode
   server-initialize: /initialize
@@ -19,13 +19,18 @@ autocode:
   web-api: /api
   web-form: /view
   web-table: /view
-  web-flow: /view
 captcha:
   key-long: 4
   img-width: 240
   img-height: 80
 casbin:
   model-path: ./resource/rbac_model.conf
+clickhouse:
+  cluster: no2
+  db: 666
+  addr: nms.lujia.com:9000
+  username: "123"
+  password: "123"
 email:
   to: 823972850@qq.com
   port: 465
