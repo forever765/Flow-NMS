@@ -39,7 +39,7 @@
       <!--  JWT start  -->
       <h2>jwt签名</h2>
       <el-form-item label="jwt签名">
-        <el-input v-model="config.jwt.signingKey" />
+        <el-input :type="pwd" v-model="config.jwt.signingKey"  @focus="showPass(true)" @blur="showPass()"/>
       </el-form-item>
       <!--  JWT end  -->
 
@@ -105,7 +105,7 @@
         <el-checkbox v-model="config.email.isSSL" />
       </el-form-item>
       <el-form-item label="secret">
-        <el-input :type="pwd" v-model="config.email.secret" @focus="showPass(true)" @blur="showPass(false)" />
+        <el-input :type="pwd" v-model="config.email.secret" @focus="showPass(true)" @blur="showPass()" />
       </el-form-item>
       <el-form-item label="测试邮件">
         <el-button @click="email">测试邮件 (修改后先保存再测试)</el-button>
@@ -139,7 +139,7 @@
           <el-input v-model="config.mysql.username" />
         </el-form-item>
         <el-form-item label="password">
-          <el-input v-model="config.mysql.password" />
+          <el-input :type="pwd" v-model="config.mysql.password" @focus="showPass(true)" @blur="showPass()"/>
         </el-form-item>
         <el-form-item label="path">
           <el-input v-model="config.mysql.path" />
