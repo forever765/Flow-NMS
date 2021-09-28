@@ -14,6 +14,8 @@ type Server struct {
 	Mysql Mysql `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
 	// Clickhouse
 	Clickhouse Clickhouse `mapstructure:"clickhouse" json:"clickhouse" yaml:"clickhouse"`
+	// Clickhouse_Sinker
+	Clickhouse_Sinker ClickhouseSinker `mapstructure:"clickhouse_sinker" json:"clickhouse_sinker" yaml:"clickhouse_sinker"`
 	// oss
 	Local      Local      `mapstructure:"local" json:"local" yaml:"local"`
 	Qiniu      Qiniu      `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`

@@ -31,6 +31,9 @@ clickhouse:
   addr: nms.lujia.com:9000
   username: "123"
   password: "123"
+clickhouse_sinker:
+  addr: nms.lujia.com
+  port: "21888"
 email:
   to: 823972850@qq.com
   port: 465
@@ -95,7 +98,7 @@ timer:
 zap:
   level: info
   format: console
-  prefix: '[gin-vue-admin/server]'
+  prefix: '[nms/server]'
   director: log
   link-name: latest_log
   showLine: false

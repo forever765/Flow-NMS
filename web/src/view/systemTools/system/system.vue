@@ -247,6 +247,16 @@
       </el-form-item>
       <!--  Clickhouse end  -->
 
+      <!--  ClickhouseSinker start  -->
+      <h2>ClickhouseSinker 中间件配置（可设置，但未有实质使用）</h2>
+      <el-form-item label="addr">
+        <el-input v-model="config.clickhouse_sinker.addr" />
+      </el-form-item>
+      <el-form-item label="port">
+        <el-input v-model="config.clickhouse_sinker.port" />
+      </el-form-item>
+      <!--  ClickhouseSinker end  -->
+
       <!--  ossType start  -->
       <template v-if="config.system.ossType === 'local'">
         <h2>本地上传配置</h2>
@@ -343,6 +353,7 @@ export default {
         sqlite: {},
         redis: {},
         clickhouse: {},
+        clickhouse_sinker: {},
         qiniu: {},
         tencentCOS: {},
         aliyunOSS: {},
