@@ -19,6 +19,8 @@ require (
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84
 	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible
 	github.com/mojocn/base64Captcha v1.3.1
+	github.com/prometheus/client_model v0.2.0 // indirect
+	github.com/prometheus/common v0.31.1 // indirect
 	github.com/qiniu/api.v7/v7 v7.4.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/satori/go.uuid v1.2.0

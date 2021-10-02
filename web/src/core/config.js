@@ -4,7 +4,7 @@
 
 const config = {
   appName: 'Flow-NMS',
-  appLogo: 'https://www.gin-vue-admin.com/img/logo.png'
+  appLogo: '/src/assets/flow-nms.png'
 }
 
 export default config
