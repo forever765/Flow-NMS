@@ -36,6 +36,7 @@ router.afterEach(() => {
 })
 
 const app = createApp(App)
+
 app.config.productionTip = false
 app.use(run)
   .use(auth)

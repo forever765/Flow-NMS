@@ -35,7 +35,8 @@ require (
 	github.com/xuri/excelize/v2 v2.4.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
+	gorm.io/driver/clickhouse v0.2.1 // indirect
 	gorm.io/driver/mysql v1.0.1
-	gorm.io/gorm v1.20.7
+	gorm.io/gorm v1.21.9
 	nhooyr.io/websocket v1.8.6
 )
