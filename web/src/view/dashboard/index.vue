@@ -1,6 +1,23 @@
 <template>
   <div class="page">
     <div class="gva-card-box">
+      <div class="gva-card">
+        <div class="card-header">
+          <span>数据统计</span>
+        </div>
+        <div class="echart-box">
+          <el-row :gutter="20">
+            <el-col :xs="24" :sm="18">
+              <echarts-line />
+            </el-col>
+            <el-col :xs="24" :sm="6">
+              <dashbord-table />
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+    </div>
+    <div class="gva-card-box">
       <div class="gva-card gva-top-card">
         <div class="gva-top-card-left">
           <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
@@ -72,23 +89,6 @@
         </el-row>
       </el-card>
     <!-- <div class="quick-entrance-title"></div> -->
-    </div>
-    <div class="gva-card-box">
-      <div class="gva-card">
-        <div class="card-header">
-          <span>数据统计</span>
-        </div>
-        <div class="echart-box">
-          <el-row :gutter="20">
-            <el-col :xs="24" :sm="18">
-              <echarts-line />
-            </el-col>
-            <el-col :xs="24" :sm="6">
-              <dashbord-table />
-            </el-col>
-          </el-row>
-        </div>
-      </div>
     </div>
   </div>
 </template>

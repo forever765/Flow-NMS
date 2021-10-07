@@ -10,7 +10,6 @@ import "echarts/theme/macarons";
 import { getTraffic } from "@/api/charts";
 
 const titles = ["上行速率", "下行速率"];
-const type = "a";
 const unit = "MBps";
 export default {
   name: "Line",
@@ -19,9 +18,8 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      myChart = this.initChart();
+      this.initChart();
     });
-    console.log("mounted");
   },
   beforeUnmount() {
     if (!this.chart) {
@@ -31,14 +29,15 @@ export default {
     this.chart = null;
   },
   beforeDestroy() {
-    window.removeEventListener("resize", () => {
-        this.Chart.resize();
-      });
+    window.removeEventListener("resize",this.resizeHandle)
   },
   methods: {
     async getData() {
       this.result = await getTraffic();
       return this.result;
+    },
+    resizeHandle(){
+      this.chart.resize()
     },
     initChart() {
       // this.chart = echarts.init(this.$refs.echart, 'macarons')
@@ -46,9 +45,10 @@ export default {
         (data) => (
           (this.chart = echarts.init(this.$refs.echart)),
           this.setOptions(data),
-          window.addEventListener("resize", () => {
-            this.chart.resize();
-          })
+          window.addEventListener("resize",this.resizeHandle)
+          // window.addEventListener("resize", () => {
+          //   this.chart.resize();
+          // })
         )
       );
     },
