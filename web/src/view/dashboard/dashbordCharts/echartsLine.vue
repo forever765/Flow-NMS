@@ -1,6 +1,6 @@
 <template>
   <div class="dashbord-line-box">
-    <div class="dashbord-line-title">最近一小时流量</div>
+    <div class="dashbord-line-title">公网出口最近一小时流量</div>
     <div ref="echart" class="dashbord-line" />
   </div>
 </template>
@@ -19,8 +19,9 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.initChart();
+      myChart = this.initChart();
     });
+    console.log("mounted");
   },
   beforeUnmount() {
     if (!this.chart) {
@@ -29,28 +30,42 @@ export default {
     this.chart.dispose();
     this.chart = null;
   },
+  beforeDestroy() {
+    window.removeEventListener("resize", () => {
+        this.Chart.resize();
+      });
+  },
   methods: {
     async getData() {
       this.result = await getTraffic();
       return this.result;
-      // for(var i = 0; i < data.length; i++){
-      //   // console.log(data[i].Time + " " + data[i].in_traffic_mbps);
-      // }
     },
     initChart() {
       // this.chart = echarts.init(this.$refs.echart, 'macarons')
       this.getData().then(
         (data) => (
-          (this.chart = echarts.init(this.$refs.echart)), this.setOptions(data)
+          (this.chart = echarts.init(this.$refs.echart)),
+          this.setOptions(data),
+          window.addEventListener("resize", () => {
+            this.chart.resize();
+          })
         )
       );
     },
     setOptions(data) {
-      var result = [];
-      for(var i in data['data'])
-          result.push([data['data'][i]['Time'], data['data'][i]['in_traffic_mbps']]);
-      console.log(result)
-      // console.log(data['data'][0]['Time'])
+      var in_data = [];
+      var out_data = [];
+      // json object to array
+      for (var i in data["data"]) {
+        in_data.push([
+          data["data"][i]["Time"],
+          data["data"][i]["in_traffic_mbps"],
+        ]);
+        out_data.push([
+          data["data"][i]["Time"],
+          data["data"][i]["out_traffic_mbps"],
+        ]);
+      }
       this.chart.setOption({
         tooltip: {
           trigger: "axis",
@@ -80,10 +95,10 @@ export default {
           },
         },
         grid: {
-          left: "35",
+          left: "70",
           right: "22",
           bottom: "30",
-          top: "34",
+          top: "50",
         },
         yAxis: [
           {
@@ -98,6 +113,7 @@ export default {
               show: false,
             },
             axisLabel: {
+              formatter: "{value} Mbps",
               color: "#5A6872",
               fontSize: 11,
             },
@@ -119,10 +135,9 @@ export default {
             },
             axisTick: { show: false },
             boundaryGap: false,
-            // data: data['in'].map(function (item) {
-            //   return item[0]
-            // })
-            data: result,
+            data: in_data.map(function (item) {
+              return item[0];
+            }),
           },
         ],
         legend: { data: titles },
@@ -148,16 +163,16 @@ export default {
               symbol: "circle",
               itemStyle: {
                 normal: {
-                  borderColor: "rgba(65,214,195,0.3)",
+                  borderColor: "rgba(65,214,195,0.1)",
                   borderWidth: 15,
                 },
               },
-              symbolSize: 7,
-              data: [{ type: "max", name: "Max" }],
+              symbolSize: 6,
+              data: [{ type: "max", name: "Out_Max" }],
             },
             lineStyle: { normal: { color: "#41D6C3", width: 1 } },
             areaStyle: { normal: { color: "#41D6C3", opacity: 0.5 } },
-            data: result,
+            data: out_data,
           },
           {
             name: "下行速率",
@@ -179,18 +194,17 @@ export default {
               symbol: "circle",
               itemStyle: {
                 normal: {
-                  borderColor: "rgba(90,170,250,0.3)",
+                  borderColor: "rgba(90,170,250,0.1)",
                   borderWidth: 15,
                 },
               },
-              symbolSize: 7,
-              data: [{ type: "max", name: "Max" }],
+              symbolSize: 6,
+              data: [{ type: "max", name: "In_Max" }],
             },
             lineStyle: { normal: { color: "#5AAAFA", width: 1 } },
             areaStyle: { normal: { color: "#5AAAFA", opacity: 0.5 } },
             connectNulls: true,
-            // ['in_traffic_mbps']
-            data: result,
+            data: in_data,
           },
         ],
       });
