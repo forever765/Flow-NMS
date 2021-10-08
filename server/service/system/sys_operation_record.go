@@ -17,8 +17,8 @@ type OperationRecordService struct {
 }
 
 func (operationRecordService *OperationRecordService) CreateSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
-	err = global.GVA_DB.Create(&sysOperationRecord).Error
-	return err
+	//err = global.GVA_DB.Create(&sysOperationRecord).Error
+	return nil
 }
 
 //@author: [granty1](https://github.com/granty1)

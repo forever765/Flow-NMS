@@ -34,7 +34,7 @@ func GetTraffic() json.RawMessage {
 	var result []Traffic
 	subQuery1 := db.Table("InTraffic").Select("Time,InTrafficMbps").Where("Time > ?", anHourAgo)
 	subQuery2 := db.Table("OutTraffic").Select("Time,OutTrafficMbps").Where("Time > ?", anHourAgo)
-	db.Debug().Table("(?) as In, (?) as Out", subQuery1, subQuery2).Select("Time,FLOOR(InTrafficMbps,2) as in_traffic_mbps,FLOOR(OutTrafficMbps,2) as out_traffic_mbps").Where("In.Time = Out.Time ORDER BY Time").Find(&result)
+	db.Table("(?) as In, (?) as Out", subQuery1, subQuery2).Select("Time,FLOOR(InTrafficMbps,2) as in_traffic_mbps,FLOOR(OutTrafficMbps,2) as out_traffic_mbps").Where("In.Time = Out.Time ORDER BY Time").Find(&result)
 	result2, _ := json.Marshal(result)
 	return json.RawMessage(result2)
 }

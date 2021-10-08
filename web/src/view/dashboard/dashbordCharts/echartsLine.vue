@@ -14,7 +14,11 @@ const unit = "MBps";
 export default {
   name: "Line",
   created() {
-    this.getData();
+    this.timer = setInterval(() => {
+      this.getData();
+      this.initChart();
+    }, 1000 * 30)
+    // this.getData();
   },
   mounted() {
     this.$nextTick(() => {
@@ -31,6 +35,13 @@ export default {
   beforeDestroy() {
     window.removeEventListener("resize",this.resizeHandle)
   },
+  watch:{
+    result:{
+      	handler(newValue,oldValue){
+        console.log('isHot被修改了')
+      }
+    }
+  },
   methods: {
     async getData() {
       this.result = await getTraffic();
@@ -46,9 +57,6 @@ export default {
           (this.chart = echarts.init(this.$refs.echart)),
           this.setOptions(data),
           window.addEventListener("resize",this.resizeHandle)
-          // window.addEventListener("resize", () => {
-          //   this.chart.resize();
-          // })
         )
       );
     },
@@ -96,7 +104,7 @@ export default {
         },
         grid: {
           left: "70",
-          right: "22",
+          right: "40",
           bottom: "30",
           top: "50",
         },
@@ -135,6 +143,7 @@ export default {
             },
             axisTick: { show: false },
             boundaryGap: false,
+            // 遍历拿时间出来
             data: in_data.map(function (item) {
               return item[0];
             }),
