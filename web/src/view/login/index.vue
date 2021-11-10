@@ -7,7 +7,7 @@
             class="login_panle_form_title_logo"
             :src="$GIN_VUE_ADMIN.appLogo"
             alt
-          />
+          >
           <p class="login_panle_form_title_p">{{ $GIN_VUE_ADMIN.appName }}</p>
         </div>
         <el-form
@@ -50,7 +50,7 @@
                 :src="picPath"
                 alt="请输入验证码"
                 @click="loginVerify()"
-              />
+              >
             </div>
           </el-form-item>
           <el-form-item>
@@ -112,8 +112,6 @@ export default {
         password: [{ validator: checkPassword, trigger: 'blur' }],
         captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' },
           {
-            min: 4,
-            max: 8,
             message: '验证码格式不正确',
             trigger: 'blur',
           }]
@@ -171,6 +169,8 @@ export default {
     },
     loginVerify() {
       captcha({}).then((ele) => {
+        this.rules.captcha[1].max = ele.data.captchaLength
+        this.rules.captcha[1].min = ele.data.captchaLength
         this.picPath = ele.data.picPath
         this.loginForm.captchaId = ele.data.captchaId
       })
@@ -179,9 +179,6 @@ export default {
 }
 
 </script>
-
-
-
 
 <style lang="scss" scoped>
 @import "@/style/newLogin.scss";
