@@ -2,8 +2,9 @@ package utils
 
 import (
 	"encoding/json"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"go.uber.org/zap"
 	"time"
-
 	"gorm.io/driver/clickhouse"
 	"gorm.io/gorm"
 )
@@ -22,7 +23,7 @@ func GetTraffic() json.RawMessage {
 	dsn := "tcp://192.168.123.221:9000?database=nms_data&username=&password=&read_timeout=10&write_timeout=20"
 	db, err := gorm.Open(clickhouse.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		global.GVA_LOG.Error("Failed to connect database!", zap.Error(err))
 	}
 	sqlDB, err := db.DB()
 	sqlDB.SetMaxIdleConns(2)
