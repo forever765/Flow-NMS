@@ -38,10 +38,10 @@ func GetTraffic() json.RawMessage {
 	//db.Table("(?) as In, (?) as Out", subQuery1, subQuery2).Select("Time,FLOOR(InTrafficMbps,2) as in_traffic_mbps,FLOOR(OutTrafficMbps,2) as out_traffic_mbps").Where("In.Time = Out.Time ORDER BY Time").Find(&result)
 
 	//RAW SQL: select In.Time,In.InTrafficMbps,Out.OutTrafficMbps FROM(
-	//select toStartOfInterval(timestamp_max, INTERVAL 10 second ) as Time, sum(bytes)/1048576 as InMBytes, sum(packets) as InPackets, sum(bytes)/838860.8 as InTrafficMbps
+	//select toStartOfInterval(timestamp_max, INTERVAL 10 second ) as Time, sum(bytes)/1048576 as InMBytes, sum(packets) as InPackets, InMBytes*0.8 as InTrafficMbps
 	//from(select * from nms_data.pmacctd_data prewhere timestamp_max >= NOW() - 3600) where loc_dst = '局域网'
 	//group by Time
-	//order by Time) as In,(select toStartOfInterval(timestamp_max, INTERVAL 10 second ) as Time, sum(bytes)/1048576 as OutMBytes, sum(packets) as OutPackets, sum(bytes)/838860.8 as OutTrafficMbps
+	//order by Time) as In,(select toStartOfInterval(timestamp_max, INTERVAL 10 second ) as Time, sum(bytes)/1048576 as OutMBytes, sum(packets) as OutPackets, OutMBytes*0.8 as OutTrafficMbps
 	//from(select * from nms_data.pmacctd_data prewhere timestamp_max >= NOW() - 3600) where loc_src = '局域网'
 	//group by Time
 	//order by Time) as Out WHERE In.Time=Out.Time;
