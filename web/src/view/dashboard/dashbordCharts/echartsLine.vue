@@ -17,7 +17,7 @@ export default {
     this.timer = setInterval(() => {
       this.getData();
       this.initChart();
-    }, 1000 * 30)
+    }, 1000 * 10)
     // this.getData();
   },
   mounted() {
