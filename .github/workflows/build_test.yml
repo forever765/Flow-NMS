@@ -38,7 +38,7 @@ jobs:
 
       - name: Build the Frontend Docker image
         run: |
-          docker login --username=${{ secrets.ALIYUN_DOCKERHUB_UNAME }} registry.cn-shenzhen.aliyuncs.com --password=${{ secrets.ALIYUN_DOCKERHUB_PASSWORD }}
+          docker login --username=${{ secrets.ALIYUN_DOCKERHUB_UNAME }} registry.cn-shenzhen.aliyuncs.com --password=${{ secrets.ALIYUN_DOCKERHUB_PWD }}
           docker build -t flownms-frontend:latest ./web
           docker tag flownms-frontend registry.cn-shenzhen.aliyuncs.com/flow_nms/flownms-frontend:latest
           docker push registry.cn-shenzhen.aliyuncs.com/flow_nms/flownms-frontend:latest
