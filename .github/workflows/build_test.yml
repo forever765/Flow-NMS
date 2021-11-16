@@ -35,13 +35,13 @@ jobs:
           npm install
           npm run build
         working-directory: ./web
-        
+
       - name: Build the Frontend Docker image
         run: |
-          docker login --username=${{ secrets.ALIYUN_DOCKER_UNAME }} registry.cn-shenzhen.aliyuncs.com --password=${{ secrets.ALIYUN_DOCKERHUB_PASSWORD }}
+          docker login --username=${{ secrets.ALIYUN_DOCKERHUB_UNAME }} registry.cn-shenzhen.aliyuncs.com --password=${{ secrets.ALIYUN_DOCKERHUB_PASSWORD }}
           docker build -t flownms-frontend:latest ./web
           docker tag flownms-frontend registry.cn-shenzhen.aliyuncs.com/flow_nms/flownms-frontend:latest
-          docker push registry.cn-shenzhen.aliyuncs.com/flow_nms/flownms-frontend:latest # 推送
+          docker push registry.cn-shenzhen.aliyuncs.com/flow_nms/flownms-frontend:latest
 
   backend:
     name: Backend build
