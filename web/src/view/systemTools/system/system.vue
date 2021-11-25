@@ -145,7 +145,7 @@
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item title="数据库配置" name="9">
+        <el-collapse-item title="关系型数据库配置" name="9">
           <template v-if="config.system.dbType === 'mysql'">
             <el-form-item label="username">
               <el-input v-model="config.mysql.username" />
@@ -306,6 +306,27 @@
               </el-form-item>
             </div>
           </template>
+        </el-collapse-item>
+
+        <el-collapse-item title="ClickHouse数据库配置" name="14">
+          <el-form-item label="addr">
+            <el-input v-model="config.clickhouse.addr" />
+          </el-form-item>
+          <el-form-item label="dbname">
+            <el-input v-model="config.clickhouse.db" />
+          </el-form-item>
+          <el-form-item label="username">
+            <el-input v-model="config.clickhouse.username" />
+          </el-form-item>
+          <el-form-item label="password">
+            <el-input v-model="config.clickhouse.password" />
+          </el-form-item>
+          <el-form-item label="read timeout">
+            <el-input v-model.number="config.clickhouse.read_timeout" />
+          </el-form-item>
+          <el-form-item label="write timeout">
+            <el-input v-model.number="config.clickhouse.write_timeout" />
+          </el-form-item>
         </el-collapse-item>
       </el-collapse>
     </el-form>

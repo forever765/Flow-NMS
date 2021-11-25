@@ -95,10 +95,12 @@ casbin:
   model-path: ./resource/rbac_model.conf
 clickhouse:
   cluster: ""
-  db: 0
-  addr: nms.lujia.com:9000
+  db: "nms_data"
+  addr: "nms01.home.com:9000"
   username: ""
   password: ""
+  read_timeout: 10
+  write_timeout: 20
 clickhouse_sinker:
   addr: nms.lujia.com
   port: "21888"
@@ -119,11 +121,11 @@ jwt:
 local:
   path: uploads/file
 mysql:
-  path: 192.168.125.213:3306
+  path: 192.168.123.213:3306
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: gva
-  username: root
-  password: dogfengzxcvbnm
+  username: gva
+  password: 6BuDxFC6LYo2VHpDegpd6btbDjzgxpZu
   max-idle-conns: 0
   max-open-conns: 0
   log-mode: ""

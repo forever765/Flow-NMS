@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"go.uber.org/zap"
 	"gorm.io/driver/clickhouse"
@@ -20,10 +21,11 @@ type Traffic struct {
 //@description: 获取最近上下行流量
 //@return: json data, err error
 func GetTraffic() json.RawMessage {
-	dsn := "tcp://192.168.123.221:9000?database=nms_data&username=&password=&read_timeout=10&write_timeout=20"
+	ClickhouseCfg := global.GVA_CONFIG.Clickhouse
+	dsn := fmt.Sprintf("tcp://%v?dateabase=%v&usernam=%v&password=%v&read_timeout=%v&write_timeout=%v", ClickhouseCfg.Addr,ClickhouseCfg.DB,ClickhouseCfg.Username,ClickhouseCfg.Password,ClickhouseCfg.ReadTimeout,ClickhouseCfg.WriteTimeout)
 	db, err := gorm.Open(clickhouse.Open(dsn), &gorm.Config{})
 	if err != nil {
-		global.GVA_LOG.Error("Failed to connect database!", zap.Error(err))
+		global.GVA_LOG.Error("Failed to connect Clickhouse!", zap.Error(err))
 	}
 	sqlDB, err := db.DB()
 	sqlDB.SetMaxIdleConns(2)
