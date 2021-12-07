@@ -1,78 +1,10 @@
-# github.com/flipped-aurora/gin-vue-admin/server Global Configuration
-
-# jwt configuration
-jwt:
-  signing-key: 'qmPlus'
-  expires-time: 604800
-  buffer-time: 86400
-  issuer: 'qmPlus'
-# zap logger configuration
-zap:
-  level: 'info'
-  format: 'console'
-  prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
-  director: 'log'
-  show-line: true
-  encode-level: 'LowercaseColorLevelEncoder'
-  stacktrace-key: 'stacktrace'
-  log-in-console: true
-
-# redis configuration
-redis:
-  db: 0
-  addr: '127.0.0.1:6379'
-  password: ''
-
-# email configuration
-email:
-  to: 'xxx@qq.com'
-  port: 465
-  from: 'xxx@163.com'
-  host: 'smtp.163.com'
-  is-ssl: true
-  secret: 'xxx'
-  nickname: 'test'
-
-# casbin configuration
-casbin:
-  model-path: './resource/rbac_model.conf'
-
-# system configuration
-system:
-  env: 'public'  # Change to "develop" to skip authentication for development mode
-  addr: 8888
-  db-type: 'mysql'
-  oss-type: 'local'    # 控制oss选择走本期还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
-  use-multipoint: false
-  # IP限制次数 一个小时15000次
-  iplimit-count: 15000
-  #  IP限制一个小时
-  iplimit-time: 3600
-
-# captcha configuration
-captcha:
-  key-long: 6
-  img-width: 240
-  img-height: 80
-
-# mysql connect configuration
-# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://www.github.com/flipped-aurora/gin-vue-admin/server.com/docs/first）
-mysql:
-  path: ''
-  config: ''
-  db-name: ''
-  username: ''
-  password: ''
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
-
-# local configuration
-local:
-  path: 'uploads/file'
-
-# autocode configuration
+aliyun-oss:
+  endpoint: ""
+  access-key-id: ""
+  access-key-secret: ""
+  bucket-name: ""
+  bucket-url: ""
+  base-path: ""
 autocode:
   transfer-restart: true
   root: D:\Script\Flow-NMS
@@ -95,12 +27,12 @@ casbin:
   model-path: ./resource/rbac_model.conf
 clickhouse:
   cluster: ""
-  db: "nms_data"
-  addr: "nms01.home.com:9000"
+  db: nms_data
+  addr: nms01.home.com:9000
   username: ""
   password: ""
-  read_timeout: 10
-  write_timeout: 20
+  read_timeout: "10"
+  write_timeout: "20"
 clickhouse_sinker:
   addr: nms.lujia.com
   port: "21888"
@@ -118,6 +50,7 @@ jwt:
   signing-key: 4qAwucdQOw1hwUaDsufcDAEV2v7sTX3FTJVOcdCNzo9m2YtpsrvkQtAgbJD2w0b5
   expires-time: 604800
   buffer-time: 86400
+  issuer: ""
 local:
   path: uploads/file
 mysql:
@@ -148,6 +81,8 @@ system:
   db-type: mysql
   oss-type: local
   use-multipoint: false
+  iplimit-count: 0
+  iplimit-time: 0
 tencent-cos:
   bucket: xxxxx-10005608
   region: ap-shanghai
@@ -170,7 +105,6 @@ zap:
   format: console
   prefix: '[nms/server]'
   director: log
-  link-name: latest_log
   showLine: false
   encode-level: LowercaseColorLevelEncoder
   stacktrace-key: stacktrace

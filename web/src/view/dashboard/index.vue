@@ -1,6 +1,19 @@
 <template>
   <div class="page">
     <div class="gva-card-box">
+      <el-row :gutter="12">
+      <el-col :span="8">
+        <el-card shadow="always"> 今日总流量： 100GB</el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card shadow="hover"> Clickhouse总记录数： </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card shadow="never"> 敬请期待... </el-card>
+      </el-col>
+      </el-row>
+    </div>
+    <div class="gva-card-box">
       <div class="gva-card">
         <div class="card-header">
           <span>数据统计</span>
