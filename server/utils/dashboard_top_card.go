@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type Traffic struct {
+type Data struct {
 	Time           string  `gorm:"column:Time;type:datetime;" json:"Time"`
 	InTrafficMbps  float32 `json:"in_traffic_mbps"`
 	OutTrafficMbps float32 `json:"out_traffic_mbps"`
@@ -20,7 +20,7 @@ type Traffic struct {
 //@function: GetTrafficData
 //@description: 获取最近上下行流量
 //@return: json data, err error
-func GetTraffic() json.RawMessage {
+func GetTopCardData() json.RawMessage {
 	ClickhouseCfg := global.GVA_CONFIG.Clickhouse
 	dsn := fmt.Sprintf("tcp://%v?dateabase=%v&usernam=%v&password=%v&read_timeout=%v&write_timeout=%v", ClickhouseCfg.Addr,ClickhouseCfg.DB,ClickhouseCfg.Username,ClickhouseCfg.Password,ClickhouseCfg.ReadTimeout,ClickhouseCfg.WriteTimeout)
 	db, err := gorm.Open(clickhouse.Open(dsn), &gorm.Config{PrepareStmt: true})

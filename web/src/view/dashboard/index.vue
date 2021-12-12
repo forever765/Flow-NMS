@@ -2,22 +2,25 @@
   <div class="page">
     <div class="gva-card-box">
       <el-row :gutter="12">
-      <el-col :span="8">
-        <el-card shadow="always"> 今日总流量： 100GB</el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card shadow="hover"> Clickhouse总记录数： </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card shadow="never"> 敬请期待... </el-card>
-      </el-col>
+        <el-col :span="6">
+          <el-card class="summary-card-box summary-card-box-1" shadow="hover"> 今日总流量： 100GB</el-card>
+        </el-col>
+        <el-col :span="6">
+          <el-card class="summary-card-box summary-card-box-2" shadow="hover"> 本月总流量：1TB </el-card>
+        </el-col>
+        <el-col :span="6">
+          <el-card class="summary-card-box summary-card-box-3" shadow="hover"> 敬请期待... </el-card>
+        </el-col>
+        <el-col :span="6">
+          <el-card class="summary-card-box summary-card-box-4" shadow="hover"> Clickhouse总记录数：2亿 </el-card>
+        </el-col>
       </el-row>
     </div>
     <div class="gva-card-box">
       <div class="gva-card">
         <div class="card-header">
           <span>数据统计</span>
-        </div>
+        </div>l
         <div class="echart-box">
           <el-row :gutter="20">
             <el-col :xs="24" :sm="18">
@@ -184,6 +187,33 @@ export default {
         padding-top: 0px;
       }
     }
+    .summary-card-box{
+      color: white;
+      &-1 {
+        background: #48D18D;
+      }
+      &-2 {
+        background: #F95959;
+      }
+      &-3 {
+        background: #8294F6;
+      }
+      &-4 {
+        background: #FEBB50;
+      }
+    }
+    // .card-box-1{
+    //   background: #48D18D;
+    // }
+    // .card-box-2{
+    //   background: #F95959;
+    // }
+    // .card-box-3{
+    //   background: #8294F6;
+    // }
+    // .card-box-4{
+    //   background: #FEBB50;
+    // }
     .gva-card {
       box-sizing: border-box;
         background-color: #fff;

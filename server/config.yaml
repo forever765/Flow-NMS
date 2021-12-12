@@ -72,8 +72,8 @@ qiniu:
   secret-key: ""
   use-cdn-domains: false
 redis:
-  db: 0
-  addr: 192.168.125.229:6379
+  db: 1
+  addr: nms01.home.com:6379
   password: ""
 system:
   env: public
@@ -100,6 +100,9 @@ timer:
   - tableName: jwt_blacklists
     compareField: created_at
     interval: 168h
+  - tableName: aaa
+    compareField: created_at
+    interval: 1m
 zap:
   level: info
   format: console
