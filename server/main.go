@@ -28,7 +28,9 @@ func main() {
 		initialize.MysqlTables(global.GVA_DB) // 初始化表
 		// 程序结束前关闭数据库链接
 		db, _ := global.GVA_DB.DB()
+		dbCH, _ := global.GORM_CH.DB()
 		defer db.Close()
+		defer dbCH.Close()
 	}
 	core.RunWindowsServer()
 }
