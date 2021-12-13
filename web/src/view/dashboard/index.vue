@@ -3,16 +3,16 @@
     <div class="gva-card-box">
       <el-row :gutter="12">
         <el-col :span="6">
-          <el-card class="summary-card-box summary-card-box-1" shadow="hover"> 今日总流量： 100GB</el-card>
+          <el-card class="summary-card-box summary-card-box-1" shadow="hover"> 今日总流量：{{ this.topCardData[0] }} GB</el-card>
         </el-col>
         <el-col :span="6">
-          <el-card class="summary-card-box summary-card-box-2" shadow="hover"> 本月总流量：1TB </el-card>
+          <el-card class="summary-card-box summary-card-box-2" shadow="hover"> 本月总流量：{{ this.topCardData[1] }} GB </el-card>
         </el-col>
         <el-col :span="6">
-          <el-card class="summary-card-box summary-card-box-3" shadow="hover"> 敬请期待... </el-card>
+          <el-card class="summary-card-box summary-card-box-3" shadow="hover"> {{ this.topCardData[3] }}敬请期待... </el-card>
         </el-col>
         <el-col :span="6">
-          <el-card class="summary-card-box summary-card-box-4" shadow="hover"> Clickhouse总记录数：2亿 </el-card>
+          <el-card class="summary-card-box summary-card-box-4" shadow="hover"> Clickhouse总记录数：{{ this.topCardData[2].toString().replace(/(\d)(?=(?:\d{3})+$)/g,'$1, ') }} 条 </el-card>
         </el-col>
       </el-row>
     </div>
@@ -20,7 +20,7 @@
       <div class="gva-card">
         <div class="card-header">
           <span>数据统计</span>
-        </div>l
+        </div>
         <div class="echart-box">
           <el-row :gutter="20">
             <el-col :xs="24" :sm="18">
@@ -111,14 +111,31 @@
 <script>
 import echartsLine from '@/view/dashboard/dashbordCharts/echartsLine.vue'
 import dashbordTable from '@/view/dashboard/dashbordTable/dashbordTable.vue'
+import { getTopCardData } from '@/api/dashboard'
+
 export default {
   name: 'Dashboard',
   components: {
     echartsLine,
     dashbordTable
   },
+  created() {
+    this.timer = setInterval(() => {
+      getTopCardData().then(result => {
+        this.topCardData = result['data'].split(',')
+      })
+    }, 1000 * 60)
+    getTopCardData().then(result => {
+      this.topCardData = result['data'].split(',')
+    })
+  },
+  beforeDestroy() {
+    // 离开首页时清理定时器
+    clearInterval(this.timer)
+  },
   data() {
     return {
+      topCardData: ['-', '-', '-', '-'],
       toolCards: [
         {
           label: '用户管理',
@@ -168,6 +185,10 @@ export default {
   methods: {
     toTarget(name) {
       this.$router.push({ name })
+    },
+    async getTopCardData() {
+      this.topCardData = await getTopCardData()
+      return this.topCardData
     }
   }
 }
