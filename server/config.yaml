@@ -80,7 +80,7 @@ system:
   addr: 8888
   db-type: mysql
   oss-type: local
-  use-multipoint: false
+  use-multipoint: true
   iplimit-count: 0
   iplimit-time: 0
 tencent-cos:
