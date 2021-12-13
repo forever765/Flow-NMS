@@ -1,10 +1,8 @@
 package initialize
 
 import (
-	"context"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"go.uber.org/zap"
-	"time"
 )
 
 func Timer() {
@@ -24,12 +22,12 @@ func Timer() {
 	if global.GVA_CONFIG.Timer.Start {
 		t := global.GVA_Timer
 		_, err := t.AddTaskByFunc("testFunc", "*/1 * * * *", func() {
-			global.GVA_LOG.Info("testFunc")
-			timer := time.Duration(3600) * time.Second
-			err := global.GVA_REDIS.Set(context.Background(), "tesfdac", time.Now().Format("2006-01-02 15:04:05"), timer).Err()
-			if err != nil {
-				global.GVA_LOG.Error("timer error:", zap.Error(err))
-			}
+			global.GVA_LOG.Info("nowTime write to Redis")
+			//timer := time.Duration(3600) * time.Second
+			//err := global.GVA_REDIS.Set(context.Background(), "nowTime", time.Now().Format("2006-01-02 15:04:05"), timer).Err()
+			//if err != nil {
+			//	global.GVA_LOG.Error("timer error:", zap.Error(err))
+			//}
 		})
 		if err != nil {
 			global.GVA_LOG.Error("No!!!", zap.Error(err))

@@ -2,11 +2,7 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"go.uber.org/zap"
-	"gorm.io/driver/clickhouse"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -21,15 +17,15 @@ type Traffic struct {
 //@description: 获取最近上下行流量
 //@return: json data, err error
 func GetTraffic() json.RawMessage {
-	ClickhouseCfg := global.GVA_CONFIG.Clickhouse
-	dsn := fmt.Sprintf("tcp://%v?dateabase=%v&usernam=%v&password=%v&read_timeout=%v&write_timeout=%v", ClickhouseCfg.Addr,ClickhouseCfg.DB,ClickhouseCfg.Username,ClickhouseCfg.Password,ClickhouseCfg.ReadTimeout,ClickhouseCfg.WriteTimeout)
-	db, err := gorm.Open(clickhouse.Open(dsn), &gorm.Config{PrepareStmt: true})
-	if err != nil {
-		global.GVA_LOG.Error("Failed to connect Clickhouse!", zap.Error(err))
-	}
-	sqlDB, err := db.DB()
-	sqlDB.SetMaxIdleConns(2)
-	sqlDB.SetMaxOpenConns(100)
+	//ClickhouseCfg := global.GVA_CONFIG.Clickhouse
+	//dsn := fmt.Sprintf("tcp://%v?dateabase=%v&usernam=%v&password=%v&read_timeout=%v&write_timeout=%v", ClickhouseCfg.Addr,ClickhouseCfg.DB,ClickhouseCfg.Username,ClickhouseCfg.Password,ClickhouseCfg.ReadTimeout,ClickhouseCfg.WriteTimeout)
+	//db, err := gorm.Open(clickhouse.Open(dsn), &gorm.Config{PrepareStmt: true})
+	//if err != nil {
+	//	global.GVA_LOG.Error("Failed to connect Clickhouse!", zap.Error(err))
+	//}
+	//sqlDB, err := db.DB()
+	//sqlDB.SetMaxIdleConns(2)
+	//sqlDB.SetMaxOpenConns(100)
 	now := time.Now()
 	h, _ := time.ParseDuration("-1h")
 	anHourAgo := (now.Add(h)).Format("2006-01-02 15:04:05")
@@ -47,9 +43,9 @@ func GetTraffic() json.RawMessage {
 	//from(select * from nms_data.pmacctd_data prewhere timestamp_max >= NOW() - 3600) where loc_src = '局域网'
 	//group by Time
 	//order by Time) as Out WHERE In.Time=Out.Time;
-	subQuery1 := db.Raw("select toStartOfInterval(timestamp_max, INTERVAL 10 second ) Time, sum(bytes)/1048576 InMBytes, sum(packets) InPackets, InMBytes*0.8 InTrafficMbps from(select * from nms_data.gateway_pmacctd prewhere timestamp_max >= ?) where loc_dst = '局域网' group by Time", anHourAgo)
-	subQuery2 := db.Raw("select toStartOfInterval(timestamp_max, INTERVAL 10 second ) Time, sum(bytes)/1048576 OutMBytes, sum(packets) OutPackets, OutMBytes*0.8 OutTrafficMbps from(select * from nms_data.gateway_pmacctd prewhere timestamp_max >= ?) where loc_src = '局域网' group by Time", anHourAgo)
-	db.Table("(?) as In, (?) as Out", subQuery1, subQuery2).Select("In.Time,FLOOR(In.InTrafficMbps,2) in_traffic_mbps,FLOOR(Out.OutTrafficMbps,2) out_traffic_mbps").Where("In.Time = Out.Time ORDER BY Time").Find(&result)
+	subQuery1 := global.GORM_CH.Raw("select toStartOfInterval(timestamp_max, INTERVAL 10 second ) Time, sum(bytes)/1048576 InMBytes, sum(packets) InPackets, InMBytes*0.8 InTrafficMbps from(select * from nms_data.gateway_pmacctd prewhere timestamp_max >= ?) where loc_dst = '局域网' group by Time", anHourAgo)
+	subQuery2 := global.GORM_CH.Raw("select toStartOfInterval(timestamp_max, INTERVAL 10 second ) Time, sum(bytes)/1048576 OutMBytes, sum(packets) OutPackets, OutMBytes*0.8 OutTrafficMbps from(select * from nms_data.gateway_pmacctd prewhere timestamp_max >= ?) where loc_src = '局域网' group by Time", anHourAgo)
+	global.GORM_CH.Table("(?) as In, (?) as Out", subQuery1, subQuery2).Select("In.Time,FLOOR(In.InTrafficMbps,2) in_traffic_mbps,FLOOR(Out.OutTrafficMbps,2) out_traffic_mbps").Where("In.Time = Out.Time ORDER BY Time").Find(&result)
 	result2, _ := json.Marshal(result)
 	return json.RawMessage(result2)
 }

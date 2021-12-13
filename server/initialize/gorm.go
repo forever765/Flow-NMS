@@ -1,6 +1,8 @@
 package initialize
 
 import (
+	"fmt"
+	"gorm.io/driver/clickhouse"
 	"os"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -27,6 +29,14 @@ func Gorm() *gorm.DB {
 	default:
 		return GormMysql()
 	}
+}
+
+//@author: forever765
+//@function: Gorm-Clickhouse
+//@description: 2021-12-12，初始化Clickhouse数据库并产生数据库全局变量
+//@return: *gorm.CH
+func GormCH() *gorm.DB {
+	return GormClickhouse()
 }
 
 // MysqlTables
@@ -115,4 +125,34 @@ func gormConfig() *gorm.Config {
 		config.Logger = internal.Default.LogMode(logger.Info)
 	}
 	return config
+}
+
+//@author: forever765
+//@function: GormClickhouse
+//@description: 初始化Clickhouse数据库
+//@return: *gorm.DB
+
+func GormClickhouse() *gorm.DB {
+	ClickhouseCfg := global.GVA_CONFIG.Clickhouse
+	if ClickhouseCfg.Addr == "" {
+		return nil
+	}
+	dsn := fmt.Sprintf("tcp://%v?dateabase=%v&usernam=%v&password=%v&read_timeout=%v&write_timeout=%v", ClickhouseCfg.Addr,ClickhouseCfg.DB,ClickhouseCfg.Username,ClickhouseCfg.Password,ClickhouseCfg.ReadTimeout,ClickhouseCfg.WriteTimeout)
+	ClickhouseConfig := clickhouse.Config{
+		DSN:                       dsn,   // DSN data source name
+		//PrepareStmt: 				true, // 预编译SQL语句
+	}
+	if db, err := gorm.Open(clickhouse.New(ClickhouseConfig), gormConfig()); err != nil {
+		//global.GVA_LOG.Error("MySQL启动异常", zap.Any("err", err))
+		//os.Exit(0)
+		//return nil
+		return nil
+	} else {
+		sqlDB, _ := db.DB()
+		sqlDB.SetMaxIdleConns(2)
+		sqlDB.SetMaxOpenConns(100)
+		//sqlDB.SetMaxIdleConns(ClickhouseCfg.MaxIdleConns)
+		//sqlDB.SetMaxOpenConns(ClickhouseCfg.MaxOpenConns)
+		return db
+	}
 }
