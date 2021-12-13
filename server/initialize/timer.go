@@ -24,7 +24,7 @@ func Timer() {
 	if global.GVA_CONFIG.Timer.Start {
 		t := global.GVA_Timer
 		// 首页Dashboard顶栏数据缓存
-		_, err := t.AddTaskByFunc("testFunc", "*/1 * * * *", func() {
+		_, err := t.AddTaskByFunc("IndexDashboardTopCard", "*/1 * * * *", func() {
 			var (
 				todayTraffic string
 				MonthTraffic string
@@ -42,7 +42,7 @@ func Timer() {
 			}
 			// 写入 Redis
 			timer := time.Duration(3600) * time.Second
-			err := global.GVA_REDIS.Set(context.Background(), "nowTime", todayTraffic[:5]+"-"+MonthTraffic[:5]+"-"+ChTotalCount, timer).Err()
+			err := global.GVA_REDIS.Set(context.Background(), "TopCard", todayTraffic[:5]+","+MonthTraffic[:5]+","+ChTotalCount, timer).Err()
 			if err != nil {
 				global.GVA_LOG.Error("写入Redis失败:", zap.Error(err))
 			}
