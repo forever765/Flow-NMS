@@ -28,21 +28,26 @@ func Timer() {
 			var (
 				todayTraffic string
 				MonthTraffic string
+				HistoryTraffic	string
 				ChTotalCount string
 			)
 			db := global.GORM_CH
-			if err := db.Table("nms_data.gateway_pmacctd").Select("SUM(bytes)/1073741824 as GBytes").Where("timestamp_min > toStartOfDay(NOW())").Find(&todayTraffic).Error; err != nil {
+			// golang做四舍五入很麻烦，故而让clickhouse代为操作
+			if err := db.Table("nms_data.gateway_pmacctd").Select("FLOOR(SUM(bytes)/1073741824,2) as GBytes").Where("timestamp_min > toStartOfDay(NOW())").Find(&todayTraffic).Error; err != nil {
 				global.GVA_LOG.Error("当天流量查询失败:", zap.Error(err))
 			}
-			if err := db.Table("nms_data.gateway_pmacctd").Select("SUM(bytes)/1073741824 as GBytes").Where("timestamp_min > toStartOfMonth(NOW())").Find(&MonthTraffic).Error; err != nil {
+			if err := db.Table("nms_data.gateway_pmacctd").Select("FLOOR(SUM(bytes)/1073741824,2) as GBytes").Where("timestamp_min > toStartOfMonth(NOW())").Find(&MonthTraffic).Error; err != nil {
 				global.GVA_LOG.Error("当月流量查询失败:", zap.Error(err))
+			}
+			if err := db.Table("nms_data.gateway_pmacctd").Select("FLOOR(SUM(bytes)/1073741824,2) as GBytes").Find(&HistoryTraffic).Error; err != nil {
+				global.GVA_LOG.Error("历史流量查询失败:", zap.Error(err))
 			}
 			if err := db.Table("nms_data.gateway_pmacctd").Select("COUNT(timestamp_min)").Find(&ChTotalCount).Error; err != nil {
 				global.GVA_LOG.Error("CH记录总数查询失败:", zap.Error(err))
 			}
 			// 写入 Redis
 			timer := time.Duration(3600) * time.Second
-			err := global.GVA_REDIS.Set(context.Background(), "TopCard", todayTraffic[:5]+","+MonthTraffic[:5]+","+ChTotalCount, timer).Err()
+			err := global.GVA_REDIS.Set(context.Background(), "TopCard", todayTraffic+","+MonthTraffic+","+HistoryTraffic+","+ChTotalCount, timer).Err()
 			if err != nil {
 				global.GVA_LOG.Error("写入Redis失败:", zap.Error(err))
 			}

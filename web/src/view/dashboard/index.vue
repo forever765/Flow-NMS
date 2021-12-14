@@ -9,10 +9,10 @@
           <el-card class="summary-card-box summary-card-box-2" shadow="hover"> 本月总流量：{{ this.topCardData[1] }} GB </el-card>
         </el-col>
         <el-col :span="6">
-          <el-card class="summary-card-box summary-card-box-3" shadow="hover"> {{ this.topCardData[3] }}敬请期待... </el-card>
+          <el-card class="summary-card-box summary-card-box-3" shadow="hover"> 历史总流量：{{ this.topCardData[2] }} GB </el-card>
         </el-col>
         <el-col :span="6">
-          <el-card class="summary-card-box summary-card-box-4" shadow="hover"> Clickhouse总记录数：{{ addChineseUnit(this.topCardData[2],4) }} 条 </el-card>
+          <el-card class="summary-card-box summary-card-box-4" shadow="hover"> Clickhouse总记录数：{{ addChineseUnit(this.topCardData[3],4) }} 条 </el-card>
         </el-col>
       </el-row>
     </div>
