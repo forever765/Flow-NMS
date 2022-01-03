@@ -64,14 +64,15 @@ export default {
       var in_data = []
       var out_data = []
       // json object to array
-      for (var i in data['data']) {
+      var readyData = JSON.parse(data['data'])
+      for (var i in readyData) {
         in_data.push([
-          data['data'][i]['Time'],
-          data['data'][i]['in_traffic_mbps'],
+          readyData[i]['Time'],
+          readyData[i]['in_traffic_mbps'],
         ])
         out_data.push([
-          data['data'][i]['Time'],
-          data['data'][i]['out_traffic_mbps'],
+          readyData[i]['Time'],
+          readyData[i]['out_traffic_mbps'],
         ])
       }
       this.chart.setOption({

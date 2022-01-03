@@ -1,8 +1,6 @@
 package charts
 
 import (
-	"encoding/json"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 )
 
@@ -14,7 +12,7 @@ import (
 type ChartsService struct {
 }
 
-func (ChartsService *ChartsService) GetTraffic() (err error, result json.RawMessage) {
+func (ChartsService *ChartsService) GetTraffic() (err error, result string) {
 	result = utils.GetTraffic()
 	return nil, result
 }
