@@ -53,10 +53,12 @@ func Timer() {
 			err := global.GVA_REDIS.Set(context.Background(), "TopCard", todayTraffic+","+MonthTraffic+","+HistoryTraffic+","+ChTotalCount, timer).Err()
 			if err != nil {
 				global.GVA_LOG.Error("写入Redis失败:", zap.Error(err))
+			} else {
+				global.GVA_LOG.Info("定时任务 IndexDashboardTopCard 执行完成")
 			}
 		})
 		if err != nil {
-			global.GVA_LOG.Error("定时任务 IndexDashboardTopCard添加失败：", zap.Error(err))
+			//global.GVA_LOG.Error("定时任务 IndexDashboardTopCard添加失败：", zap.Error(err))
 		}
 
 
@@ -69,7 +71,7 @@ func Timer() {
 			InTrafficMbps  float32 `json:"in_traffic_mbps"`
 			OutTrafficMbps float32 `json:"out_traffic_mbps"`
 		}
-		_, err2 := t.AddTaskByFunc("IndexDashboardTraffic", "*/1 * * * *", func() {
+		_, err2 := t.AddSecondTaskByFunc("IndexDashboardTraffic", "@every 10s", func() {
 			now := time.Now()
 			h, _ := time.ParseDuration("-1h")
 			anHourAgo := (now.Add(h)).Format("2006-01-02 15:04:05")
@@ -97,10 +99,12 @@ func Timer() {
 			err := global.GVA_REDIS.Set(context.Background(), "IndexTraffic", string(result2), timer).Err()
 			if err != nil {
 				global.GVA_LOG.Error("写入Redis失败:", zap.Error(err))
+			}else {
+				//global.GVA_LOG.Info("定时任务 IndexDashboardTraffic 执行完成")
 			}
 		})
 		if err2 != nil {
-			global.GVA_LOG.Error("定时任务 IndexDashboardTopCard添加失败：", zap.Error(err))
+			global.GVA_LOG.Error("定时任务 IndexDashboardTraffic 添加失败：", zap.Error(err))
 		}
 	}
 }

@@ -8,6 +8,7 @@ import (
 
 type Timer interface {
 	AddTaskByFunc(taskName string, spec string, task func()) (cron.EntryID, error)
+	AddSecondTaskByFunc(taskName string, spec string, task func()) (cron.EntryID, error)
 	AddTaskByJob(taskName string, spec string, job interface{ Run() }) (cron.EntryID, error)
 	FindCron(taskName string) (*cron.Cron, bool)
 	StartTask(taskName string)
@@ -23,12 +24,24 @@ type timer struct {
 	sync.Mutex
 }
 
-// AddTaskByFunc 通过函数的方法添加任务
+// AddTaskByFunc 通过函数的方法添加任务，普通Cron表达式
 func (t *timer) AddTaskByFunc(taskName string, spec string, task func()) (cron.EntryID, error) {
 	t.Lock()
 	defer t.Unlock()
 	if _, ok := t.taskList[taskName]; !ok {
 		t.taskList[taskName] = cron.New()
+	}
+	id, err := t.taskList[taskName].AddFunc(spec, task)
+	t.taskList[taskName].Start()
+	return id, err
+}
+
+// AddSecondTaskByFunc 通过函数的方法添加任务，特殊Cron表达式，第一位为秒级
+func (t *timer) AddSecondTaskByFunc(taskName string, spec string, task func()) (cron.EntryID, error) {
+	t.Lock()
+	defer t.Unlock()
+	if _, ok := t.taskList[taskName]; !ok {
+		t.taskList[taskName] = cron.New(cron.WithSeconds())
 	}
 	id, err := t.taskList[taskName].AddFunc(spec, task)
 	t.taskList[taskName].Start()
