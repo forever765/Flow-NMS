@@ -71,7 +71,7 @@ func Timer() {
 			InTrafficMbps  float32 `json:"in_traffic_mbps"`
 			OutTrafficMbps float32 `json:"out_traffic_mbps"`
 		}
-		_, err2 := t.AddSecondTaskByFunc("IndexDashboardTraffic", "@every 10s", func() {
+		_, err2 := t.AddSecondTaskByFunc("IndexDashboardTraffic", "@every 5s", func() {
 			now := time.Now()
 			h, _ := time.ParseDuration("-1h")
 			anHourAgo := (now.Add(h)).Format("2006-01-02 15:04:05")
