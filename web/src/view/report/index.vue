@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import dailyDetail from '@/view/detail/daily/dailyDetail.vue'
+import dailyDetail from '@/view/report/detail/detail.vue'
 export default {
   name: 'Detail',
   components: {

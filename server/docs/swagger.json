@@ -1165,6 +1165,30 @@
                 }
             }
         },
+        "/charts/getTraffic": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Charts"
+                ],
+                "summary": "获取最近上下行流量",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/customer/customer": {
             "get": {
                 "security": [
@@ -1375,6 +1399,30 @@
                         "in": "query"
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/getTopCardData": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "从Redis获取首页顶部卡片组件数据",
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
@@ -2194,6 +2242,30 @@
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/reports/getNewestData": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "获取最新报表数据",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -3089,6 +3161,54 @@
                 }
             }
         },
+        "/system/GetClickhouseInfo": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "获取Clickhouse状态",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/system/getChSinkerInfo": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "获取Clickhouse_Sinker状态",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/system/getServerInfo": {
             "post": {
                 "security": [
@@ -3594,6 +3714,52 @@
                 }
             }
         },
+        "config.Clickhouse": {
+            "type": "object",
+            "properties": {
+                "addr": {
+                    "description": "服务器地址:端口",
+                    "type": "string"
+                },
+                "cluster": {
+                    "description": "Clickhouse Cluster",
+                    "type": "string"
+                },
+                "db": {
+                    "description": "Clickhouse的哪个数据库",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "read_timeout": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "write_timeout": {
+                    "description": "密码",
+                    "type": "string"
+                }
+            }
+        },
+        "config.ClickhouseSinker": {
+            "type": "object",
+            "properties": {
+                "addr": {
+                    "description": "服务器地址",
+                    "type": "string"
+                },
+                "port": {
+                    "description": "端口",
+                    "type": "string"
+                }
+            }
+        },
         "config.Detail": {
             "type": "object",
             "properties": {
@@ -3662,6 +3828,10 @@
                 "expiresTime": {
                     "description": "过期时间",
                     "type": "integer"
+                },
+                "issuer": {
+                    "description": "签发者",
+                    "type": "string"
                 },
                 "signingKey": {
                     "description": "jwt签名",
@@ -3785,6 +3955,14 @@
                 "casbin": {
                     "$ref": "#/definitions/config.Casbin"
                 },
+                "clickhouse": {
+                    "description": "Clickhouse",
+                    "$ref": "#/definitions/config.Clickhouse"
+                },
+                "clickhouse_sinker_nali": {
+                    "description": "Clickhouse_Sinker",
+                    "$ref": "#/definitions/config.ClickhouseSinker"
+                },
                 "email": {
                     "$ref": "#/definitions/config.Email"
                 },
@@ -3836,6 +4014,12 @@
                 "env": {
                     "description": "环境值",
                     "type": "string"
+                },
+                "iplimitCount": {
+                    "type": "integer"
+                },
+                "iplimitTime": {
+                    "type": "integer"
                 },
                 "ossType": {
                     "description": "Oss类型",
@@ -3906,10 +4090,6 @@
                 },
                 "level": {
                     "description": "级别",
-                    "type": "string"
-                },
-                "linkName": {
-                    "description": "软链接名称",
                     "type": "string"
                 },
                 "logInConsole": {

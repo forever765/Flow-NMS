@@ -54,7 +54,7 @@ func Timer() {
 			if err != nil {
 				global.GVA_LOG.Error("写入Redis失败:", zap.Error(err))
 			} else {
-				global.GVA_LOG.Info("定时任务 IndexDashboardTopCard 执行完成")
+				//global.GVA_LOG.Info("定时任务 IndexDashboardTopCard 执行完成")
 			}
 		})
 		if err != nil {

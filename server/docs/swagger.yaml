@@ -77,6 +77,39 @@ definitions:
         description: 存放casbin模型的相对路径
         type: string
     type: object
+  config.Clickhouse:
+    properties:
+      addr:
+        description: 服务器地址:端口
+        type: string
+      cluster:
+        description: Clickhouse Cluster
+        type: string
+      db:
+        description: Clickhouse的哪个数据库
+        type: string
+      password:
+        description: 密码
+        type: string
+      read_timeout:
+        description: 密码
+        type: string
+      username:
+        description: 密码
+        type: string
+      write_timeout:
+        description: 密码
+        type: string
+    type: object
+  config.ClickhouseSinker:
+    properties:
+      addr:
+        description: 服务器地址
+        type: string
+      port:
+        description: 端口
+        type: string
+    type: object
   config.Detail:
     properties:
       compareField:
@@ -126,6 +159,9 @@ definitions:
       expiresTime:
         description: 过期时间
         type: integer
+      issuer:
+        description: 签发者
+        type: string
       signingKey:
         description: jwt签名
         type: string
@@ -213,6 +249,12 @@ definitions:
         $ref: '#/definitions/config.Captcha'
       casbin:
         $ref: '#/definitions/config.Casbin'
+      clickhouse:
+        $ref: '#/definitions/config.Clickhouse'
+        description: Clickhouse
+      clickhouse_sinker_nali:
+        $ref: '#/definitions/config.ClickhouseSinker'
+        description: Clickhouse_Sinker
       email:
         $ref: '#/definitions/config.Email'
       excel:
@@ -249,6 +291,10 @@ definitions:
       env:
         description: 环境值
         type: string
+      iplimitCount:
+        type: integer
+      iplimitTime:
+        type: integer
       ossType:
         description: Oss类型
         type: string
@@ -297,9 +343,6 @@ definitions:
         type: string
       level:
         description: 级别
-        type: string
-      linkName:
-        description: 软链接名称
         type: string
       logInConsole:
         description: 输出控制台
@@ -1642,6 +1685,20 @@ paths:
       summary: 获取权限列表
       tags:
       - Casbin
+  /charts/getTraffic:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取最近上下行流量
+      tags:
+      - Charts
   /customer/customer:
     delete:
       consumes:
@@ -1778,6 +1835,20 @@ paths:
       summary: 分页获取权限客户列表
       tags:
       - ExaCustomer
+  /dashboard/getTopCardData:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 从Redis获取首页顶部卡片组件数据
+      tags:
+      - Dashboard
   /email/emailTest:
     post:
       produces:
@@ -2272,6 +2343,20 @@ paths:
       summary: 更新菜单
       tags:
       - Menu
+  /reports/getNewestData:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取最新报表数据
+      tags:
+      - Reports
   /sysDictionary/createSysDictionary:
     post:
       consumes:
@@ -2829,6 +2914,34 @@ paths:
       summary: 分页获取SysOperationRecord列表
       tags:
       - SysOperationRecord
+  /system/GetClickhouseInfo:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取Clickhouse状态
+      tags:
+      - System
+  /system/getChSinkerInfo:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取Clickhouse_Sinker状态
+      tags:
+      - System
   /system/getServerInfo:
     post:
       produces:

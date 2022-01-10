@@ -5,6 +5,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/charts"
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/dashboard"
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/example"
+	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/reports"
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/system"
 )
 
@@ -13,6 +14,7 @@ type ApiGroup struct {
 	SystemApiGroup   system.ApiGroup
 	AutoCodeApiGroup autocode.ApiGroup
 	ChartsApiGroup   charts.ApiGroup
+	ReportsApiGroup   reports.ApiGroup
 	DashboardApiGroup   dashboard.ApiGroup
 }
 
