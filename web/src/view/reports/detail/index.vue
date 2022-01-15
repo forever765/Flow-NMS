@@ -20,6 +20,24 @@ export default {
   name: 'DynamicShare',
   components: { FilterPane, TablePane },
   data() {
+    function handleBytes(v) {
+      if (v == null) {
+        return ''
+      }
+      const unit = [' KB', ' MB', ' GB', ' TB', ' PB']
+      let n = -1
+      const s = 1024
+      if (v < s) {
+        return v + ' B'
+      }
+      do {
+        v = v / s
+        n++
+      }
+      while (Math.round(v) > s && n < unit.length)
+      return Math.round(v) + unit[n]
+    }
+
     return {
       // 搜索栏配置
       filterData: {
@@ -36,7 +54,7 @@ export default {
             key: 'dynamicId'
           },
           {
-            name: '分享ID',
+            name: 'XXX',
             width: 230,
             key: 'shareId'
           }
@@ -86,6 +104,9 @@ export default {
           {
             label: '数据大小',
             prop: 'bytes',
+            isCodeTableFormatter: function(val) {
+              return handleBytes(val.bytes)
+            }
           },
           {
             label: '类型',
@@ -188,7 +209,7 @@ export default {
     changeNum(pageNum) {
       this.dataSource.pageData.pageNum = pageNum
       this.getList()
-    }
+    },
   }
 }
 </script>
