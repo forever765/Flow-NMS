@@ -1,0 +1,198 @@
+<template>
+  <div className="app-container">
+    <filter-pane :filter-data="filterData" @filterMsg="filterMsg" />
+    <table-pane
+      :data-source="dataSource"
+      @changeSize="changeSize"
+      @changeNum="changeNum"
+    />
+  </div>
+</template>
+
+<script>
+import FilterPane from '@/view/reports/detail/filterPane.vue'
+import TablePane from '@/view/reports/detail/tablePane.vue'
+import { getNewestData } from '@/api/reports.js'
+// import {dynamicShareList} from '@/api/user'
+// import {timeFormat} from '@/filters/index'
+
+export default {
+  name: 'DynamicShare',
+  components: { FilterPane, TablePane },
+  data() {
+    return {
+      // 搜索栏配置
+      filterData: {
+        timeSelect: true,
+        elinput: [
+          {
+            name: 'IP地址',
+            width: 230,
+            key: 'userId'
+          },
+          {
+            name: '类型',
+            width: 230,
+            key: 'dynamicId'
+          },
+          {
+            name: '分享ID',
+            width: 230,
+            key: 'shareId'
+          }
+        ]
+      },
+      // 表格配置
+      dataSource: {
+        tool: [{
+          name: '测试按钮-新增版本',
+          key: 1,
+          // permission: 2010701,
+          handleClick: this.handleAdd,
+          bgColor: '' // 自定义按钮背景色
+        }],
+        data: [], // 表格数据
+        cols: [
+          {
+            label: '开始时间',
+            prop: 'timestamp_min',
+            // isImagePopover: true,
+            width: 180
+          },
+          {
+            label: '结束时间',
+            prop: 'timestamp_max',
+            width: 180
+          },
+          {
+            label: '源IP:端口',
+            prop: 'src_ip_port',
+            width: 180,
+            // template slot-scope="scope"> {{src_ip}}: {{src_port}} </template>
+          },
+          {
+            label: '源IP-ISP',
+            prop: 'src_loc_isp'
+          },
+          {
+            label: '目标IP:端口',
+            prop: 'dst_ip_port',
+            width: 180,
+          },
+          {
+            label: '目标IP-ISP',
+            prop: 'dst_loc_isp',
+          },
+          {
+            label: '数据大小',
+            prop: 'bytes',
+          },
+          {
+            label: '类型',
+            prop: 'class',
+            width: 100
+          },
+          {
+            label: '协议类型',
+            prop: 'protocol_etype'
+          }
+        ], // 表格的列数据
+        handleSelectionChange: () => {
+        },
+        isSelection: false, // 表格有多选时设置
+        isOperation: false, // 表格有操作列时设置
+        isIndex: true, // 列表序号
+        loading: true, // loading
+        pageData: {
+          total: 0, // 总条数
+          pageSize: 10, // 每页数量
+          pageNum: 1 // 页码
+        },
+        operation: {
+          // 表格有操作列时设置
+          label: '操作', // 列名
+          width: '100', // 根据实际情况给宽度
+          data: [ // 功能数组
+            {
+              type: 'icon', // 为icon则是图标
+              label: '推荐', // 功能
+              icon: 'iconfont recommend-btn icon-iconkuozhan_tuijianpre',
+              permission: '3010105', // 后期这个操作的权限，用来控制权限
+              handleRow: this.handleRow
+            },
+            {
+              label: '删除', // 操作名称
+              type: 'danger', // 为element btn属性则是按钮
+              permission: '2010702', // 后期这个操作的权限，用来控制权限
+              handleRow: this.handleRow
+            }
+          ]
+        }
+      },
+      dialogAdd: false,
+      msg: {}
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      const data = {
+        pageSize: this.dataSource.pageData.pageSize,
+        pageNum: this.dataSource.pageData.pageNum
+      }
+      if (this.msg.userId) {
+        var reg = /^\d{9,10}$/
+        if (!reg.test(this.msg.userId)) {
+          this.$message({
+            type: 'error',
+            message: '请输入正确的脸影号'
+          })
+          return
+        }
+        data.userId = this.msg.userId
+      }
+      if (this.msg.beginDate) {
+        data.beginDate = this.msg.beginDate
+        data.endDate = this.msg.endDate
+      }
+      if (this.msg.dynamicId) {
+        data.dynamicId = this.msg.dynamicId
+      }
+      if (this.msg.shareId) {
+        data.shareId = this.msg.shareId
+      }
+      this.dataSource.loading = true
+      getNewestData(data).then(res => {
+        this.dataSource.loading = false
+        if (res['msg'] === '获取成功') {
+          if (res['data'].length > 0) {
+            this.dataSource.pageData.total = res['data'].length
+            this.dataSource.data = res['data']
+          } else {
+            this.dataSource.data = []
+            this.dataSource.pageData.total = 0
+          }
+        }
+      })
+    },
+    filterMsg(msg) {
+      this.msg = msg
+      this.getList()
+    },
+    changeSize(size) {
+      this.dataSource.pageData.pageSize = size
+      this.getList()
+    },
+    changeNum(pageNum) {
+      this.dataSource.pageData.pageNum = pageNum
+      this.getList()
+    }
+  }
+}
+</script>
+
+<style scoped lang='scss'>
+
+</style>

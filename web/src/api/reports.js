@@ -26,12 +26,11 @@ import service from '@/utils/request'
 // @accept application/json
 // @Produce application/json
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /report/getNewData [get]
-export const getNewData = (data) => {
+// @Router /report/getNewestData [get]
+export const getNewestData = () => {
   return service({
-    url: '/report/getNewData',
+    url: '/reports/getNewestData',
     method: 'get',
-    data
   })
 }
 

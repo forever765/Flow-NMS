@@ -24,16 +24,72 @@ type dbTable struct {
 	Isp_dst string
 	Etype string
 }
-var NewestData []dbTable
+//var NewestData []dbTable
+var NewestData []map[string]interface{}
 //@author: [forever765](https://github.com/forever765)
 //@function: GetNewestData
 //@description: 获取最新报表数据
 //@return: json data, err error
-func GetNewestData() string {
-//func GetNewestData() map[string]interface{} {
+func GetNewestData() []map[string]interface{} {
 	db := global.GORM_CH
-	if err := db.Table("nms_data.gateway_pmacctd").Select("*").Where("timestamp_min >= NOW()-300 ORDER BY timestamp_min DESC LIMIT 200").Find(&NewestData).Error; err != nil {
+	if err := db.
+		Table("nms_data.gateway_pmacctd").
+		Select("timestamp_min, timestamp_max, ip_src, port_src, isp_src, loc_src, ip_dst, isp_dst, loc_dst, port_dst, bytes, class, ip_proto, packets, etype").
+		Where("timestamp_min >= NOW()-120").
+		Limit(100).
+		Order("timestamp_min DESC").
+		//Debug().
+		Find(&NewestData).
+		Error; err != nil {
 		global.GVA_LOG.Error("获取报表最新数据失败:", zap.Error(err))
 	}
-	return strings.Replace(strings.Trim(fmt.Sprint(NewestData), "[]"), " ", ",", -1)
+	fmt.Print("总数：",len(NewestData), NewestData)
+	// 遍历合并字段，简化前端操作
+	for i:= 0; i<len(NewestData); i++{
+		if strings.Contains(fmt.Sprintf("%v",NewestData[i]), "nil") {
+			fmt.Println("found nil")
+			break
+		}
+		NewestData[i]["src_ip_port"] = fmt.Sprintf("%v:%v", NewestData[i]["ip_src"], NewestData[i]["port_src"])
+		NewestData[i]["dst_ip_port"] = fmt.Sprintf("%v:%v", NewestData[i]["ip_dst"], NewestData[i]["port_dst"])
+		// 优化局域网显示，局域网:局域网 => 局域网
+		if NewestData[i]["loc_src"] == "局域网" {
+			NewestData[i]["src_loc_isp"] = "局域网"
+		} else {
+			NewestData[i]["src_loc_isp"] = fmt.Sprintf("%v%v", NewestData[i]["loc_src"], NewestData[i]["isp_src"])
+		}
+		if NewestData[i]["loc_dst"] == "局域网" {
+			NewestData[i]["dst_loc_isp"] = "局域网"
+		} else {
+			NewestData[i]["dst_loc_isp"] = fmt.Sprintf("%v%v", NewestData[i]["loc_dst"], NewestData[i]["isp_dst"])
+		}
+		// 优化ipv4/6显示，和协议合并显示
+		if NewestData[i]["etype"] == "800" {
+			NewestData[i]["protocol_etype"] = fmt.Sprintf("%v/v4", NewestData[i]["ip_proto"])
+		} else {
+			NewestData[i]["protocol_etype"] = fmt.Sprintf("%v/v6", NewestData[i]["ip_proto"])
+		}
+		// 处理时间
+		MinTimeStep1 := strings.Replace(fmt.Sprintf("%v", NewestData[i]["timestamp_min"]) , "CST", "", -1)
+		MinTimeStep2 := strings.Replace(MinTimeStep1 , "T", " ", -1)
+		NewestData[i]["timestamp_min"] = strings.Replace(MinTimeStep2 , " +0800 ", "", -1)
+		MaxTimeStep1 := strings.Replace(fmt.Sprintf("%v", NewestData[i]["timestamp_max"]) , "CST", "", -1)
+		MaxTimeStep2 := strings.Replace(MaxTimeStep1 , "T", " ", -1)
+		NewestData[i]["timestamp_max"] = strings.Replace(MaxTimeStep2 , " +0800 ", "", -1)
+
+		delete(NewestData[i], "ip_src")
+		delete(NewestData[i], "port_src")
+		delete(NewestData[i], "ip_dst")
+		delete(NewestData[i], "port_dst")
+		delete(NewestData[i], "loc_src")
+		delete(NewestData[i], "isp_src")
+		delete(NewestData[i], "loc_dst")
+		delete(NewestData[i], "isp_dst")
+		delete(NewestData[i], "ip_proto")
+		delete(NewestData[i], "etype")
+	}
+	defer func() {
+		NewestData = nil
+	}()
+	return NewestData
 }

@@ -12,7 +12,7 @@ import (
 type ReportsService struct {
 }
 
-func (ReportsService *ReportsService) GetNewestData() (err error, result string) {
+func (ReportsService *ReportsService) GetNewestData() (err error, result []map[string]interface{}) {
 	result = reports.GetNewestData()
 	return nil, result
 }
