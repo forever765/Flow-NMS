@@ -2,41 +2,41 @@
   <div>
     <div class="filter-container">
       <el-date-picker
-          v-if="filterData.timeSelect"
-          v-model="dateRange"
-          style="width: 300px"
-          type="daterange"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-time="['', '']"
-          :picker-options="pickerOptions"
-          class="filter-item"
+        v-if="filterData.timeSelect"
+        v-model="dateRange"
+        style="width: 300px"
+        type="daterange"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :default-time="['', '']"
+        :picker-options="pickerOptions"
+        class="filter-item"
       />
       <template v-if="filterData.elinput">
         <el-input
-            v-for="(item,index) in filterData.elinput"
-            :key="index"
-            v-model="listQuery[item.key]"
-            :placeholder="item.name"
-            :style="{'width':item.width?item.width+'px':'200px'}"
-            class="filter-item"
+          v-for="(item,index) in filterData.elinput"
+          :key="index"
+          v-model="listQuery[item.key]"
+          :placeholder="item.name"
+          :style="{'width':item.width?item.width+'px':'200px'}"
+          class="filter-item"
         />
       </template>
       <template v-if="filterData.elselect">
         <el-select
-            v-for="(item,index) in filterData.elselect"
-            :key="index"
-            v-model="listQuery[item.key]"
-            :placeholder="item.name"
-            clearable
-            :style="{'width':item.width?item.width+'px':'90px'}"
-            class="filter-item"
+          v-for="(item,index) in filterData.elselect"
+          :key="index"
+          v-model="listQuery[item.key]"
+          :placeholder="item.name"
+          clearable
+          :style="{'width':item.width?item.width+'px':'90px'}"
+          class="filter-item"
         >
           <el-option
-              v-for="i in item.option"
-              :key="i.key"
-              :label="i.value"
-              :value="i.key"
+            v-for="i in item.option"
+            :key="i.key"
+            :label="i.value"
+            :value="i.key"
           />
         </el-select>
       </template>
@@ -86,8 +86,30 @@ export default {
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now()
-        }
+        },
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
       },
+      value1: '',
+      value2: '',
       dateRange: ['', ''],
       listQuery: {}
     }
@@ -133,13 +155,11 @@ export default {
       this.$emit('filterMsg', data)
     },
     handleRest() {
-      const data = this.$global.deepClone(this.listQuery)
-      Object.keys(data).forEach(function(key) {
-        data[key] = ''
-      })
-      this.listQuery = data
+      this.listQuery['dynamicId'] = ''
+      this.listQuery['shareId'] = ''
+      this.listQuery['userId'] = ''
       this.dateRange = ['', '']
-      console.log('重置成功', this.listQuery)
+      // console.log('重置成功', this.listQuery)
     }
   }
 }

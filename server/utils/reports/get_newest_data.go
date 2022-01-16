@@ -24,26 +24,26 @@ type dbTable struct {
 	Isp_dst string
 	Etype string
 }
-//var NewestData []dbTable
+
 var NewestData []map[string]interface{}
 //@author: [forever765](https://github.com/forever765)
 //@function: GetNewestData
 //@description: 获取最新报表数据
 //@return: json data, err error
-func GetNewestData() []map[string]interface{} {
+func GetNewestData(pageNum int, pageSize int) []map[string]interface{} {
 	db := global.GORM_CH
 	if err := db.
 		Table("nms_data.gateway_pmacctd").
 		Select("timestamp_min, timestamp_max, ip_src, port_src, isp_src, loc_src, ip_dst, isp_dst, loc_dst, port_dst, bytes, class, ip_proto, packets, etype").
-		Where("timestamp_min >= NOW()-120").
-		Limit(100).
+		Where("timestamp_min >= NOW()-600").
+		Offset(OffsetCompute(pageNum, pageSize)).
+		Limit(pageSize).
 		Order("timestamp_min DESC").
-		//Debug().
+		Debug().
 		Find(&NewestData).
 		Error; err != nil {
 		global.GVA_LOG.Error("获取报表最新数据失败:", zap.Error(err))
 	}
-	fmt.Print("总数：",len(NewestData), NewestData)
 	// 遍历合并字段，简化前端操作
 	for i:= 0; i<len(NewestData); i++{
 		if strings.Contains(fmt.Sprintf("%v",NewestData[i]), "nil") {
@@ -92,4 +92,14 @@ func GetNewestData() []map[string]interface{} {
 		NewestData = nil
 	}()
 	return NewestData
+}
+
+// offset计算
+func OffsetCompute(pageNum int, pageSize int) (offset int) {
+	if pageNum == 1 {
+		offset = -1
+	} else {
+		offset = (pageNum-1) * pageSize
+	}
+	return offset
 }

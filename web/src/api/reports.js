@@ -27,9 +27,13 @@ import service from '@/utils/request'
 // @Produce application/json
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /report/getNewestData [get]
-export const getNewestData = () => {
+// {
+//  page     int
+//	pageSize int
+// }
+export const getNewestData = (data) => {
   return service({
-    url: '/reports/getNewestData',
+    url: '/reports/getNewestData?pageNum=' + data.pageNum + '&pageSize=' + data.pageSize,
     method: 'get',
   })
 }

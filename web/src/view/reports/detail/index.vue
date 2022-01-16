@@ -13,11 +13,9 @@
 import FilterPane from '@/view/reports/detail/filterPane.vue'
 import TablePane from '@/view/reports/detail/tablePane.vue'
 import { getNewestData } from '@/api/reports.js'
-// import {dynamicShareList} from '@/api/user'
-// import {timeFormat} from '@/filters/index'
 
 export default {
-  name: 'DynamicShare',
+  name: 'GetNewestData',
   components: { FilterPane, TablePane },
   data() {
     function handleBytes(v) {
@@ -86,7 +84,6 @@ export default {
             label: '源IP:端口',
             prop: 'src_ip_port',
             width: 180,
-            // template slot-scope="scope"> {{src_ip}}: {{src_port}} </template>
           },
           {
             label: '源IP-ISP',
@@ -126,7 +123,7 @@ export default {
         loading: true, // loading
         pageData: {
           total: 0, // 总条数
-          pageSize: 10, // 每页数量
+          pageSize: 20, // 每页数量
           pageNum: 1 // 页码
         },
         operation: {
@@ -138,13 +135,13 @@ export default {
               type: 'icon', // 为icon则是图标
               label: '推荐', // 功能
               icon: 'iconfont recommend-btn icon-iconkuozhan_tuijianpre',
-              permission: '3010105', // 后期这个操作的权限，用来控制权限
+              // permission: '3010105', // 后期这个操作的权限，用来控制权限
               handleRow: this.handleRow
             },
             {
               label: '删除', // 操作名称
               type: 'danger', // 为element btn属性则是按钮
-              permission: '2010702', // 后期这个操作的权限，用来控制权限
+              // permission: '2010702', // 后期这个操作的权限，用来控制权限
               handleRow: this.handleRow
             }
           ]
@@ -189,7 +186,7 @@ export default {
         this.dataSource.loading = false
         if (res['msg'] === '获取成功') {
           if (res['data'].length > 0) {
-            this.dataSource.pageData.total = res['data'].length
+            this.dataSource.pageData.total = 1000 // res['data'].length
             this.dataSource.data = res['data']
           } else {
             this.dataSource.data = []

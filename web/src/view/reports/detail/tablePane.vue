@@ -32,14 +32,14 @@
         :width="dataSource.selectionWidth || 50"
         align="center"
       />
-      <!-- 是否需要序号 -->
-      <!--      <el-table-column-->
-      <!--        v-if="dataSource.isIndex"-->
-      <!--        type="index"-->
-      <!--        label="序号"-->
-      <!--        width="55"-->
-      <!--        align="center"-->
-      <!--      />-->
+      <!-- 是否显示序号 -->
+      <el-table-column
+        v-if="dataSource.isIndex"
+        type="index"
+        label="序号"
+        width="55"
+        align="center"
+      />
 
       <template v-for="item in dataSource.cols">
         <!-- 表格的列展示 特殊情况处理 比如要输入框 显示图片 -->
@@ -149,8 +149,9 @@
     <div class="page">
       <el-pagination
         v-if="dataSource.pageData.total>0"
+        background
         :current-page="dataSource.pageData.pageNum"
-        :page-sizes="dataSource.pageData.pageSizes?dataSource.pageData.pageSizes:[5,10,15,20]"
+        :page-sizes="dataSource.pageData.pageSizes?dataSource.pageData.pageSizes:[20,30,50,100]"
         :page-size="dataSource.pageData.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="dataSource.pageData.total"
@@ -234,11 +235,11 @@ export default {
     },
     handleSizeChange(val) {
       this.$emit('changeSize', val)
-      console.log(`每页 ${val} 条`)
+      // console.log(`每页 ${val} 条`)
     },
     handleCurrentChange(val) {
       this.$emit('changeNum', val)
-      console.log(`当前页: ${val}`)
+      // console.log(`当前页: ${val}`)
     },
     // 点击行即可选中
     getRowData(row) {
