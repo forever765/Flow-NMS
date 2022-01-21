@@ -3,6 +3,7 @@ import 'element-plus/dist/index.css'
 import './style/element_visiable.scss'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
 // 引入 NProgress显示页面加载进度条
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'

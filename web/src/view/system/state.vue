@@ -155,6 +155,7 @@ export default {
   },
   created() {
     this.reload()
+    console.log('getSystemState')
     this.timer = setInterval(() => {
       this.reload()
     }, 1000 * 10)

@@ -237,7 +237,6 @@ export default {
   }
 }
 
-
 </script>
 
 <style lang="scss" scoped>
@@ -269,18 +268,6 @@ export default {
         background: #FEBB50;
       }
     }
-    // .card-box-1{
-    //   background: #48D18D;
-    // }
-    // .card-box-2{
-    //   background: #F95959;
-    // }
-    // .card-box-3{
-    //   background: #8294F6;
-    // }
-    // .card-box-4{
-    //   background: #FEBB50;
-    // }
     .gva-card {
       box-sizing: border-box;
         background-color: #fff;

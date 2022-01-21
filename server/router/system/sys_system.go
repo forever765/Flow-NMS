@@ -17,7 +17,7 @@ func (s *SysRouter) InitSystemRouter(Router *gin.RouterGroup) {
 		sysRouter.POST("setSystemConfig", systemApi.SetSystemConfig)     // 设置配置文件内容
 		sysRouter.POST("getServerInfo", systemApi.GetServerInfo)         // 获取服务器信息
 		sysRouter.POST("getClickhouseInfo", systemApi.GetClickhouseInfo) // 获取Clickhouse信息
-		sysRouter.POST("getChSinkerInfo", systemApi.GetChSinkerInfo)     // 获取Clickhouse_Sinker信息
+		sysRouter.POST("getChSinkerNaliInfo", systemApi.GetChSinkerNaliInfo)     // 获取Clickhouse_SinkerNali信息
 		sysRouter.POST("reloadSystem", systemApi.ReloadSystem)           // 重启服务
 	}
 }

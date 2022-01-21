@@ -37,8 +37,8 @@ clickhouse_sinker:
   addr: nms.lujia.com
   port: "21888"
 clickhouse_sinker_nali:
-  addr: ""
-  port: ""
+  addr: nms01.home.com
+  port: "21888"
 email:
   to: 823972850@qq.com
   port: 465
@@ -64,7 +64,7 @@ mysql:
   password: 6BuDxFC6LYo2VHpDegpd6btbDjzgxpZu
   max-idle-conns: 0
   max-open-conns: 0
-  log-mode: "Warn"
+  log-mode: Warn
   log-zap: false
 qiniu:
   zone: ZoneHuaDong

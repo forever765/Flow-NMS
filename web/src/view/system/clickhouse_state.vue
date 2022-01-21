@@ -141,7 +141,7 @@
 <script>
 import { getClickhouseState } from '@/api/system'
 export default {
-  name: 'State',
+  name: 'ChInfo',
   data() {
     return {
       timer: null,

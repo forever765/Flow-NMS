@@ -99,11 +99,11 @@ func (s *SystemApi) GetClickhouseInfo(c *gin.Context) {
 // @Produce  application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /system/getChSinkerInfo [post]
-func (s *SystemApi) GetChSinkerInfo(c *gin.Context) {
-	if server, err := systemConfigService.GetChSinkerInfo(); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+func (s *SystemApi) GetChSinkerNaliInfo(c *gin.Context) {
+	if ChSinkerNaliInfo := systemConfigService.GetChSinkerNaliInfo(); string(ChSinkerNaliInfo) == "" {
+		global.GVA_LOG.Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithDetailed(gin.H{"server": server}, "获取成功", c)
+		response.OkWithDetailed(ChSinkerNaliInfo, "获取成功", c)
 	}
 }

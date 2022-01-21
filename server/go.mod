@@ -36,6 +36,7 @@ require (
 	github.com/tidwall/gjson v1.12.1 // indirect
 	github.com/tklauser/go-sysconf v0.3.9 // indirect
 	github.com/unrolled/secure v1.0.7
+	github.com/walle/targz v0.0.0-20140417120357-57fe4206da5a // indirect
 	github.com/xuri/excelize/v2 v2.4.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20220107192237-5cfca573fb4d // indirect

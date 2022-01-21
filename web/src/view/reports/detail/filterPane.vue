@@ -4,8 +4,9 @@
       <el-date-picker
         v-if="filterData.timeSelect"
         v-model="dateRange"
-        style="width: 300px"
-        type="daterange"
+        style="width: 360px; height: 130%"
+        type="datetimerange"
+        range-separator="To"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
         :default-time="['', '']"
@@ -18,7 +19,7 @@
           :key="index"
           v-model="listQuery[item.key]"
           :placeholder="item.name"
-          :style="{'width':item.width?item.width+'px':'200px'}"
+          :style="{'width':item.width?item.width+'px':'160px'}"
           class="filter-item"
         />
       </template>
@@ -44,7 +45,7 @@
         <el-button class="filter-item" type="primary" @click="handleSearch">
           搜索
         </el-button>
-        <el-button class="filter-item" type="warning" @click="handleRest">
+        <el-button class="filter-item" type="warning" @click="handleReset">
           重置
         </el-button>
       </div>
@@ -73,6 +74,8 @@
 //     }
 //   ]
 // }
+import moment from 'moment'
+
 export default {
   name: 'FilterPane',
   props: {
@@ -116,7 +119,7 @@ export default {
   },
   watch: {
     'filterData'(val) {
-      console.log(val)
+      // console.log(val)
       if (val.elinput.length > 0) {
         val.elinput.map(item => {
           this.listQuery[item.key] = ''
@@ -131,7 +134,7 @@ export default {
     'filterData.rest': {
       handler: function(val) {
         if (val) {
-          this.handleRest()
+          this.handleReset()
         }
       },
       deep: true
@@ -139,11 +142,11 @@ export default {
   },
   methods: {
     handleSearch() {
-      console.log('搜索成功', this.listQuery)
-      const data = this.$global.deepClone(this.listQuery)
+      const data = this.listQuery
+      // 处理时间未选择的情况
       if (this.dateRange && this.dateRange[0] !== '') {
-        const startTime = this.$moment(this.dateRange[0]).format('YYYY-MM-DD') + ' 00:00:00'
-        const endTime = this.$moment(this.dateRange[1]).format('YYYY-MM-DD') + ' 23:59:59'
+        const startTime = moment(this.dateRange[0]).format('YYYY-MM-DD') + ' 00:00:00'
+        const endTime = moment(this.dateRange[1]).format('YYYY-MM-DD') + ' 23:59:59'
         data.beginDate = startTime
         data.endDate = endTime
       }
@@ -153,19 +156,19 @@ export default {
         }
       })
       this.$emit('filterMsg', data)
+      console.log('搜索成功', this.listQuery)
     },
-    handleRest() {
+    handleReset() {
       this.listQuery['dynamicId'] = ''
-      this.listQuery['shareId'] = ''
-      this.listQuery['userId'] = ''
+      this.listQuery['class'] = ''
+      this.listQuery['ipAddr'] = ''
       this.dateRange = ['', '']
-      // console.log('重置成功', this.listQuery)
     }
   }
 }
 </script>
 
-<style  scoped lang='scss'>
+<style scoped>
 .filter-item{
   margin-left: 10px;
   display: inline-block;

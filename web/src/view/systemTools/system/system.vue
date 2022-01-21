@@ -328,6 +328,17 @@
             <el-input v-model.number="config.clickhouse.write_timeout" />
           </el-form-item>
         </el-collapse-item>
+        <el-collapse-item title="ClickHouse_Sinker_Nali 中间件配置" name="15">
+          <el-form-item label="地址">
+            <el-input v-model="config.clickhouse_sinker_nali.addr" />
+          </el-form-item>
+          <el-form-item label="端口">
+            <el-input v-model="config.clickhouse_sinker_nali.port" />
+          </el-form-item>
+          <el-form-item label="Prom2Json文件保存路径">
+            <el-input v-model="config.clickhouse_sinker_nali.prom2json_path" />
+          </el-form-item>
+        </el-collapse-item>
       </el-collapse>
     </el-form>
     <div class="gva-btn-list">
@@ -344,7 +355,7 @@ export default {
   name: 'Config',
   data() {
     return {
-      pwd:"password",
+      pwd: "password",
       isFocus: false,
       config: {
         system: {},
@@ -355,7 +366,7 @@ export default {
         autoCode: {},
         redis: {},
         clickhouse: {},
-        clickhouse_sinker: {},
+        clickhouse_sinker_nali: {},
         qiniu: {},
         tencentCOS: {},
         aliyunOSS: {},

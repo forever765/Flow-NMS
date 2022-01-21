@@ -39,7 +39,7 @@ func GetNewestData(pageNum int, pageSize int) []map[string]interface{} {
 		Offset(OffsetCompute(pageNum, pageSize)).
 		Limit(pageSize).
 		Order("timestamp_min DESC").
-		Debug().
+		//Debug().
 		Find(&NewestData).
 		Error; err != nil {
 		global.GVA_LOG.Error("获取报表最新数据失败:", zap.Error(err))

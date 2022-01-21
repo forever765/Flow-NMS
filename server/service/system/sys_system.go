@@ -5,6 +5,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/status"
 	"go.uber.org/zap"
 )
 
@@ -85,25 +86,11 @@ func (systemConfigService *SystemConfigService) GetClickhouseInfo() (server *uti
 }
 
 //@author: [forever765](https://github.com/forever765)
-//@function: GetClickhouseInfo
-//@description: 获取Clickhouse信息
+//@function: GetChSinkerNaliInfo
+//@description: 获取ClickhouseSinkerNali信息
 //@return: server *utils.Server, err error
 
-func (systemConfigService *SystemConfigService) GetChSinkerInfo() (server *utils.Server, err error) {
-	var s utils.Server
-	s.Os = utils.InitOS()
-	if s.Cpu, err = utils.InitCPU(); err != nil {
-		global.GVA_LOG.Error("func utils.InitCPU() Failed", zap.String("err", err.Error()))
-		return &s, err
-	}
-	if s.Rrm, err = utils.InitRAM(); err != nil {
-		global.GVA_LOG.Error("func utils.InitRAM() Failed", zap.String("err", err.Error()))
-		return &s, err
-	}
-	if s.Disk, err = utils.InitDisk(); err != nil {
-		global.GVA_LOG.Error("func utils.InitDisk() Failed", zap.String("err", err.Error()))
-		return &s, err
-	}
+func (systemConfigService *SystemConfigService) GetChSinkerNaliInfo() string {
 
-	return &s, nil
+	return status.RunProm2Json()
 }

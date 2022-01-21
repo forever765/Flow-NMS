@@ -13,6 +13,7 @@
 import FilterPane from '@/view/reports/detail/filterPane.vue'
 import TablePane from '@/view/reports/detail/tablePane.vue'
 import { getNewestData } from '@/api/reports.js'
+import { ElMessage } from 'element-plus'
 
 export default {
   name: 'GetNewestData',
@@ -44,12 +45,12 @@ export default {
           {
             name: 'IP地址',
             width: 230,
-            key: 'userId'
+            key: 'ipAddr'
           },
           {
             name: '类型',
             width: 230,
-            key: 'dynamicId'
+            key: 'class'
           },
           {
             name: 'XXX',
@@ -155,31 +156,29 @@ export default {
     this.getList()
   },
   methods: {
-    getList() {
+    getList(a) {
       const data = {
         pageSize: this.dataSource.pageData.pageSize,
         pageNum: this.dataSource.pageData.pageNum
       }
-      if (this.msg.userId) {
-        var reg = /^\d{9,10}$/
-        if (!reg.test(this.msg.userId)) {
-          this.$message({
-            type: 'error',
-            message: '请输入正确的脸影号'
-          })
+      // 校验IP地址格式
+      if (this.msg.ipAddr) {
+        var reg = /(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}/
+        if (!reg.test(this.msg.ipAddr)) {
+          ElMessage.error('请输入正确的ip地址')
           return
         }
-        data.userId = this.msg.userId
+        data.ipAddr = this.msg.ipAddr
       }
       if (this.msg.beginDate) {
         data.beginDate = this.msg.beginDate
         data.endDate = this.msg.endDate
       }
-      if (this.msg.dynamicId) {
-        data.dynamicId = this.msg.dynamicId
+      if (this.msg.ipAddr) {
+        data.ipAddr = this.msg.ipAddr
       }
-      if (this.msg.shareId) {
-        data.shareId = this.msg.shareId
+      if (this.msg.class) {
+        data.class = this.msg.class
       }
       this.dataSource.loading = true
       getNewestData(data).then(res => {
@@ -197,7 +196,11 @@ export default {
     },
     filterMsg(msg) {
       this.msg = msg
-      this.getList()
+      if (Object.keys(msg).length > 0) {
+        this.getList(msg)
+      } else {
+        this.getList()
+      }
     },
     changeSize(size) {
       this.dataSource.pageData.pageSize = size

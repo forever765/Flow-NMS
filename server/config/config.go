@@ -15,7 +15,7 @@ type Server struct {
 	// Clickhouse
 	Clickhouse Clickhouse `mapstructure:"clickhouse" json:"clickhouse" yaml:"clickhouse"`
 	// Clickhouse_Sinker
-	Clickhouse_Sinker ClickhouseSinker `mapstructure:"clickhouse_sinker_nali" json:"clickhouse_sinker_nali" yaml:"clickhouse_sinker_nali"`
+	Clickhouse_SinkerNali ClickhouseSinkerNali `mapstructure:"clickhouse_sinker_nali" json:"clickhouse_sinker_nali" yaml:"clickhouse_sinker_nali"`
 	// oss
 	Local      Local      `mapstructure:"local" json:"local" yaml:"local"`
 	Qiniu      Qiniu      `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
