@@ -329,7 +329,7 @@
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item title="ClickHouse_Sinker_Nali 中间件配置" name="15">
-          <el-form-item label="地址">
+          <el-form-item label="地址（请以http://或https://开头）">
             <el-input v-model="config.clickhouse_sinker_nali.addr" />
           </el-form-item>
           <el-form-item label="端口">

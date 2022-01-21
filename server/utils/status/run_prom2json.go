@@ -11,9 +11,9 @@ import (
 )
 
 func RunProm2Json() string {
-	// Todo：对接配置页面
+	chSinkerNaliCfg := global.GVA_CONFIG.Clickhouse_SinkerNali
+	Prom2jsonPath := filepath.Join(chSinkerNaliCfg.Prom2json_path)
 	var Bin string
-	Prom2jsonPath := filepath.Join("D:/script/prom2json-1.3.0")
 	switch runtime.GOOS {
 	case "windows":
 		Bin = "prom2json.exe"
@@ -30,9 +30,8 @@ func RunProm2Json() string {
 		}
 		fmt.Println("Prom2Json 文件已存在，继续")
 	}
-	// Todo: 对接配置页面
 	if DownResult == true {
-		cmd := exec.Command(ExePath, "http://nms01.home.com:21888/metrics")
+		cmd := exec.Command(ExePath, chSinkerNaliCfg.Addr+":"+chSinkerNaliCfg.Port+"/metrics")
 		output, err := cmd.CombinedOutput()
 		if err != nil {
 			global.GVA_LOG.Error(err.Error())
