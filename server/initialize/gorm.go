@@ -137,7 +137,7 @@ func GormClickhouse() *gorm.DB {
 	if ClickhouseCfg.Addr == "" {
 		return nil
 	}
-	dsn := fmt.Sprintf("tcp://%v?dateabase=%v&usernam=%v&password=%v&read_timeout=%v&write_timeout=%v", ClickhouseCfg.Addr,ClickhouseCfg.DB,ClickhouseCfg.Username,ClickhouseCfg.Password,ClickhouseCfg.ReadTimeout,ClickhouseCfg.WriteTimeout)
+	dsn := fmt.Sprintf("tcp://%v:%v?dateabase=%v&usernam=%v&password=%v&read_timeout=%v&write_timeout=%v", ClickhouseCfg.Addr,ClickhouseCfg.Port, ClickhouseCfg.DB,ClickhouseCfg.Username,ClickhouseCfg.Password,ClickhouseCfg.ReadTimeout,ClickhouseCfg.WriteTimeout)
 	ClickhouseConfig := clickhouse.Config{
 		DSN:                       dsn,   // DSN data source name
 		//PrepareStmt: 				true, // 预编译SQL语句

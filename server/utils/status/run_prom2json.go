@@ -1,24 +1,24 @@
 package status
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/tidwall/gjson"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strconv"
 )
 
-func RunProm2Json() string {
-		chSinkerNaliCfg := global.GVA_CONFIG.Clickhouse_SinkerNali
-		cmd := exec.Command(global.Prom2JsonBin, chSinkerNaliCfg.Addr+":"+strconv.Itoa(chSinkerNaliCfg.Port)+"/metrics")
-		output, err := cmd.CombinedOutput()
-		if err != nil {
-			global.GVA_LOG.Error(err.Error())
-		}
-		result := ParseResult(string(output))
-		return result
+func RunProm2Json(MetricLink string) string {
+	cmd := exec.Command(global.Prom2JsonBin, MetricLink)
+	fmt.Println(global.Prom2JsonBin,MetricLink)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		global.GVA_LOG.Error(err.Error())
+	}
+	result := ParseResult(string(output))
+	return result
 }
 
 func ParseResult(result string) string {
@@ -32,7 +32,7 @@ func ParseResult(result string) string {
 	//labels := "@this.@flatten.#.metrics.@flatten.#.labels"
 	//value := "@this.@flatten.#.metrics.@flatten.#.value"
 	//value2 := GetManyToMap(result, name, labels, value)
-	//fmt.Println("aaa", value2)
+	fmt.Println("aaa", result, value.String())
 	return value.String()
 }
 

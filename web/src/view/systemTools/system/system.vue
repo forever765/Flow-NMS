@@ -309,16 +309,19 @@
         </el-collapse-item>
 
         <el-collapse-item title="ClickHouse数据库配置" name="14">
-          <el-form-item label="addr">
+          <el-form-item label="地址">
             <el-input v-model="config.clickhouse.addr" />
           </el-form-item>
-          <el-form-item label="dbname">
+          <el-form-item label="端口">
+            <el-input v-model="config.clickhouse.port" />
+          </el-form-item>
+          <el-form-item label="数据库名称">
             <el-input v-model="config.clickhouse.db" />
           </el-form-item>
-          <el-form-item label="username">
+          <el-form-item label="用户名">
             <el-input v-model="config.clickhouse.username" />
           </el-form-item>
-          <el-form-item label="password">
+          <el-form-item label="密码">
             <el-input v-model="config.clickhouse.password" />
           </el-form-item>
           <el-form-item label="read timeout">
@@ -327,10 +330,10 @@
           <el-form-item label="write timeout">
             <el-input v-model.number="config.clickhouse.write_timeout" />
           </el-form-item>
-          <el-form-item label="prometheus port">
+          <el-form-item label="prometheus 端口">
             <el-input v-model.number="config.clickhouse.prometheus_port" />
           </el-form-item>
-          <el-form-item label="prometheus suffix">
+          <el-form-item label="prometheus URL后缀">
             <el-input v-model.number="config.clickhouse.prometheus_suffix" />
           </el-form-item>
         </el-collapse-item>

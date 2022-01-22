@@ -85,11 +85,11 @@ func (s *SystemApi) GetServerInfo(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /system/GetClickhouseInfo [post]
 func (s *SystemApi) GetClickhouseInfo(c *gin.Context) {
-	if server, err := systemConfigService.GetClickhouseInfo(); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
-		response.FailWithMessage("获取失败", c)
+	if ClickhouseInfo := systemConfigService.GetClickhouseInfo(); ClickhouseInfo== "" {
+		global.GVA_LOG.Error("GetClickhouseInfo获取失败，后端返回空结果!")
+		response.FailWithMessage("GetClickhouseInfo获取失败，后端返回空结果!", c)
 	} else {
-		response.OkWithDetailed(gin.H{"server": server}, "获取成功", c)
+		response.OkWithDetailed(ClickhouseInfo, "获取成功", c)
 	}
 }
 
