@@ -31,7 +31,7 @@ func RunProm2Json() string {
 		fmt.Println("Prom2Json 文件已存在，继续")
 	}
 	if DownResult == true {
-		cmd := exec.Command(ExePath, chSinkerNaliCfg.Addr+":"+chSinkerNaliCfg.Port+"/metrics")
+		cmd := exec.Command(ExePath, chSinkerNaliCfg.Addr+":"+string(chSinkerNaliCfg.Port)+"/metrics")
 		output, err := cmd.CombinedOutput()
 		if err != nil {
 			global.GVA_LOG.Error(err.Error())

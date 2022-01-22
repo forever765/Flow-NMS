@@ -8,7 +8,7 @@
         <div>
           <el-table
             :data="tableData"
-            height="700"
+            height="650"
             border
             style="width: 100%"
             :row-style="{height:'20px'}"

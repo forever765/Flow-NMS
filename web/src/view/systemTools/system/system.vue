@@ -327,6 +327,12 @@
           <el-form-item label="write timeout">
             <el-input v-model.number="config.clickhouse.write_timeout" />
           </el-form-item>
+          <el-form-item label="prometheus port">
+            <el-input v-model.number="config.clickhouse.prometheus_port" />
+          </el-form-item>
+          <el-form-item label="prometheus suffix">
+            <el-input v-model.number="config.clickhouse.prometheus_suffix" />
+          </el-form-item>
         </el-collapse-item>
         <el-collapse-item title="ClickHouse_Sinker_Nali 中间件配置" name="15">
           <el-form-item label="地址（请以http://或https://开头）">
