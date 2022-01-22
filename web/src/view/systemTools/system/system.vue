@@ -341,8 +341,10 @@
           <el-form-item label="端口">
             <el-input v-model="config.clickhouse_sinker_nali.port" />
           </el-form-item>
-          <el-form-item label="Prom2Json文件保存路径">
-            <el-input v-model="config.clickhouse_sinker_nali.prom2json_path" />
+        </el-collapse-item>
+        <el-collapse-item title="文件保存目录" name="16">
+          <el-form-item label="Prom2Json文件保存目录">
+            <el-input v-model="config.download_path.prom2json" />
           </el-form-item>
         </el-collapse-item>
       </el-collapse>
@@ -373,6 +375,7 @@ export default {
         redis: {},
         clickhouse: {},
         clickhouse_sinker_nali: {},
+        download_path: {},
         qiniu: {},
         tencentCOS: {},
         aliyunOSS: {},

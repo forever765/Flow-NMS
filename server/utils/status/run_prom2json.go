@@ -1,18 +1,18 @@
 package status
 
 import (
-	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/tidwall/gjson"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strconv"
 )
 
 func RunProm2Json() string {
 	chSinkerNaliCfg := global.GVA_CONFIG.Clickhouse_SinkerNali
-	Prom2jsonPath := filepath.Join(chSinkerNaliCfg.Prom2json_path)
+	Prom2jsonPath := filepath.Join(global.GVA_CONFIG.DownloadPath.Prom2Json)
 	var Bin string
 	switch runtime.GOOS {
 	case "windows":
@@ -28,10 +28,10 @@ func RunProm2Json() string {
 			global.GVA_LOG.Error("Prom2json不存在，尝试从gitee下载...")
 				DownResult = DownloadProm2json()
 		}
-		fmt.Println("Prom2Json 文件已存在，继续")
+		//fmt.Println("Prom2Json 文件已存在，继续")
 	}
 	if DownResult == true {
-		cmd := exec.Command(ExePath, chSinkerNaliCfg.Addr+":"+string(chSinkerNaliCfg.Port)+"/metrics")
+		cmd := exec.Command(ExePath, chSinkerNaliCfg.Addr+":"+strconv.Itoa(chSinkerNaliCfg.Port)+"/metrics")
 		output, err := cmd.CombinedOutput()
 		if err != nil {
 			global.GVA_LOG.Error(err.Error())
