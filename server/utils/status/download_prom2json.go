@@ -12,11 +12,11 @@ import (
 	"runtime"
 )
 
-func DownloadProm2json() (Status bool){
-	// Todo：对接配置文件
-	Prom2jsonPath := ""
+func DownloadProm2json() bool{
+	Prom2jsonPath := filepath.Join(global.GVA_CONFIG.DownloadPath.Prom2Json)
 	if Prom2jsonPath == "" {
-		Prom2jsonPath = filepath.Join("D:/script/prom2json-1.3.0")
+		global.GVA_LOG.Info("Prom2Json下载目录未设置，使用默认值：/root/prom2json-1.3.0")
+		Prom2jsonPath = filepath.Join("/root/prom2json-1.3.0")
 	}
 	if _, err := os.Stat(Prom2jsonPath); os.IsNotExist(err) {
 		if err := os.MkdirAll(Prom2jsonPath, 0777); err != nil {
@@ -24,13 +24,13 @@ func DownloadProm2json() (Status bool){
 		}
 	}
 
-	// 下载 prom2json v1.3.0
 	var (
 		DownloadUrl string
 		FileName string
 		Bin	string
 	)
 	// = "https://github.com/prometheus/prom2json/releases/download/v1.3.0/prom2json-1.3.0.linux-amd64.tar.gz"
+	// 注：gitee的压缩包经过重命名处理，和github原版的名称不同
 	switch runtime.GOOS {
 	case "windows":
 		FileName = "prom2json-1.3.0-win.tar.gz"
@@ -46,10 +46,12 @@ func DownloadProm2json() (Status bool){
 	resp, err := http.Get(DownloadUrl)
 	if err != nil {
 		global.GVA_LOG.Error(err.Error())
+		return false
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		global.GVA_LOG.Error(err.Error())
+		return false
 	}
 
 	FullPath := filepath.Join(Prom2jsonPath, FileName)
@@ -58,6 +60,7 @@ func DownloadProm2json() (Status bool){
 		global.GVA_LOG.Info("Prom2json 压缩包下载完毕，", zap.String("本地路径: ", FullPath))
 	} else {
 		global.GVA_LOG.Error(err.Error())
+		return false
 	}
 	defer resp.Body.Close()
 

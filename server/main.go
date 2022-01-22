@@ -4,6 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/core"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/status"
 )
 
 //go:generate go env -w GO111MODULE=on
@@ -23,6 +24,7 @@ func main() {
 	global.GVA_LOG = core.Zap()       // 初始化zap日志库
 	global.GVA_DB = initialize.Gorm() // gorm连接数据库
 	global.GORM_CH = initialize.GormCH() // gorm连接Clickhouse数据库
+	status.CheckProm2Json()	// 检查Prom2Json是否存在
 	initialize.Timer()
 	if global.GVA_DB != nil {
 		initialize.MysqlTables(global.GVA_DB) // 初始化表

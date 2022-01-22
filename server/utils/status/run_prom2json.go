@@ -10,27 +10,8 @@ import (
 	"strconv"
 )
 
-func RunProm2Json() string {
-	chSinkerNaliCfg := global.GVA_CONFIG.Clickhouse_SinkerNali
-	Prom2jsonPath := filepath.Join(global.GVA_CONFIG.DownloadPath.Prom2Json)
-	var Bin string
-	switch runtime.GOOS {
-	case "windows":
-		Bin = "prom2json.exe"
-	default:
-		Bin = "prom2json"
-	}
-	ExePath := filepath.Join(Prom2jsonPath, Bin)
-	var DownResult bool = true
-	_, err := os.Stat(ExePath)
-	if err != nil {
-		if os.IsNotExist(err) {
-			global.GVA_LOG.Error("Prom2json不存在，尝试从gitee下载...")
-				DownResult = DownloadProm2json()
-		}
-		//fmt.Println("Prom2Json 文件已存在，继续")
-	}
-	if DownResult == true {
+func RunProm2Json() bool {
+		chSinkerNaliCfg := global.GVA_CONFIG.Clickhouse_SinkerNali
 		cmd := exec.Command(ExePath, chSinkerNaliCfg.Addr+":"+strconv.Itoa(chSinkerNaliCfg.Port)+"/metrics")
 		output, err := cmd.CombinedOutput()
 		if err != nil {
@@ -38,8 +19,6 @@ func RunProm2Json() string {
 		}
 		result := ParseResult(string(output))
 		return result
-	}
-	return ""
 }
 
 func ParseResult(result string) string {
@@ -55,4 +34,23 @@ func ParseResult(result string) string {
 	//value2 := GetManyToMap(result, name, labels, value)
 	//fmt.Println("aaa", value2)
 	return value.String()
+}
+
+func CheckProm2Json() {
+	Prom2jsonPath := filepath.Join(global.GVA_CONFIG.DownloadPath.Prom2Json)
+	var Bin string
+	switch runtime.GOOS {
+	case "windows":
+		Bin = "prom2json.exe"
+	default:
+		Bin = "prom2json"
+	}
+	ExePath := filepath.Join(Prom2jsonPath, Bin)
+	_, err := os.Stat(ExePath)
+	if err != nil {
+		global.GVA_LOG.Error("Prom2json不存在，尝试从gitee下载...")
+		DownloadProm2json()
+	} else {
+		global.GVA_LOG.Info("Prom2json文件存在")
+	}
 }
