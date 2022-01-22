@@ -27,4 +27,5 @@ var (
 	GVA_Concurrency_Control             = &singleflight.Group{}
 
 	BlackCache local_cache.Cache
+	Prom2JsonBin	string
 )
