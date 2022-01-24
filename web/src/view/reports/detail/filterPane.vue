@@ -14,6 +14,10 @@
         class="filter-item"
       />
       <template v-if="filterData.elinput">
+        <el-checkbox-group v-model="protocolVersion.type" @change="test" class="filter-item" size="small">
+          <el-checkbox-button label="IPv4" :checked="true" name="type"></el-checkbox-button>
+          <el-checkbox-button label="IPv6" :checked="true" name="type"></el-checkbox-button>
+        </el-checkbox-group>
         <el-input
           v-for="(item,index) in filterData.elinput"
           :key="index"
@@ -75,6 +79,7 @@
 //   ]
 // }
 import moment from 'moment'
+import { ElMessage } from 'element-plus'
 
 export default {
   name: 'FilterPane',
@@ -86,6 +91,9 @@ export default {
   },
   data() {
     return {
+      protocolVersion: {
+        type: []
+      },
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now()
@@ -114,10 +122,22 @@ export default {
       value1: '',
       value2: '',
       dateRange: ['', ''],
-      listQuery: {}
+      listQuery: {},
     }
   },
   watch: {
+    'protocolVersion.type': {
+      handler(newValue, oldValue) {
+        // const _this = this
+        if (newValue.length === 0) {
+          // setTimeout(function() {
+          //   _this.protocolVersion.type['0'] = [oldValue]
+          // }, 1000)
+          this.alertError('请最少选择一个协议版本！')
+        }
+        console.log(this.protocolVersion.type)
+      }
+    },
     'filterData'(val) {
       // console.log(val)
       if (val.elinput.length > 0) {
@@ -141,6 +161,12 @@ export default {
     }
   },
   methods: {
+    test() {
+      console.log('检查到点击事件', this.protocolVersion.type)
+    },
+    alertError(message) {
+      ElMessage.error(message)
+    },
     handleSearch() {
       const data = this.listQuery
       // 处理时间未选择的情况
@@ -173,6 +199,7 @@ export default {
   margin-left: 10px;
   display: inline-block;
 }
+
 .filter-container .filter-item:nth-of-type(1){
   margin-left: 0px;
 }
