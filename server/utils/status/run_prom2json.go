@@ -32,7 +32,7 @@ func ParseResult(result string) string {
 	//labels := "@this.@flatten.#.metrics.@flatten.#.labels"
 	//value := "@this.@flatten.#.metrics.@flatten.#.value"
 	//value2 := GetManyToMap(result, name, labels, value)
-	fmt.Println("aaa", result, value.String())
+	//fmt.Println("aaa", result, value.String())
 	return value.String()
 }
 

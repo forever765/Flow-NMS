@@ -1,24 +1,12 @@
 <template>
   <div>
-    <div v-if="dataSource.tool" class="tool">
-      <el-button
-        v-for="(item) in dataSource.tool"
-        :key="item.key"
-        class="filter-item"
-        :style="{'background':item.bgColor,borderColor:item.bgColor}"
-        :type="item.type || 'primary'"
-        @click="item.handleClick(item.name,$event)"
-      >
-        {{ item.name }}
-      </el-button>
-    </div>
     <el-table
       ref="table"
       v-loading="dataSource.loading"
       :border="dataSource.border?true:false"
       style="width: 100%; font-size: 10px"
       :row-style="{height:'20px'}"
-      :cell-style="{padding:'0px', 'text-align':'left'}"
+      :cell-style="{padding:'0px', 'text-align':'center'}"
       :class="{ 'no-data': !dataSource.data || !dataSource.data.length }"
       :data="dataSource.data"
       @row-click="getRowData"
@@ -121,29 +109,29 @@
         align="center"
       >
         <!-- UI统一一排放3个，4个以上出现更多 -->
-        <template slot-scope="scope">
-          <!-- 三个一排的情况，去掉隐藏的按钮后的长度 -->
-          <template v-if="dataSource.operation.data.length > 0">
-            <div class="btn">
-              <div v-for="(item) in dataSource.operation.data" :key="item.label">
-                <template v-if="item.type!=='icon'">
-                  <el-button
-                    v-permission="item.permission"
-                    v-bind="item"
-                    :type="item.type?item.type:''"
-                    size="mini"
-                    @click.native.prevent="item.handleRow(scope.$index, scope.row, item.label)"
-                  >
-                    {{ item.label }}
-                  </el-button>
-                </template>
-                <template v-else>
-                  <i :class="[icon,item.icon]" v-bind="item" @click="item.handleRow(scope.$index, scope.row, item.label)" />
-                </template>
-              </div>
-            </div>
-          </template>
-        </template>
+<!--        <template slot-scope="scope">-->
+<!--          &lt;!&ndash; 三个一排的情况，去掉隐藏的按钮后的长度 &ndash;&gt;-->
+<!--          <template v-if="dataSource.operation.data.length > 0">-->
+<!--            <div class="btn">-->
+<!--              <div v-for="(item) in dataSource.operation.data" :key="item.label">-->
+<!--                <template v-if="item.type!=='icon'">-->
+<!--                  <el-button-->
+<!--                    v-permission="item.permission"-->
+<!--                    v-bind="item"-->
+<!--                    :type="item.type?item.type:''"-->
+<!--                    size="mini"-->
+<!--                    @click.native.prevent="item.handleRow(scope.$index, scope.row, item.label)"-->
+<!--                  >-->
+<!--                    {{ item.label }}-->
+<!--                  </el-button>-->
+<!--                </template>-->
+<!--                <template v-else>-->
+<!--                  <i :class="[icon,item.icon]" v-bind="item" @click="item.handleRow(scope.$index, scope.row, item.label)" />-->
+<!--                </template>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </template>-->
       </el-table-column>
     </el-table>
     <div class="page">

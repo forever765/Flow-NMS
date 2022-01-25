@@ -13,6 +13,6 @@ func (s *ReportsRouter) InitReportsRouter(Router *gin.RouterGroup) {
 	reportsRouter := Router.Group("reports").Use(middleware.OperationRecord())
 	var reportsApi = v1.ApiGroupApp.ReportsApiGroup.ReportsApi
 	{
-		reportsRouter.GET("getNewestData", reportsApi.GetNewestData) // 获取报表最新数据
+		reportsRouter.POST("getNewestData", reportsApi.GetNewestData) // 获取报表最新数据
 	}
 }

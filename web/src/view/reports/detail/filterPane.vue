@@ -14,10 +14,11 @@
         class="filter-item"
       />
       <template v-if="filterData.elinput">
-        <el-checkbox-group v-model="protocolVersion.type" @change="test" class="filter-item" size="small">
-          <el-checkbox-button label="IPv4" :checked="true" name="type"></el-checkbox-button>
-          <el-checkbox-button label="IPv6" :checked="true" name="type"></el-checkbox-button>
-        </el-checkbox-group>
+        <el-Radio-group v-model="protocolVersion" @change="protocolSelect" class="filter-item" size="small">
+          <el-Radio-button label="双栈" :checked="true" name="type"></el-Radio-button>
+          <el-Radio-button label="仅IPv4" name="type"></el-Radio-button>
+          <el-Radio-button label="仅IPv6" name="type"></el-Radio-button>
+        </el-Radio-group>
         <el-input
           v-for="(item,index) in filterData.elinput"
           :key="index"
@@ -79,7 +80,6 @@
 //   ]
 // }
 import moment from 'moment'
-import { ElMessage } from 'element-plus'
 
 export default {
   name: 'FilterPane',
@@ -91,9 +91,7 @@ export default {
   },
   data() {
     return {
-      protocolVersion: {
-        type: []
-      },
+      protocolVersion: '双栈',
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now()
@@ -126,18 +124,6 @@ export default {
     }
   },
   watch: {
-    'protocolVersion.type': {
-      handler(newValue, oldValue) {
-        // const _this = this
-        if (newValue.length === 0) {
-          // setTimeout(function() {
-          //   _this.protocolVersion.type['0'] = [oldValue]
-          // }, 1000)
-          this.alertError('请最少选择一个协议版本！')
-        }
-        console.log(this.protocolVersion.type)
-      }
-    },
     'filterData'(val) {
       // console.log(val)
       if (val.elinput.length > 0) {
@@ -161,11 +147,8 @@ export default {
     }
   },
   methods: {
-    test() {
-      console.log('检查到点击事件', this.protocolVersion.type)
-    },
-    alertError(message) {
-      ElMessage.error(message)
+    protocolSelect() {
+      console.log('检查到点击事件', this.protocolVersion)
     },
     handleSearch() {
       const data = this.listQuery
@@ -181,6 +164,7 @@ export default {
           delete data[key]
         }
       })
+      console.log('data: ', data)
       this.$emit('filterMsg', data)
       console.log('搜索成功', this.listQuery)
     },
@@ -189,6 +173,7 @@ export default {
       this.listQuery['class'] = ''
       this.listQuery['ipAddr'] = ''
       this.dateRange = ['', '']
+      this.protocolVersion = '双栈'
     }
   }
 }

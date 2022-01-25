@@ -3,6 +3,7 @@ package reports
 import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/tidwall/gjson"
 	"go.uber.org/zap"
 	"strings"
 )
@@ -30,16 +31,25 @@ var NewestData []map[string]interface{}
 //@function: GetNewestData
 //@description: 获取最新报表数据
 //@return: json data, err error
-func GetNewestData(pageNum int, pageSize int) []map[string]interface{} {
+func GetNewestData(ParamsMap map[string]gjson.Result) []map[string]interface{} {
 	db := global.GORM_CH
-	if err := db.
+	Db := db
+	// 如果包含class类型
+	if _,exist := ParamsMap["class"]; exist {
+		Db = Db.Where("class", ParamsMap["class"].String())
+	}
+	// 如果包含IP地址
+	if _,exist := ParamsMap["ipAddr"]; exist {
+		Db = Db.Where("ip_src = ? or ip_dst = ?", ParamsMap["ipAddr"].String(), ParamsMap["ipAddr"].String())
+	}
+	if err := Db.
 		Table("nms_data.gateway_pmacctd").
 		Select("timestamp_min, timestamp_max, ip_src, port_src, isp_src, loc_src, ip_dst, isp_dst, loc_dst, port_dst, bytes, class, ip_proto, packets, etype").
 		Where("timestamp_min >= NOW()-600").
-		Offset(OffsetCompute(pageNum, pageSize)).
-		Limit(pageSize).
+		Offset(OffsetCompute(int(ParamsMap["pageNum"].Num), int(ParamsMap["pageSize"].Num))).
+		Limit(int(ParamsMap["pageSize"].Num)).
 		Order("timestamp_min DESC").
-		//Debug().
+		Debug().
 		Find(&NewestData).
 		Error; err != nil {
 		global.GVA_LOG.Error("获取报表最新数据失败:", zap.Error(err))

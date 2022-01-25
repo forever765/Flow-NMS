@@ -26,15 +26,16 @@ import service from '@/utils/request'
 // @accept application/json
 // @Produce application/json
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /report/getNewestData [get]
+// @Router /report/getNewestData [post]
 // {
 //  page     int
 //	pageSize int
 // }
 export const getNewestData = (data) => {
   return service({
-    url: '/reports/getNewestData?pageNum=' + data.pageNum + '&pageSize=' + data.pageSize,
-    method: 'get',
+    url: '/reports/getNewestData',
+    method: 'post',
+    data
   })
 }
 

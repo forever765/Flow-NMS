@@ -4,7 +4,9 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/gin-gonic/gin"
+	"github.com/tidwall/gjson"
 	"go.uber.org/zap"
+	"io/ioutil"
 	"strconv"
 )
 
@@ -16,13 +18,12 @@ type ReportsApi struct {
 // @Security ApiKeyAuth
 // @Produce  application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /reports/getNewestData [get]
+// @Router /reports/getNewestData [post]
 func (s *ReportsApi) GetNewestData(c *gin.Context) {
-	pageNum := c.DefaultQuery("pageNum", "1")
-	pageSize := c.DefaultQuery("pageSize", "20")
-	pageNumInt := ConvNum(pageNum)
-	pageSizeInt := ConvNum(pageSize)
-	if err, result := reportsService.GetNewestData(pageNumInt, pageSizeInt); err != nil {
+	raw, _ := ioutil.ReadAll(c.Request.Body)
+	ParamsMap := gjson.GetBytes(raw, "@this").Map()
+	//fmt.Printf("解码：%v", ParamsMap)
+	if err, result := reportsService.GetNewestData(ParamsMap) ; err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {
