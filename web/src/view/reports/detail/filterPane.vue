@@ -80,6 +80,7 @@
 //   ]
 // }
 import moment from 'moment'
+import { ElMessage } from 'element-plus'
 
 export default {
   name: 'FilterPane',
@@ -148,7 +149,10 @@ export default {
   },
   methods: {
     protocolSelect() {
-      console.log('检查到点击事件', this.protocolVersion)
+      const data = []
+      data['protocolVersion'] = this.protocolVersion
+      this.$emit('filterMsg', data)
+      ElMessage.success('已切换至：' + this.protocolVersion)
     },
     handleSearch() {
       const data = this.listQuery
@@ -164,9 +168,8 @@ export default {
           delete data[key]
         }
       })
-      console.log('data: ', data)
       this.$emit('filterMsg', data)
-      console.log('搜索成功', this.listQuery)
+      ElMessage.success('搜索成功')
     },
     handleReset() {
       this.listQuery['dynamicId'] = ''

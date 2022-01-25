@@ -175,6 +175,7 @@ export default {
       if (this.msg.class) {
         data.class = this.msg.class
       }
+      data.protocolVersion = this.msg.protocolVersion
       this.dataSource.loading = true
       getNewestData(data).then(res => {
         this.dataSource.loading = false

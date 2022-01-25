@@ -8,24 +8,6 @@ import (
 	"strings"
 )
 
-type dbTable struct {
-	Timestamp_min string
-	Timestamp_max string
-	Ip_src string
-	Port_src uint16
-	Ip_dst string
-	Port_dst uint16
-	Bytes int64
-	Class string
-	Ip_proto string
-	Packets	int64
-	Loc_src string
-	Loc_dst string
-	Isp_src string
-	Isp_dst string
-	Etype string
-}
-
 var NewestData []map[string]interface{}
 //@author: [forever765](https://github.com/forever765)
 //@function: GetNewestData
@@ -34,6 +16,15 @@ var NewestData []map[string]interface{}
 func GetNewestData(ParamsMap map[string]gjson.Result) []map[string]interface{} {
 	db := global.GORM_CH
 	Db := db
+	// 如果包含协议版本
+	if value,exist := ParamsMap["protocolVersion"]; exist {
+		switch value.String() {
+		case "仅IPv4":
+			Db = Db.Where("etype", "800")
+		case "仅IPv6":
+			Db = Db.Where("etype", "86dd")
+		}
+	}
 	// 如果包含class类型
 	if _,exist := ParamsMap["class"]; exist {
 		Db = Db.Where("class", ParamsMap["class"].String())
@@ -42,6 +33,10 @@ func GetNewestData(ParamsMap map[string]gjson.Result) []map[string]interface{} {
 	if _,exist := ParamsMap["ipAddr"]; exist {
 		Db = Db.Where("ip_src = ? or ip_dst = ?", ParamsMap["ipAddr"].String(), ParamsMap["ipAddr"].String())
 	}
+	// 如果包含时间范围
+	//if _,exist := ParamsMap["startTime"]; exist {
+	//	Db = Db.Where("ip_src = ? or ip_dst = ?", ParamsMap["ipAddr"].String(), ParamsMap["ipAddr"].String())
+	//}
 	if err := Db.
 		Table("nms_data.gateway_pmacctd").
 		Select("timestamp_min, timestamp_max, ip_src, port_src, isp_src, loc_src, ip_dst, isp_dst, loc_dst, port_dst, bytes, class, ip_proto, packets, etype").
