@@ -170,17 +170,21 @@ export default {
   },
   methods: {
     protocolSelect() {
-      const data = []
-      data['protocolVersion'] = this.protocolVersion
-      this.$emit('filterMsg', data)
+      // const data = []
+      // data['protocolVersion'] = this.protocolVersion
+      // this.$emit('filterMsg', data)
       ElMessage.success('显示：' + this.protocolVersion + '数据')
     },
     handleSearch() {
       const data = this.listQuery
-      if (this.dateRange[0] !== '') {
+      // 把 时间 写入data，默认的时间范围传过来是unix时间戳，不是x-x-x格式的ban掉
+      if (this.dateRange[0].toString().indexOf('-') !== -1) {
         data.startTime = this.dateRange[0]
         data.endTime = this.dateRange[1]
       }
+      // 把 协议版本选择框 写入data
+      data.protocolVersion = this.protocolVersion
+      // 干掉空key
       Object.keys(data).forEach(function(key) {
         if (data[key] === '') {
           delete data[key]

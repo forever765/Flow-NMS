@@ -180,12 +180,17 @@ export default {
       getNewestData(data).then(res => {
         this.dataSource.loading = false
         if (res['msg'] === '获取成功') {
-          if (res['data'].length > 0) {
+          if (res['data'] !== null) {
             ElMessage.success('搜索成功')
-            this.dataSource.pageData.total = res['data'].length
+            // 少于pageSize就统计长度，否则返回10000条的total
+            if (res['data'].length < this.dataSource.pageData.pageSize) {
+              this.dataSource.pageData.total = res['data'].length
+            } else {
+              this.dataSource.pageData.total = 10000
+            }
             this.dataSource.data = res['data']
           } else {
-            ElMessage.info('搜索成功，无结果')
+            ElMessage.warning('搜索成功，无结果')
             this.dataSource.data = []
             this.dataSource.pageData.total = 0
           }
