@@ -1,6 +1,6 @@
 <template>
   <div className="app-container">
-    <el-card>
+    <el-card :style="{'height': '80px'}">
       <filter-pane :filter-data="filterData" @filterMsg="filterMsg" />
     </el-card>
     <table-pane

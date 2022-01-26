@@ -4,7 +4,7 @@
       <el-date-picker
         v-if="filterData.timeSelect"
         v-model="dateRange"
-        style="width: 360px; height: 130%"
+        style="width: 360px; margin:0 auto"
         type="datetimerange"
         range-separator="~"
         format="YYYY/MM/DD HH:mm:ss"
@@ -14,7 +14,7 @@
         :shortcuts="shortcuts"
         class="filter-item"
       />
-      <template v-if="filterData.elinput">
+      <template v-if="filterData.elinput" :style="{'margin-buttom: 10px'}">
         <el-Radio-group v-model="protocolVersion" class="filter-item" size="small">
           <el-Radio-button label="双栈" :checked="true" name="type"></el-Radio-button>
           <el-Radio-button label="仅IPv4" name="type"></el-Radio-button>
@@ -25,7 +25,7 @@
           :key="index"
           v-model="listQuery[item.key]"
           :placeholder="item.name"
-          :style="{'width':item.width?item.width+'px':'160px'}"
+          :style="{'width': '190px'}"
           class="filter-item"
         />
       </template>
@@ -36,7 +36,7 @@
           v-model="listQuery[item.key]"
           :placeholder="item.name"
           clearable
-          :style="{'width':item.width?item.width+'px':'90px'}"
+          :style="{'width':item.width?item.width+'px':'50px'}"
           class="filter-item"
         >
           <el-option
