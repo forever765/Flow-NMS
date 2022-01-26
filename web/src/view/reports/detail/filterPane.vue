@@ -15,7 +15,7 @@
         class="filter-item"
       />
       <template v-if="filterData.elinput">
-        <el-Radio-group v-model="protocolVersion" @change="protocolSelect" class="filter-item" size="small">
+        <el-Radio-group v-model="protocolVersion" class="filter-item" size="small">
           <el-Radio-button label="双栈" :checked="true" name="type"></el-Radio-button>
           <el-Radio-button label="仅IPv4" name="type"></el-Radio-button>
           <el-Radio-button label="仅IPv6" name="type"></el-Radio-button>
@@ -169,12 +169,6 @@ export default {
     }
   },
   methods: {
-    protocolSelect() {
-      // const data = []
-      // data['protocolVersion'] = this.protocolVersion
-      // this.$emit('filterMsg', data)
-      ElMessage.success('显示：' + this.protocolVersion + '数据')
-    },
     handleSearch() {
       const data = this.listQuery
       // 把 时间 写入data，默认的时间范围传过来是unix时间戳，不是x-x-x格式的ban掉
@@ -197,6 +191,8 @@ export default {
       this.listQuery['class'] = ''
       this.listQuery['ipAddr'] = ''
       this.dateRange = ['', '']
+      this.pageData.pageSize = 20 // 每页数量
+      this.pageData.pageNum = 1 // 页码
       this.protocolVersion = '双栈'
     }
   }
