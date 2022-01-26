@@ -165,9 +165,9 @@ export default {
         }
         data.ipAddr = this.msg.ipAddr
       }
-      if (this.msg.beginDate) {
-        data.beginDate = this.msg.beginDate
-        data.endDate = this.msg.endDate
+      if (this.msg.startTime) {
+        data.startTime = this.msg.startTime
+        data.endTime = this.msg.endTime
       }
       if (this.msg.ipAddr) {
         data.ipAddr = this.msg.ipAddr
@@ -181,9 +181,11 @@ export default {
         this.dataSource.loading = false
         if (res['msg'] === '获取成功') {
           if (res['data'].length > 0) {
-            this.dataSource.pageData.total = 1000
+            ElMessage.success('搜索成功')
+            this.dataSource.pageData.total = res['data'].length
             this.dataSource.data = res['data']
           } else {
+            ElMessage.info('搜索成功，无结果')
             this.dataSource.data = []
             this.dataSource.pageData.total = 0
           }

@@ -34,13 +34,14 @@ func GetNewestData(ParamsMap map[string]gjson.Result) []map[string]interface{} {
 		Db = Db.Where("ip_src = ? or ip_dst = ?", ParamsMap["ipAddr"].String(), ParamsMap["ipAddr"].String())
 	}
 	// 如果包含时间范围
-	//if _,exist := ParamsMap["startTime"]; exist {
-	//	Db = Db.Where("ip_src = ? or ip_dst = ?", ParamsMap["ipAddr"].String(), ParamsMap["ipAddr"].String())
-	//}
+	if _,exist := ParamsMap["startTime"]; exist {
+		Db = Db.Where("timestamp_min >= ? and timestamp_max <= ?", ParamsMap["startTime"].String(), ParamsMap["endTime"].String())
+	} else {
+		Db = Db.Where("timestamp_min >= NOW()-600")
+	}
 	if err := Db.
 		Table("nms_data.gateway_pmacctd").
 		Select("timestamp_min, timestamp_max, ip_src, port_src, isp_src, loc_src, ip_dst, isp_dst, loc_dst, port_dst, bytes, class, ip_proto, packets, etype").
-		Where("timestamp_min >= NOW()-600").
 		Offset(OffsetCompute(int(ParamsMap["pageNum"].Num), int(ParamsMap["pageSize"].Num))).
 		Limit(int(ParamsMap["pageSize"].Num)).
 		Order("timestamp_min DESC").

@@ -6,11 +6,12 @@
         v-model="dateRange"
         style="width: 360px; height: 130%"
         type="datetimerange"
-        range-separator="To"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :default-time="['', '']"
-        :picker-options="pickerOptions"
+        range-separator="~"
+        format="YYYY/MM/DD HH:mm:ss"
+        value-format="YYYY-MM-DD HH:mm:ss"
+        start-placeholder="开始时间"
+        end-placeholder="结束时间"
+        :shortcuts="shortcuts"
         class="filter-item"
       />
       <template v-if="filterData.elinput">
@@ -93,34 +94,54 @@ export default {
   data() {
     return {
       protocolVersion: '双栈',
-      pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now()
-        },
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            picker.$emit('pick', new Date())
-          }
+      shortcuts: [
+        {
+          text: '1小时内',
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000)
+            this.dateRange = [start, end]
+            return [start, end]
+          },
+        }, {
+          text: '3小时内',
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 3)
+            this.dateRange = [start, end]
+            return [start, end]
+          },
+        }, {
+          text: '6小时内',
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 6)
+            this.dateRange = [start, end]
+            return [start, end]
+          },
         }, {
           text: '昨天',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24)
+            this.dateRange = [start, end]
+            return [start, end]
+          },
         }, {
           text: '一周前',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
-      },
-      value1: '',
-      value2: '',
-      dateRange: ['', ''],
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            this.dateRange = [start, end]
+            return [start, end]
+          },
+        }],
+      dateRange: [Date.now() - 1000 * 3600, Date.now()],
       listQuery: {},
     }
   },
@@ -152,16 +173,13 @@ export default {
       const data = []
       data['protocolVersion'] = this.protocolVersion
       this.$emit('filterMsg', data)
-      ElMessage.success('已切换至：' + this.protocolVersion)
+      ElMessage.success('显示：' + this.protocolVersion + '数据')
     },
     handleSearch() {
       const data = this.listQuery
-      // 处理时间未选择的情况
-      if (this.dateRange && this.dateRange[0] !== '') {
-        const startTime = moment(this.dateRange[0]).format('YYYY-MM-DD') + ' 00:00:00'
-        const endTime = moment(this.dateRange[1]).format('YYYY-MM-DD') + ' 23:59:59'
-        data.beginDate = startTime
-        data.endDate = endTime
+      if (this.dateRange[0] !== '') {
+        data.startTime = this.dateRange[0]
+        data.endTime = this.dateRange[1]
       }
       Object.keys(data).forEach(function(key) {
         if (data[key] === '') {
@@ -169,7 +187,6 @@ export default {
         }
       })
       this.$emit('filterMsg', data)
-      ElMessage.success('搜索成功')
     },
     handleReset() {
       this.listQuery['dynamicId'] = ''
