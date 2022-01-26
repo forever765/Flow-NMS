@@ -1,15 +1,15 @@
-package example
+package system_tools
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system_tools"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
-type ExcelApi struct {
+type SystemToolsApi struct {
 }
 
 // /excel/importExcel 接口，与upload接口作用类似，只是把文件存到resource/excel目录下，用于导入Excel时存放Excel文件(ExcelImport.xlsx)
@@ -25,11 +25,11 @@ type ExcelApi struct {
 // @Param data body example.ExcelInfo true "导出Excel文件信息"
 // @Success 200
 // @Router /excel/exportExcel [post]
-func (e *ExcelApi) ExportExcel(c *gin.Context) {
-	var excelInfo example.ExcelInfo
+func (e *SystemToolsApi) ExportExcel(c *gin.Context) {
+	var excelInfo system_tools.ExcelInfo
 	_ = c.ShouldBindJSON(&excelInfo)
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
-	err := excelService.ParseInfoList2Excel(excelInfo.InfoList, filePath)
+	err := systemToolsService.ParseInfoList2Excel(excelInfo.InfoList, filePath)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Any("err", err))
 		response.FailWithMessage("转换Excel失败", c)
@@ -47,7 +47,7 @@ func (e *ExcelApi) ExportExcel(c *gin.Context) {
 // @Param file formData file true "导入Excel文件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"导入成功"}"
 // @Router /excel/importExcel [post]
-func (e *ExcelApi) ImportExcel(c *gin.Context) {
+func (e *SystemToolsApi) ImportExcel(c *gin.Context) {
 	_, header, err := c.Request.FormFile("file")
 	if err != nil {
 		global.GVA_LOG.Error("接收文件失败!", zap.Any("err", err))
@@ -64,8 +64,8 @@ func (e *ExcelApi) ImportExcel(c *gin.Context) {
 // @Produce  application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"加载数据成功"}"
 // @Router /excel/loadExcel [get]
-func (e *ExcelApi) LoadExcel(c *gin.Context) {
-	menus, err := excelService.ParseExcel2InfoList()
+func (e *SystemToolsApi) LoadExcel(c *gin.Context) {
+	menus, err := systemToolsService.ParseExcel2InfoList()
 	if err != nil {
 		global.GVA_LOG.Error("加载数据失败!", zap.Any("err", err))
 		response.FailWithMessage("加载数据失败", c)
@@ -87,7 +87,7 @@ func (e *ExcelApi) LoadExcel(c *gin.Context) {
 // @Param fileName query string true "模板名称"
 // @Success 200
 // @Router /excel/downloadTemplate [get]
-func (e *ExcelApi) DownloadTemplate(c *gin.Context) {
+func (e *SystemToolsApi) DownloadTemplate(c *gin.Context) {
 	fileName := c.Query("fileName")
 	filePath := global.GVA_CONFIG.Excel.Dir + fileName
 	ok, err := utils.PathExists(filePath)

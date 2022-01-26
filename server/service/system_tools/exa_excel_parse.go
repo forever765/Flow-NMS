@@ -1,45 +1,43 @@
-package example
+package system_tools
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
-	"strconv"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system_tools"
 	"github.com/xuri/excelize/v2"
+	"strconv"
 )
 
-type ExcelService struct {
+type SystemToolsService struct {
 }
 
-func (exa *ExcelService) ParseInfoList2Excel(infoList []system.SysBaseMenu, filePath string) error {
+func (exa *SystemToolsService) ParseInfoList2Excel(infoList []system_tools.IpHost, filePath string) error {
 	excel := excelize.NewFile()
-	excel.SetSheetRow("Sheet1", "A1", &[]string{"ID", "路由Name", "路由Path", "是否隐藏", "父节点", "排序", "文件名称"})
+	excel.SetSheetRow("Sheet1", "A1", &[]string{"ID", "所属地区", "主机名", "IP地址"})
 	for i, menu := range infoList {
 		axis := fmt.Sprintf("A%d", i+2)
 		excel.SetSheetRow("Sheet1", axis, &[]interface{}{
 			menu.ID,
-			menu.Name,
-			menu.Path,
-			menu.Hidden,
-			menu.ParentId,
-			menu.Sort,
-			menu.Component,
+			menu.Area,
+			menu.HostName,
+			menu.IpAddr,
 		})
 	}
 	err := excel.SaveAs(filePath)
 	return err
 }
 
-func (exa *ExcelService) ParseExcel2InfoList() ([]system.SysBaseMenu, error) {
+func (exa *SystemToolsService) ParseExcel2InfoList() ([]system_tools.IpHost, error) {
 	skipHeader := true
-	fixedHeader := []string{"ID", "路由Name", "路由Path", "是否隐藏", "父节点", "排序", "文件名称"}
+	fixedHeader := []string{"ID", "所属地区", "主机名", "IP地址"}
 	file, err := excelize.OpenFile(global.GVA_CONFIG.Excel.Dir + "ExcelImport.xlsx")
 	if err != nil {
 		return nil, err
 	}
-	menus := make([]system.SysBaseMenu, 0)
+	menus := make([]system_tools.IpHost, 0)
 	rows, err := file.Rows("Sheet1")
 	if err != nil {
 		return nil, err
@@ -61,25 +59,31 @@ func (exa *ExcelService) ParseExcel2InfoList() ([]system.SysBaseMenu, error) {
 			continue
 		}
 		id, _ := strconv.Atoi(row[0])
-		hidden, _ := strconv.ParseBool(row[3])
-		sort, _ := strconv.Atoi(row[5])
-		menu := system.SysBaseMenu{
-			GVA_MODEL: global.GVA_MODEL{
-				ID: uint(id),
-			},
-			Name:      row[1],
-			Path:      row[2],
-			Hidden:    hidden,
-			ParentId:  row[4],
-			Sort:      sort,
-			Component: row[6],
+		menu := system_tools.IpHost{
+			ID: 	uint(id),
+			Area:      row[1],
+			HostName:  row[2],
+			IpAddr:  row[3],
 		}
 		menus = append(menus, menu)
+		if err := WriteInfo2Redis(menus); err != nil{
+			return nil, err
+		}
 	}
 	return menus, nil
 }
 
-func (exa *ExcelService) compareStrSlice(a, b []string) bool {
+func WriteInfo2Redis(raw []system_tools.IpHost) error {
+	if result, err := json.Marshal(raw); err != nil {
+		return err
+	} else {
+		write2RedisErr := global.GVA_REDIS.Set(context.Background(), "IpHostList", result, 0).Err()
+		return write2RedisErr
+	}
+}
+
+
+func (exa *SystemToolsService) compareStrSlice(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
 	}
