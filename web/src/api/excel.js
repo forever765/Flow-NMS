@@ -36,7 +36,7 @@ const handleFileError = (res, fileName) => {
 // @Router /excel/exportExcel [post]
 export const exportExcel = (tableData, fileName) => {
   service({
-    url: '/excel/exportExcel',
+    url: '/iphost/exportExcel',
     method: 'post',
     data: {
       fileName: fileName,
@@ -58,7 +58,7 @@ export const exportExcel = (tableData, fileName) => {
 // @Router /excel/importExcel [post]
 export const loadExcelData = () => {
   return service({
-    url: '/excel/loadExcel',
+    url: '/iphost/loadExcel',
     method: 'get'
   })
 }
@@ -73,7 +73,7 @@ export const loadExcelData = () => {
 // @Router /excel/downloadTemplate [get]
 export const downloadTemplate = (fileName) => {
   return service({
-    url: '/excel/downloadTemplate',
+    url: '/iphost/downloadTemplate',
     method: 'get',
     params: {
       fileName: fileName

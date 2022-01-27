@@ -5,7 +5,7 @@
       <div class="gva-btn-list">
         <el-upload
           class="excel-btn"
-          :action="`${path}/excel/importExcel`"
+          :action="`${path}/iphost/importExcel`"
           :headers="{'x-token':token}"
           :on-success="loadExcel"
           :show-file-list="false"
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { ElMessage } from 'element-plus'
+
 const path = import.meta.env.VITE_BASE_API
 import { mapGetters } from 'vuex'
 import infoList from '@/mixins/infoList'
@@ -55,6 +57,7 @@ export default {
     },
     loadExcel() {
       this.listApi = loadExcelData
+      ElMessage.success('导入成功')
       this.getTableData()
     },
     downloadExcelTemplate() {

@@ -12,19 +12,19 @@ import (
 type SystemToolsApi struct {
 }
 
-// /excel/importExcel 接口，与upload接口作用类似，只是把文件存到resource/excel目录下，用于导入Excel时存放Excel文件(ExcelImport.xlsx)
-// /excel/loadExcel接口，用于读取resource/excel目录下的文件((ExcelImport.xlsx)并加载为[]model.SysBaseMenu类型的示例数据
-// /excel/exportExcel 接口，用于读取前端传来的tableData，生成Excel文件并返回
-// /excel/downloadTemplate 接口，用于下载resource/excel目录下的 ExcelTemplate.xlsx 文件，作为导入的模板
+// /iphost/importExcel 接口，与upload接口作用类似，只是把文件存到resource/excel目录下，用于导入Excel时存放Excel文件(ExcelImport.xlsx)
+// /iphost/loadExcel接口，用于读取resource/excel目录下的文件((ExcelImport.xlsx)并加载为[]model.SysBaseMenu类型的示例数据
+// /iphost/exportExcel 接口，用于读取前端传来的tableData，生成Excel文件并返回
+// /iphost/downloadTemplate 接口，用于下载resource/excel目录下的 ExcelTemplate.xlsx 文件，作为导入的模板
 
-// @Tags excel
+// @Tags iphost
 // @Summary 导出Excel
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce  application/octet-stream
 // @Param data body example.ExcelInfo true "导出Excel文件信息"
 // @Success 200
-// @Router /excel/exportExcel [post]
+// @Router /iphost/exportExcel [post]
 func (e *SystemToolsApi) ExportExcel(c *gin.Context) {
 	var excelInfo system_tools.ExcelInfo
 	_ = c.ShouldBindJSON(&excelInfo)
@@ -39,14 +39,14 @@ func (e *SystemToolsApi) ExportExcel(c *gin.Context) {
 	c.File(filePath)
 }
 
-// @Tags excel
+// @Tags iphost
 // @Summary 导入Excel文件
 // @Security ApiKeyAuth
 // @accept multipart/form-data
 // @Produce  application/json
 // @Param file formData file true "导入Excel文件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"导入成功"}"
-// @Router /excel/importExcel [post]
+// @Router /iphost/importExcel [post]
 func (e *SystemToolsApi) ImportExcel(c *gin.Context) {
 	_, header, err := c.Request.FormFile("file")
 	if err != nil {
@@ -55,15 +55,19 @@ func (e *SystemToolsApi) ImportExcel(c *gin.Context) {
 		return
 	}
 	_ = c.SaveUploadedFile(header, global.GVA_CONFIG.Excel.Dir+"ExcelImport.xlsx")
-	response.OkWithMessage("导入成功", c)
+	if err := systemToolsService.ParseExcel2Redis(); err != nil {
+		response.FailWithMessage("导入失败："+err.Error(), c)
+	} else {
+		response.OkWithMessage("导入成功，已加载到缓存", c)
+	}
 }
 
-// @Tags excel
-// @Summary 加载Excel数据
+// @Tags iphost
+// @Summary 从Redis加载Excel数据
 // @Security ApiKeyAuth
 // @Produce  application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"加载数据成功"}"
-// @Router /excel/loadExcel [get]
+// @Router /iphost/loadExcel [get]
 func (e *SystemToolsApi) LoadExcel(c *gin.Context) {
 	menus, err := systemToolsService.ParseInfoList4Redis()
 	if err != nil {
@@ -79,14 +83,14 @@ func (e *SystemToolsApi) LoadExcel(c *gin.Context) {
 	}, "加载数据成功", c)
 }
 
-// @Tags excel
+// @Tags iphost
 // @Summary 下载模板
 // @Security ApiKeyAuth
 // @accept multipart/form-data
 // @Produce  application/json
 // @Param fileName query string true "模板名称"
 // @Success 200
-// @Router /excel/downloadTemplate [get]
+// @Router /iphost/downloadTemplate [get]
 func (e *SystemToolsApi) DownloadTemplate(c *gin.Context) {
 	fileName := c.Query("fileName")
 	filePath := global.GVA_CONFIG.Excel.Dir + fileName

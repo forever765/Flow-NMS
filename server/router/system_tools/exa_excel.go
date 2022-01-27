@@ -9,7 +9,7 @@ type ExcelRouter struct {
 }
 
 func (e *ExcelRouter) InitExcelRouter(Router *gin.RouterGroup) {
-	excelRouter := Router.Group("excel")
+	excelRouter := Router.Group("iphost")
 	var systemToolsApi = v1.ApiGroupApp.SystemToolsApiGroup.SystemToolsApi
 	{
 		excelRouter.POST("importExcel", systemToolsApi.ImportExcel)          // 导入Excel
