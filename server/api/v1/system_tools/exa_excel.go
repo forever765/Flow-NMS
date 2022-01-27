@@ -65,7 +65,7 @@ func (e *SystemToolsApi) ImportExcel(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"加载数据成功"}"
 // @Router /excel/loadExcel [get]
 func (e *SystemToolsApi) LoadExcel(c *gin.Context) {
-	menus, err := systemToolsService.ParseExcel2InfoList()
+	menus, err := systemToolsService.ParseInfoList4Redis()
 	if err != nil {
 		global.GVA_LOG.Error("加载数据失败!", zap.Any("err", err))
 		response.FailWithMessage("加载数据失败", c)

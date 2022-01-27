@@ -25,7 +25,9 @@ func main() {
 	global.GVA_DB = initialize.Gorm() // gorm连接数据库
 	global.GORM_CH = initialize.GormCH() // gorm连接Clickhouse数据库
 	global.Prom2JsonBin = status.CheckProm2Json()	// 检查Prom2Json是否存在
-	initialize.Timer()
+	initialize.Timer()	// 加载定时任务
+	initialize.Redis() // 因IpHostInfo使用需要，提前初始化Redis
+	initialize.IpHostInfo() // 从Excel文件读取IP-Host数据到Redis
 	if global.GVA_DB != nil {
 		initialize.MysqlTables(global.GVA_DB) // 初始化表
 		// 程序结束前关闭数据库链接

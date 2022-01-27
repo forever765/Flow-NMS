@@ -17,7 +17,8 @@ type server interface {
 func RunWindowsServer() {
 	//if global.GVA_CONFIG.System.UseMultipoint {
 	// 修改：因为NMS多处需要使用Redis缓存，所以无论是否启用【多点登录拦截】，都初始化redis服务
-	initialize.Redis()
+	// 因IpHost 需要使用，调整到main.go提前初始化Redis
+	//initialize.Redis()
 
 	// 从db加载jwt数据
 	if global.GVA_DB != nil {
