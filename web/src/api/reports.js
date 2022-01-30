@@ -39,18 +39,40 @@ export const getNewestData = (data) => {
   })
 }
 
-// @Tags SysApi
-// @Summary 删除选中Api
+// @Tags Report
+// @Summary 分页获取src使用流量TopN
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.IdsReq true "ID"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /api/deleteApisByIds [delete]
-// export const deleteApisByIds = (data) => {
-//   return service({
-//     url: '/api/deleteApisByIds',
-//     method: 'delete',
-//     data
-//   })
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /report/getSrcTopN [post]
+// {
+//  page     int
+//	pageSize int
 // }
+export const getSrcTopN = (data) => {
+  return service({
+    url: '/reports/getSrcTopN',
+    method: 'post',
+    data
+  })
+}
+
+// @Tags Report
+// @Summary 分页获取dst使用流量TopN
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /report/getDstTopN [post]
+// {
+//  page     int
+//	pageSize int
+// }
+export const getDstTopN = (data) => {
+  return service({
+    url: '/reports/getDstTopN',
+    method: 'post',
+    data
+  })
+}
