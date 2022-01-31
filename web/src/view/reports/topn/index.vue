@@ -18,7 +18,7 @@
 import FilterPanel from '@/view/reports/topn/filterPanel.vue'
 import TopNTablePanel from '@/view/reports/topn/tablePanel.vue'
 // import TopNTrafficLine from '@/view/reports/topn/topNTrafficLine'
-import { getSrcTopN } from '@/api/reports.js'
+import { getTopN } from '@/api/reports.js'
 import { ElMessage } from 'element-plus'
 
 export default {
@@ -158,9 +158,10 @@ export default {
       }
       data.protocolVersion = this.msg.protocolVersion
       this.dataSource.loading = true
-      getSrcTopN(data).then(res => {
+      getTopN(data).then(res => {
         this.dataSource.loading = false
         if (res['msg'] === '获取成功') {
+          console.log(res['data'])
           if (res['data'] !== null) {
             ElMessage.success('搜索成功')
             // 少于pageSize就统计长度，否则返回10000条的total

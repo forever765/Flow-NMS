@@ -14,5 +14,6 @@ func (s *ReportsRouter) InitReportsRouter(Router *gin.RouterGroup) {
 	var reportsApi = v1.ApiGroupApp.ReportsApiGroup.ReportsApi
 	{
 		reportsRouter.POST("getNewestData", reportsApi.GetNewestData) // 获取报表最新数据
+		reportsRouter.POST("getTopN", reportsApi.GetTopN) // 获取TopN排行榜最新数据
 	}
 }

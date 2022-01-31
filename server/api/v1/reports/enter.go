@@ -6,4 +6,7 @@ type ApiGroup struct {
 	ReportsApi
 }
 
+type ReportsApi struct {
+}
+
 var reportsService = service.ServiceGroupApp.ReportsServiceGroup

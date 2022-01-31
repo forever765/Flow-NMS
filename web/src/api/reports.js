@@ -50,28 +50,9 @@ export const getNewestData = (data) => {
 //  page     int
 //	pageSize int
 // }
-export const getSrcTopN = (data) => {
+export const getTopN = (data) => {
   return service({
-    url: '/reports/getSrcTopN',
-    method: 'post',
-    data
-  })
-}
-
-// @Tags Report
-// @Summary 分页获取dst使用流量TopN
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /report/getDstTopN [post]
-// {
-//  page     int
-//	pageSize int
-// }
-export const getDstTopN = (data) => {
-  return service({
-    url: '/reports/getDstTopN',
+    url: '/reports/getTopN',
     method: 'post',
     data
   })
