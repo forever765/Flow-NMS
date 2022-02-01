@@ -12,7 +12,7 @@ import { getTraffic } from '@/api/charts'
 const titles = ['上行速率', '下行速率']
 const unit = 'MBps'
 export default {
-  name: 'TopNTrafficLine',
+  name: 'TopnTrafficLine',
   watch: {
     result: {
       // eslint-disable-next-line no-mixed-spaces-and-tabs
@@ -226,7 +226,7 @@ export default {
 .dashbord-line-box {
   .dashbord-line {
     background-color: #fff;
-    height: 360px;
+    height: 200px;
     width: 100%;
   }
   .dashbord-line-title {

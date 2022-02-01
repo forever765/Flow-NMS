@@ -4,7 +4,7 @@
       <filter-panel :filter-data="filterData" @filterMsg="filterMsg" />
     </el-card>
     <el-card :xs="24" :sm="18">
-<!--      <top-n-traffic-line />-->
+      <topn-traffic-line />
     </el-card>
     <top-n-table-panel
       :data-source="dataSource"
@@ -17,18 +17,19 @@
 <script>
 import FilterPanel from '@/view/reports/topn/filterPanel.vue'
 import TopNTablePanel from '@/view/reports/topn/tablePanel.vue'
-// import TopNTrafficLine from '@/view/reports/topn/topNTrafficLine'
+import TopnTrafficLine from '@/view/reports/topn/topnTrafficLine.vue'
 import { getTopN } from '@/api/reports.js'
 import { ElMessage } from 'element-plus'
 
 export default {
-  name: 'TopNIndex',
-  // eslint-disable-next-line vue/no-unused-components
-  components: { FilterPanel, TopNTablePanel },
+  name: 'TopnIndex',
+  components: { FilterPanel, TopNTablePanel, TopnTrafficLine },
   data() {
     function handleBytes(v) {
       if (v == null) {
-        return ''
+        return 'null'
+      } else {
+        console.log('else')
       }
       const unit = [' KB', ' MB', ' GB', ' TB', ' PB']
       let n = -1
@@ -68,7 +69,8 @@ export default {
       },
       // 表格配置
       dataSource: {
-        data: [], // 表格数据
+        src: [], // 表格数据
+        dst: [], // 表格数据
         cols: [
           {
             label: '主机名',
@@ -80,10 +82,14 @@ export default {
             prop: 'ipaddr'
           },
           {
-            label: '数据量',
-            prop: 'bytes',
+            label: 'ISP信息',
+            prop: 'isp'
+          },
+          {
+            label: '数据大小',
+            prop: 'mbytes',
             isCodeTableFormatter: function(val) {
-              return handleBytes(val.bytes)
+              return handleBytes(val.mbytes)
             }
           },
           {
@@ -161,7 +167,6 @@ export default {
       getTopN(data).then(res => {
         this.dataSource.loading = false
         if (res['msg'] === '获取成功') {
-          console.log(res['data'])
           if (res['data'] !== null) {
             ElMessage.success('搜索成功')
             // 少于pageSize就统计长度，否则返回10000条的total
@@ -170,10 +175,12 @@ export default {
             } else {
               this.dataSource.pageData.total = 10000
             }
-            this.dataSource.data = res['data']
+            this.dataSource.src = res['data']['src']
+            this.dataSource.dst = res['data']['dst']
           } else {
             ElMessage.warning('搜索成功，无结果')
-            this.dataSource.data = []
+            this.dataSource.src = []
+            this.dataSource.dst = []
             this.dataSource.pageData.total = 0
           }
         }

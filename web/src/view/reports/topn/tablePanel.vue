@@ -1,14 +1,13 @@
 <template>
   <div>
-    <el-row :gutter="50">
+    <el-row :gutter="20">
       <el-col :span="12">
         <el-table
           ref="table"
           v-loading="dataSource.loading"
-          :border="dataSource.border?true:false"
-          style="width: 500px; height: 30%; font-size: 10px"
+          style="width: 100%; height: 300px; font-size: 10px"
           :row-style="{height:'10px'}"
-          :cell-style="{padding:'0px', 'text-align':'center'}"
+          :cell-style="{padding:'0px', 'text-align':'left'}"
           :class="{ 'no-data': !dataSource.data || !dataSource.data.length }"
           :data="dataSource.src"
           @row-click="getRowData"
@@ -93,10 +92,9 @@
         <el-table
           ref="table"
           v-loading="dataSource.loading"
-          :border="dataSource.border?true:false"
-          style="width: 500px; height: 30%; font-size: 10px"
+          style="width: 100%; height: 300px; font-size: 10px"
           :row-style="{height:'10px'}"
-          :cell-style="{padding:'0px', 'text-align':'center'}"
+          :cell-style="{padding:'0px', 'text-align':'left'}"
           :class="{ 'no-data': !dataSource.data || !dataSource.data.length }"
           :data="dataSource.dst"
           @row-click="getRowData"
