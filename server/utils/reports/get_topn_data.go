@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm"
 	"net"
 	"strings"
-	"time"
 )
 
 //@author: [forever765](https://github.com/forever765)
@@ -55,18 +54,14 @@ func GetTopN(ParamsMap map[string]gjson.Result) map[string]interface{} {
 			delete(tmpResult[i], "location")
 		}
 		// 在循环外执行，只需要读两次redis
-		startTime := time.Now().UnixNano()
-		tmpResult = searchHostname(tmpResult)
-		endTime := time.Now().UnixNano()
-		fmt.Printf("执行完毕，所花时间:%.1f ms\n",  float64(endTime-startTime)/1000000000)
-
+		tmpResult = searchHostnameAndSubnet(tmpResult)
 		finalResult[obj] = tmpResult
 		tmpResult = nil
 	}
 	return finalResult
 }
 
-func searchHostname(tmpResult []map[string]interface{}) []map[string]interface{} {
+func searchHostnameAndSubnet(tmpResult []map[string]interface{}) []map[string]interface{} {
 	redisResult, err := global.GVA_REDIS.Get(context.Background(), "IpHostList").Result()
 	if err != nil {
 		global.GVA_LOG.Error("从Redis获取IpHostList失败：", zap.Error(err))
@@ -84,7 +79,7 @@ func searchHostname(tmpResult []map[string]interface{}) []map[string]interface{}
 				obj := record.Map()
 				if (obj["ipaddr"]).String() == ipaddr {
 					tmpResult[i]["hostname"] = obj["hostname"].String()
-					tmpResult[i]["area"] = obj["area"].String()
+					tmpResult[i]["isp"] = obj["area"].String()+"-内网"
 				}
 			}
 		} else {

@@ -59,7 +59,6 @@ func (exa *SystemToolsService) ParseExcel2Redis() error {
 		if len(row) != len(fixedHeader) {
 			continue
 		}
-		//id, _ := strconv.Atoi(row[0])
 		menu := system_tools.IpHost{
 			Area:      row[0],
 			HostName:  row[1],
