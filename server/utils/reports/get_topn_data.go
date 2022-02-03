@@ -1,12 +1,15 @@
 package reports
 
 import (
+	"context"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/tidwall/gjson"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
+	"net"
 	"strings"
+	"time"
 )
 
 //@author: [forever765](https://github.com/forever765)
@@ -51,10 +54,45 @@ func GetTopN(ParamsMap map[string]gjson.Result) map[string]interface{} {
 			}
 			delete(tmpResult[i], "location")
 		}
+		// 在循环外执行，只需要读两次redis
+		startTime := time.Now().UnixNano()
+		tmpResult = searchHostname(tmpResult)
+		endTime := time.Now().UnixNano()
+		fmt.Printf("执行完毕，所花时间:%.1f ms\n",  float64(endTime-startTime)/1000000000)
+
 		finalResult[obj] = tmpResult
 		tmpResult = nil
 	}
 	return finalResult
+}
+
+func searchHostname(tmpResult []map[string]interface{}) []map[string]interface{} {
+	redisResult, err := global.GVA_REDIS.Get(context.Background(), "IpHostList").Result()
+	if err != nil {
+		global.GVA_LOG.Error("从Redis获取IpHostList失败：", zap.Error(err))
+	}
+
+	// 遍历处理所有ip，提取要匹配的ip
+	for i:= 0; i<len(tmpResult); i++ {
+		// 默认值
+		tmpResult[i]["hostname"] = tmpResult[i]["ipaddr"]
+		ipaddr := fmt.Sprintf("%v", tmpResult[i]["ipaddr"])
+		// redisResultValue example: [{"id":1,"area":"顺德","hostname":"主路由","ipaddr":"192.168.123.1"},{"id":2,"area":"顺德","hostname":"核心交换机","ipaddr":"192.168.123.2"}]
+		// 先用ip-host表匹配，无结果的话再去dns反查
+		if redisResultValue := gjson.Get(redisResult, "@values"); redisResultValue.String() != "" {
+			for _, record := range redisResultValue.Array() {
+				obj := record.Map()
+				if (obj["ipaddr"]).String() == ipaddr {
+					tmpResult[i]["hostname"] = obj["hostname"].String()
+					tmpResult[i]["area"] = obj["area"].String()
+				}
+			}
+		} else {
+			iprecords, _ := net.LookupIP(ipaddr)
+			tmpResult[i]["hostname"] = iprecords[0]
+		}
+	}
+	return tmpResult
 }
 
 func defineDB(ParamsMap map[string]gjson.Result) *gorm.DB {

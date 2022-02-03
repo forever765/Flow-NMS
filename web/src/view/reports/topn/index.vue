@@ -75,7 +75,6 @@ export default {
           {
             label: '主机名',
             prop: 'hostname',
-            width: 180,
           },
           {
             label: 'IP地址',
