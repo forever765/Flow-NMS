@@ -15,8 +15,8 @@
         <el-button class="excel-btn" size="mini" type="primary" icon="el-icon-download" @click="handleExcelExport('ExcelExport.xlsx')">导出</el-button>
         <el-button class="excel-btn" size="mini" type="success" icon="el-icon-download" @click="downloadExcelTemplate()">下载模板</el-button>
       </div>
-      <el-table :data="tableData" row-key="ID">
-        <el-table-column align="left" label="ID" min-width="100" prop="id" />
+      <el-table :data="tableData">
+        <el-table-column type="index" label="序号" width="55" align="center" />
         <el-table-column align="left" show-overflow-tooltip label="地区" min-width="160" prop="area" />
         <el-table-column align="left" show-overflow-tooltip label="主机名" min-width="160" prop="hostname" />
         <el-table-column align="left" label="IP地址" min-width="90" prop="ipaddr" />

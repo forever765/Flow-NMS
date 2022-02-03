@@ -22,10 +22,8 @@ export default {
     }
   },
   created() {
-    this.timer = setInterval(() => {
-      this.getData()
-      this.initChart()
-    }, 1000 * 10)
+    this.getData()
+    this.initChart()
   },
   mounted() {
     this.$nextTick(() => {

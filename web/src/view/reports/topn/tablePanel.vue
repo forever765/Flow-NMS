@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="20">
+    <el-row :gutter="10">
       <el-col :span="12">
         <el-table
           ref="table"
@@ -159,7 +159,7 @@
         v-if="dataSource.pageData.total>0"
         background
         :current-page="dataSource.pageData.pageNum"
-        :page-sizes="dataSource.pageData.pageSizes?dataSource.pageData.pageSizes:[20,30,50,100]"
+        :page-sizes="dataSource.pageData.pageSizes?dataSource.pageData.pageSizes:[10,20,30,50]"
         :page-size="dataSource.pageData.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="dataSource.pageData.total"

@@ -8,7 +8,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system_tools"
 	"github.com/xuri/excelize/v2"
-	"strconv"
 )
 
 type SystemToolsService struct {
@@ -17,11 +16,10 @@ type SystemToolsService struct {
 // 把数据导出到excel
 func (exa *SystemToolsService) ParseInfoList2Excel(infoList []system_tools.IpHost, filePath string) error {
 	excel := excelize.NewFile()
-	excel.SetSheetRow("Sheet1", "A1", &[]string{"ID", "所属地区", "主机名", "IP地址"})
+	excel.SetSheetRow("Sheet1", "A1", &[]string{"所属地区", "主机名", "IP地址"})
 	for i, menu := range infoList {
 		axis := fmt.Sprintf("A%d", i+2)
 		excel.SetSheetRow("Sheet1", axis, &[]interface{}{
-			menu.ID,
 			menu.Area,
 			menu.HostName,
 			menu.IpAddr,
@@ -34,7 +32,7 @@ func (exa *SystemToolsService) ParseInfoList2Excel(infoList []system_tools.IpHos
 // 解析excel并返回结果
 func (exa *SystemToolsService) ParseExcel2Redis() error {
 	skipHeader := true
-	fixedHeader := []string{"ID", "所属地区", "主机名", "IP地址"}
+	fixedHeader := []string{"所属地区", "主机名", "IP地址"}
 	file, err := excelize.OpenFile(global.GVA_CONFIG.Excel.Dir + "ExcelImport.xlsx")
 	if err != nil {
 		return err
@@ -44,6 +42,7 @@ func (exa *SystemToolsService) ParseExcel2Redis() error {
 	if err != nil {
 		return err
 	}
+	i := 1
 	for rows.Next() {
 		row, err := rows.Columns()
 		if err != nil {
@@ -60,17 +59,17 @@ func (exa *SystemToolsService) ParseExcel2Redis() error {
 		if len(row) != len(fixedHeader) {
 			continue
 		}
-		id, _ := strconv.Atoi(row[0])
+		//id, _ := strconv.Atoi(row[0])
 		menu := system_tools.IpHost{
-			ID: 	uint(id),
-			Area:      row[1],
-			HostName:  row[2],
-			IpAddr:  row[3],
+			Area:      row[0],
+			HostName:  row[1],
+			IpAddr:  row[2],
 		}
 		menus = append(menus, menu)
 		if err := WriteInfo2Redis(menus); err != nil{
 			return err
 		}
+		i = i+1
 	}
 	return nil
 }
