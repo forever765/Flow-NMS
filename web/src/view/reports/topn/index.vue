@@ -108,7 +108,7 @@ export default {
         loading: true, // loading
         pageData: {
           total: 0, // 总条数
-          pageSize: 20, // 每页数量
+          pageSize: 10, // 每页数量
           pageNum: 1 // 页码
         },
         operation: {

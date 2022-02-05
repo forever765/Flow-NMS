@@ -5,6 +5,8 @@
         <el-table
           ref="table"
           v-loading="dataSource.loading"
+          height="250"
+          :header-cell-style="{'text-align':'left'}"
           style="width: 100%; height: 300px; font-size: 10px"
           :row-style="{height:'10px'}"
           :cell-style="{padding:'0px', 'text-align':'left'}"
@@ -92,6 +94,8 @@
         <el-table
           ref="table"
           v-loading="dataSource.loading"
+          height="250"
+          :header-cell-style="{'text-align':'left'}"
           style="width: 100%; height: 300px; font-size: 10px"
           :row-style="{height:'10px'}"
           :cell-style="{padding:'0px', 'text-align':'left'}"
