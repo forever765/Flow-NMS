@@ -158,14 +158,13 @@
 
     </el-row>
     <!--  下方页脚 -->
-    <div class="page">
+    <div>
       <el-pagination
         v-if="dataSource.pageData.total>0"
         background
-        :current-page="dataSource.pageData.pageNum"
         :page-sizes="dataSource.pageData.pageSizes?dataSource.pageData.pageSizes:[10,20,30,50]"
         :page-size="dataSource.pageData.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="total, sizes"
         :total="dataSource.pageData.total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -223,30 +222,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.page{
-  margin-top: 20px;
-}
-.btn{
-  display: flex;
-  justify-content: center;
-}
 .btn div{
   margin-left: 5px;
-}
-.reference-img{
-  width: 40px;
-  height: 40px;
-  background-size:100% 100%;
-  border-radius: 4px;
-}
-.image-popover{
-  width: 200px;
-  height: 200px;
-  background-size:100% 100%;
-}
-.icon {
-  width: 25px;
-  font-size: 20px;
-  font-weight: bold;
 }
 </style>

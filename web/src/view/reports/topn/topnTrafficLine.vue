@@ -180,6 +180,24 @@ export default {
               symbolSize: 6,
               data: [{ type: 'max', name: 'Out_Max' }],
             },
+            markLine: {
+              symbol: 'none', // 去掉警戒线最后面的箭头
+              label: {
+                position: 'end' // 将警示值放在哪个位置，三个值“start”,"middle","end"  开始  中点 结束
+              },
+              data: [{
+                silent: false, // 鼠标悬停加粗显示
+                label: {
+                  position: 'middle',
+                  formatter: '{c}Mbps',
+                },
+                lineStyle: { // 警戒线的样式  ，虚实  颜色
+                  type: 'nomal',
+                  color: '#FA3934',
+                },
+                yAxis: 500,
+              }]
+            },
             lineStyle: { normal: { color: '#41D6C3', width: 1 }},
             areaStyle: { normal: { color: '#41D6C3', opacity: 0.5 }},
             data: out_data,
