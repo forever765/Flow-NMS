@@ -96,7 +96,7 @@ func Timer() {
 
 			// 写入 Redis
 			timer := time.Duration(3600) * time.Second
-			err := global.GVA_REDIS.Set(context.Background(), "IndexTraffic", string(result2), timer).Err()
+			err := global.GVA_REDIS.Set(context.Background(), "1hTrafficData", string(result2), timer).Err()
 			if err != nil {
 				global.GVA_LOG.Error("写入Redis失败:", zap.Error(err))
 			}else {

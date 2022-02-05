@@ -7,13 +7,24 @@
 <script>
 import echarts from 'echarts'
 import 'echarts/theme/macarons'
-import { getTraffic } from '@/api/charts'
+import { ElMessage } from 'element-plus'
+import { getTrafficData } from '@/api/charts'
 
 const titles = ['上行速率', '下行速率']
 const unit = 'MBps'
 export default {
-  name: 'TopnTrafficLine',
+  name: 'TopNTrafficLine',
+  props: {
+    trafficLineData: {
+      type: Object
+    }
+  },
   watch: {
+    // 'trafficLineData.Data': {
+    //   handler(newValue, oldValue) {
+    //
+    //   }
+    // },
     result: {
       // eslint-disable-next-line no-mixed-spaces-and-tabs
       	handler(newValue, oldValue) {
@@ -22,8 +33,8 @@ export default {
     }
   },
   created() {
-    this.getData()
-    this.initChart()
+    this.getTrafficData()
+    // this.initChart()
   },
   mounted() {
     this.$nextTick(() => {
@@ -41,18 +52,22 @@ export default {
     window.removeEventListener('resize', this.resizeHandle)
   },
   methods: {
-    async getData() {
-      this.result = await getTraffic()
-      return this.result
-    },
-    resizeHandle() {
-      this.chart.resize()
+    async getTrafficData() {
+      const result = await getTrafficData()
+      return result
     },
     initChart() {
-      // this.chart = echarts.init(this.$refs.echart, 'macarons')
-      this.getData().then(
+      this.chart = echarts.init(this.$refs.echart)
+      this.chart.showLoading({
+        text: 'loading',
+        color: '#c23531',
+        textColor: '#000',
+        maskColor: 'rgba(255, 255, 255, 0.2)',
+        zlevel: 0,
+      })
+      this.getTrafficData().then(
         (data) => (
-          (this.chart = echarts.init(this.$refs.echart)),
+          this.chart.hideLoading(),
           this.setOptions(data),
           window.addEventListener('resize', this.resizeHandle)
         )
@@ -61,7 +76,6 @@ export default {
     setOptions(data) {
       var in_data = []
       var out_data = []
-      // json object to array
       var readyData = JSON.parse(data['data'])
       for (var i in readyData) {
         in_data.push([
@@ -216,6 +230,9 @@ export default {
           },
         ],
       })
+    },
+    resizeHandle() {
+      this.chart.resize()
     },
   },
 }

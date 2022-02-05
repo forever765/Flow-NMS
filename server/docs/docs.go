@@ -1180,7 +1180,7 @@ var doc = `{
                 }
             }
         },
-        "/charts/getTraffic": {
+        "/charts/getTrafficData": {
             "post": {
                 "security": [
                     {

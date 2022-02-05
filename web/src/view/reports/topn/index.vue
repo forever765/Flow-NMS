@@ -4,7 +4,7 @@
       <filter-panel :filter-data="filterData" @filterMsg="filterMsg" />
     </el-card>
     <el-card :xs="24" :sm="18">
-      <topn-traffic-line />
+      <top-n-traffic-line :traffic-line-data="trafficLineData" />
     </el-card>
     <top-n-table-panel
       :data-source="dataSource"
@@ -17,19 +17,18 @@
 <script>
 import FilterPanel from '@/view/reports/topn/filterPanel.vue'
 import TopNTablePanel from '@/view/reports/topn/tablePanel.vue'
-import TopnTrafficLine from '@/view/reports/topn/topnTrafficLine.vue'
+import TopNTrafficLine from '@/view/reports/topn/topnTrafficLine.vue'
 import { getTopN } from '@/api/reports.js'
 import { ElMessage } from 'element-plus'
+import { getTrafficData } from '@/api/charts'
 
 export default {
   name: 'TopnIndex',
-  components: { FilterPanel, TopNTablePanel, TopnTrafficLine },
+  components: { FilterPanel, TopNTablePanel, TopNTrafficLine },
   data() {
     function handleBytes(v) {
       if (v == null) {
         return 'null'
-      } else {
-        console.log('else')
       }
       const unit = [' KB', ' MB', ' GB', ' TB', ' PB']
       let n = -1
@@ -46,6 +45,11 @@ export default {
     }
 
     return {
+      // 流量图子组件数据
+      trafficLineData: {
+        Data: [],
+        isLoading: true,
+      },
       // 搜索栏配置
       filterData: {
         timeSelect: true,
@@ -134,10 +138,10 @@ export default {
     }
   },
   created() {
-    this.getList()
+    this.getTableData()
   },
   methods: {
-    getList(a) {
+    getTableData(a) {
       const data = {
         pageSize: this.dataSource.pageData.pageSize,
         pageNum: this.dataSource.pageData.pageNum
@@ -188,18 +192,18 @@ export default {
     filterMsg(msg) {
       this.msg = msg
       if (Object.keys(msg).length > 0) {
-        this.getList(msg)
+        this.getTableData(msg)
       } else {
-        this.getList()
+        this.getTableData()
       }
     },
     changeSize(size) {
       this.dataSource.pageData.pageSize = size
-      this.getList()
+      this.getTableData()
     },
     changeNum(pageNum) {
       this.dataSource.pageData.pageNum = pageNum
-      this.getList()
+      this.getTableData()
     },
   }
 }

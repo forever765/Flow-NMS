@@ -6,8 +6,7 @@
 </template>
 <script>
 import echarts from 'echarts'
-import 'echarts/theme/macarons'
-import { getTraffic } from '@/api/charts'
+import { getTrafficData } from '@/api/charts'
 
 const titles = ['上行速率', '下行速率']
 const unit = 'MBps'
@@ -44,14 +43,13 @@ export default {
   },
   methods: {
     async getData() {
-      this.result = await getTraffic()
+      this.result = await getTrafficData()
       return this.result
     },
     resizeHandle() {
       this.chart.resize()
     },
     initChart() {
-      // this.chart = echarts.init(this.$refs.echart, 'macarons')
       this.getData().then(
         (data) => (
           (this.chart = echarts.init(this.$refs.echart)),

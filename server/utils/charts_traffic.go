@@ -11,9 +11,9 @@ import (
 //@description: 获取最近上下行流量
 //@return: json data, err error
 func GetTraffic() string {
-	TopCardData, err := global.GVA_REDIS.Get(context.Background(), "IndexTraffic").Result()
+	TopCardData, err := global.GVA_REDIS.Get(context.Background(), "1hTrafficData").Result()
 	if err != nil{
-		global.GVA_LOG.Error("从Redis获取TopCard数据失败：", zap.Error(err))
+		global.GVA_LOG.Error("从Redis获取最近1h上下行流量数据失败：", zap.Error(err))
 	}
 	return TopCardData
 }
