@@ -121,7 +121,16 @@ export default {
             return [start, end]
           },
         }, {
-          text: '昨天',
+          text: '12小时内',
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 12)
+            this.dateRange = [start, end]
+            return [start, end]
+          },
+        }, {
+          text: '24小时内',
           value: () => {
             const end = new Date()
             const start = new Date()
@@ -130,11 +139,42 @@ export default {
             return [start, end]
           },
         }, {
-          text: '一周前',
+          text: '本周',
+          value: () => {
+            const start = this.WeekFirstDay()
+            const end = new Date()
+            this.dateRange = [start, end]
+            return [start, end]
+          },
+        }, {
+          text: '本月',
           value: () => {
             const end = new Date()
             const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            start.setDate(1)
+            start.setHours(0)
+            start.setSeconds(0)
+            start.setMinutes(0)
+            start.setTime(start)
+            this.dateRange = [start, end]
+            return [start, end]
+          },
+        }, {
+          text: '上个月',
+          value: () => {
+            const start = new Date()
+            start.setMonth(0)
+            start.setDate(1)
+            start.setHours(0)
+            start.setMinutes(0)
+            start.setSeconds(0)
+            start.setTime(start)
+            const end = new Date()
+            end.setMonth(1)
+            end.setDate(0)
+            end.setHours(23)
+            end.setMinutes(59)
+            end.setSeconds(59)
             this.dateRange = [start, end]
             return [start, end]
           },
@@ -167,6 +207,18 @@ export default {
     }
   },
   methods: {
+    WeekFirstDay() {
+      var Nowdate = new Date()
+      var day = Nowdate.getDay()
+      if (day === 0) {
+        day = 7
+      }
+      var WeekFirstDay = new Date(Nowdate - (day - 1) * 86400000)
+      WeekFirstDay.setHours(0)
+      WeekFirstDay.setMinutes(0)
+      WeekFirstDay.setSeconds(0)
+      return WeekFirstDay
+    },
     handleSearch() {
       const data = this.listQuery
       // 把 时间 写入data，默认的时间范围传过来是unix时间戳，不是x-x-x格式的ban掉
