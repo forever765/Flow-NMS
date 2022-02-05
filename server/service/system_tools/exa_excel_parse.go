@@ -16,11 +16,12 @@ type SystemToolsService struct {
 // 把数据导出到excel
 func (exa *SystemToolsService) ParseInfoList2Excel(infoList []system_tools.IpHost, filePath string) error {
 	excel := excelize.NewFile()
-	excel.SetSheetRow("Sheet1", "A1", &[]string{"所属地区", "主机名", "IP地址"})
+	excel.SetSheetRow("Sheet1", "A1", &[]string{"所属地区", "类型", "主机名", "IP地址"})
 	for i, menu := range infoList {
 		axis := fmt.Sprintf("A%d", i+2)
 		excel.SetSheetRow("Sheet1", axis, &[]interface{}{
 			menu.Area,
+			menu.Type,
 			menu.HostName,
 			menu.IpAddr,
 		})
@@ -32,7 +33,7 @@ func (exa *SystemToolsService) ParseInfoList2Excel(infoList []system_tools.IpHos
 // 解析excel并返回结果
 func (exa *SystemToolsService) ParseExcel2Redis() error {
 	skipHeader := true
-	fixedHeader := []string{"所属地区", "主机名", "IP地址"}
+	fixedHeader := []string{"所属地区", "类型", "主机名", "IP地址"}
 	file, err := excelize.OpenFile(global.GVA_CONFIG.Excel.Dir + "ExcelImport.xlsx")
 	if err != nil {
 		return err
@@ -61,8 +62,9 @@ func (exa *SystemToolsService) ParseExcel2Redis() error {
 		}
 		menu := system_tools.IpHost{
 			Area:      row[0],
-			HostName:  row[1],
-			IpAddr:  row[2],
+			Type:      row[1],
+			HostName:  row[2],
+			IpAddr:  row[3],
 		}
 		menus = append(menus, menu)
 		if err := WriteInfo2Redis(menus); err != nil{

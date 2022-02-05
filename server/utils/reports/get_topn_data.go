@@ -72,14 +72,14 @@ func searchHostnameAndSubnet(tmpResult []map[string]interface{}) []map[string]in
 		// 默认值
 		tmpResult[i]["hostname"] = tmpResult[i]["ipaddr"]
 		ipaddr := fmt.Sprintf("%v", tmpResult[i]["ipaddr"])
-		// redisResultValue example: [{"id":1,"area":"顺德","hostname":"主路由","ipaddr":"192.168.123.1"},{"id":2,"area":"顺德","hostname":"核心交换机","ipaddr":"192.168.123.2"}]
+		// redisResultValue example: [{"id":1,"type":"内网","area":"顺德","hostname":"主路由","ipaddr":"192.168.123.1"},{"id":2,"area":"顺德","type":"内网","hostname":"核心交换机","ipaddr":"192.168.123.2"}]
 		// 先用ip-host表匹配，无结果的话再去dns反查
 		if redisResultValue := gjson.Get(redisResult, "@values"); redisResultValue.String() != "" {
 			for _, record := range redisResultValue.Array() {
 				obj := record.Map()
 				if (obj["ipaddr"]).String() == ipaddr {
 					tmpResult[i]["hostname"] = obj["hostname"].String()
-					tmpResult[i]["isp"] = obj["area"].String()+"-内网"
+					tmpResult[i]["isp"] = obj["area"].String()+"-"+obj["type"].String()
 				}
 			}
 		} else {
