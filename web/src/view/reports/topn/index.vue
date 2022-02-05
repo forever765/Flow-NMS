@@ -4,7 +4,7 @@
       <filter-panel :filter-data="filterData" @filterMsg="filterMsg" />
     </el-card>
     <el-card :xs="24" :sm="18">
-      <top-n-traffic-line :traffic-line-data="trafficLineData" />
+      <top-n-traffic-line ref="TopNTrafficLine" :traffic-line-data="trafficLineData" />
     </el-card>
     <top-n-table-panel
       :data-source="dataSource"
@@ -20,7 +20,6 @@ import TopNTablePanel from '@/view/reports/topn/tablePanel.vue'
 import TopNTrafficLine from '@/view/reports/topn/topnTrafficLine.vue'
 import { getTopN } from '@/api/reports.js'
 import { ElMessage } from 'element-plus'
-import { getTrafficData } from '@/api/charts'
 
 export default {
   name: 'TopnIndex',
@@ -192,6 +191,7 @@ export default {
     filterMsg(msg) {
       this.msg = msg
       if (Object.keys(msg).length > 0) {
+        this.$.refs.TopNTrafficLine.getTrafficData(msg)
         this.getTableData(msg)
       } else {
         this.getTableData()

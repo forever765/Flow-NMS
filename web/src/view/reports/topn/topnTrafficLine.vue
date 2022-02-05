@@ -7,7 +7,6 @@
 <script>
 import echarts from 'echarts'
 import 'echarts/theme/macarons'
-import { ElMessage } from 'element-plus'
 import { getTrafficData } from '@/api/charts'
 
 const titles = ['上行速率', '下行速率']
@@ -19,22 +18,8 @@ export default {
       type: Object
     }
   },
-  watch: {
-    // 'trafficLineData.Data': {
-    //   handler(newValue, oldValue) {
-    //
-    //   }
-    // },
-    result: {
-      // eslint-disable-next-line no-mixed-spaces-and-tabs
-      	handler(newValue, oldValue) {
-        console.log('isHot被修改了')
-      }
-    }
-  },
   created() {
     this.getTrafficData()
-    // this.initChart()
   },
   mounted() {
     this.$nextTick(() => {
@@ -52,9 +37,12 @@ export default {
     window.removeEventListener('resize', this.resizeHandle)
   },
   methods: {
-    async getTrafficData() {
-      const result = await getTrafficData()
-      return result
+    async getTrafficData(data) {
+      this.result = await getTrafficData(data)
+      if (this.result['startTime'] !== '') {
+        this.setOptions(this.result, true)
+      }
+      return this.result
     },
     initChart() {
       this.chart = echarts.init(this.$refs.echart)

@@ -6,9 +6,10 @@ import service from '@/utils/request'
 // @Produce  application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /charts/getTrafficData [post]
-export const getTrafficData = () => {
+export const getTrafficData = (data) => {
   return service({
     url: '/charts/getTrafficData',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
