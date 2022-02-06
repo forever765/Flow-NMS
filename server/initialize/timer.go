@@ -65,7 +65,7 @@ func Timer() {
 
 		// 任务名称：IndexDashboardTraffic
 		// 任务用途：首页 Dashboard 流量图数据缓存，to Redis
-		// 执行间隔：Every 10s
+		// 执行间隔：Every 5s
 		type Traffic struct {
 			Time           string  `gorm:"column:Time;type:datetime;" json:"Time"`
 			InTrafficMbps  float32 `json:"in_traffic_mbps"`
@@ -76,13 +76,15 @@ func Timer() {
 			h, _ := time.ParseDuration("-1h")
 			anHourAgo := (now.Add(h)).Format("2006-01-02 15:04:05")
 			var result []Traffic
-			subQuery1 := global.GORM_CH.Raw("select toStartOfInterval(timestamp_max, INTERVAL 10 second ) Time, sum(bytes)/1048576 InMBytes, sum(packets) InPackets, InMBytes*0.8 InTrafficMbps from(select * from nms_data.gateway_pmacctd prewhere timestamp_max >= ?) where loc_dst = '局域网' group by Time", anHourAgo)
-			subQuery2 := global.GORM_CH.Raw("select toStartOfInterval(timestamp_max, INTERVAL 10 second ) Time, sum(bytes)/1048576 OutMBytes, sum(packets) OutPackets, OutMBytes*0.8 OutTrafficMbps from(select * from nms_data.gateway_pmacctd prewhere timestamp_max >= ?) where loc_src = '局域网' group by Time", anHourAgo)
+			Db := global.GORM_CH
+			subQuery1 := Db.Raw("SELECT toStartOfInterval(timestamp_max, INTERVAL 10 second ) Time, sum(bytes)/1048576 InMBytes, sum(packets) InPackets, InMBytes*0.8 InTrafficMbps FROM(SELECT * FROM nms_data.gateway_pmacctd PREWHERE timestamp_max >= ?) WHERE loc_dst = '局域网' GROUP BY Time", anHourAgo)
+			subQuery2 := Db.Raw("SELECT toStartOfInterval(timestamp_max, INTERVAL 10 second ) Time, sum(bytes)/1048576 OutMBytes, sum(packets) OutPackets, OutMBytes*0.8 OutTrafficMbps FROM(SELECT * FROM nms_data.gateway_pmacctd PREWHERE timestamp_max >= ?) WHERE loc_src = '局域网' GROUP BY Time", anHourAgo)
 			global.GORM_CH.
 				Table("(?) as In, (?) as Out", subQuery1, subQuery2).
 				Select("In.Time,FLOOR(In.InTrafficMbps,2) in_traffic_mbps,FLOOR(Out.OutTrafficMbps,2) out_traffic_mbps").
 				Where("In.Time = Out.Time").
-				Where("In.Time = Out.Time").
+				Order("Time").
+				//Debug().
 				Find(&result)
 			result2, _ := json.Marshal(result)
 
