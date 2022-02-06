@@ -40,24 +40,26 @@ func QueryDB(ParamsMap map[string]gjson.Result) (string) {
 	}
 	var result []Traffic
 	Db := global.GORM_CH
-	// 如果包含协议版本
+	var (
+		startTime = "NOW() - 3600"
+		endTime = "NOW()"
+	)
+	// 如果有指定时间范围就把查询条件改为该时间，否则保持默认值1h
+	if startTimeTemp := ParamsMap["startTime"].String(); startTimeTemp!=""{
+		startTime = startTimeTemp
+	}
+	if endTimeTemp := ParamsMap["endTime"].String(); endTimeTemp!=""{
+		endTime = endTimeTemp
+	}
+	// 如果要区别协议版本，直接加在后面作为条件
 	if value, exist := ParamsMap["protocolVersion"]; exist {
 		switch value.String() {
 		case "仅IPv4":
-			Db = Db.Where("etype", "800")
+			endTime = endTime + " AND etype = '800'"
 		case "仅IPv6":
-			Db = Db.Where("etype", "86dd")
+			endTime = endTime + " AND etype = '86dd'"
 		}
 	}
-	var startTime,endTime string
-	if startTime = ParamsMap["startTime"].String(); startTime==""{
-		startTime = "NOW() - 3600"
-	}
-	if endTime = ParamsMap["endTime"].String(); endTime==""{
-		endTime = "NOW()"
-	}
-	//subQuery1 := Db.Raw("SELECT toStartOfInterval(timestamp_max, INTERVAL 10 second ) Time, sum(bytes)/1048576 InMBytes, sum(packets) InPackets, InMBytes*0.8 InTrafficMbps FROM (SELECT * FROM nms_data.gateway_pmacctd PREWHERE timestamp_min >= ? AND timestamp_max <= ?) PREWHERE loc_dst = '局域网' GROUP BY Time", startTime, endTime)
-	//subQuery2 := Db.Raw("SELECT toStartOfInterval(timestamp_max, INTERVAL 10 second ) Time, sum(bytes)/1048576 OutMBytes, sum(packets) OutPackets, OutMBytes*0.8 OutTrafficMbps FROM (SELECT * FROM nms_data.gateway_pmacctd PREWHERE timestamp_min >= ? AND timestamp_max <= ?) PREWHERE loc_src = '局域网' GROUP BY Time", startTime, endTime)
 	subQuery1 := Db.Raw(fmt.Sprintf("SELECT toStartOfInterval(timestamp_max, INTERVAL 10 second) Time, sum(bytes)/1048576 InMBytes, sum(packets) InPackets, InMBytes*0.8 InTrafficMbps FROM (SELECT * FROM nms_data.gateway_pmacctd PREWHERE timestamp_min >= %v AND timestamp_max <= %v) WHERE loc_dst = '局域网' GROUP BY Time", startTime, endTime))
 	subQuery2 := Db.Raw(fmt.Sprintf("SELECT toStartOfInterval(timestamp_max, INTERVAL 10 second) Time, sum(bytes)/1048576 OutMBytes, sum(packets) OutPackets, OutMBytes*0.8 OutTrafficMbps FROM (SELECT * FROM nms_data.gateway_pmacctd PREWHERE timestamp_min >= %v AND timestamp_max <= %v) WHERE loc_src = '局域网' GROUP BY Time", startTime, endTime))
 	global.GORM_CH.
@@ -65,7 +67,7 @@ func QueryDB(ParamsMap map[string]gjson.Result) (string) {
 		Select("In.Time,FLOOR(In.InTrafficMbps,2) in_traffic_mbps,FLOOR(Out.OutTrafficMbps,2) out_traffic_mbps").
 		Where("In.Time = Out.Time").
 		Order("Time").
-		//Debug().
+		Debug().
 		Find(&result)
 	result2, _ := json.Marshal(result)
 	return string(result2)
