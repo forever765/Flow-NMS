@@ -1,0 +1,120 @@
+aliyun-oss:
+  endpoint: ""
+  access-key-id: ""
+  access-key-secret: ""
+  bucket-name: ""
+  bucket-url: ""
+  base-path: ""
+autocode:
+  transfer-restart: true
+  root: D:\Script\Flow-NMS
+  server: /server
+  server-api: /api/v1/autocode
+  server-initialize: /initialize
+  server-model: /model/autocode
+  server-request: /model/autocode/request/
+  server-router: /router/autocode
+  server-service: /service/autocode
+  web: /web/src
+  web-api: /api
+  web-form: /view
+  web-table: /view
+captcha:
+  key-long: 4
+  img-width: 240
+  img-height: 80
+casbin:
+  model-path: ./resource/rbac_model.conf
+clickhouse:
+  cluster: ""
+  db: nms_data
+  addr: nms01.home.com
+  port: 9000
+  username: ""
+  password: ""
+  read_timeout: 10
+  write_timeout: 20
+  prometheus_port: 9363
+  prometheus_suffix: metrics
+clickhouse_sinker_nali:
+  addr: http://nms01.home.com
+  port: 21888
+  prom2json_path: ""
+download_path:
+  prom2json: D:/script/prom2json-1.3.0
+email:
+  to: 823972850@qq.com
+  port: 465
+  from: 823972850@qq.com
+  host: smtp.qq.com
+  is-ssl: true
+  secret: sronepedczakbdfa
+  nickname: test
+excel:
+  dir: ./resource/excel/
+jwt:
+  signing-key: 4qAwucdQOw1hwUaDsufcDAEV2v7sTX3FTJVOcdCNzo9m2YtpsrvkQtAgbJD2w0b5
+  expires-time: 604800
+  buffer-time: 86400
+  issuer: ""
+local:
+  path: uploads/file
+mysql:
+  path: 192.168.123.213:3306
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name: gva
+  username: gva
+  password: 6BuDxFC6LYo2VHpDegpd6btbDjzgxpZu
+  max-idle-conns: 0
+  max-open-conns: 0
+  log-mode: Warn
+  log-zap: false
+qiniu:
+  zone: ZoneHuaDong
+  bucket: ""
+  img-path: ""
+  use-https: false
+  access-key: ""
+  secret-key: ""
+  use-cdn-domains: false
+redis:
+  db: 1
+  addr: nms01.home.com:6379
+  password: ""
+system:
+  env: public
+  addr: 8888
+  db-type: mysql
+  oss-type: local
+  use-multipoint: false
+  iplimit-count: 0
+  iplimit-time: 0
+tencent-cos:
+  bucket: xxxxx-10005608
+  region: ap-shanghai
+  secret-id: xxxxxxxx
+  secret-key: xxxxxxxx
+  base-url: https://gin.vue.admin
+  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+timer:
+  start: true
+  spec: '@daily'
+  detail:
+  - tableName: sys_operation_records
+    compareField: created_at
+    interval: 2160h
+  - tableName: jwt_blacklists
+    compareField: created_at
+    interval: 168h
+  - tableName: aaa
+    compareField: created_at
+    interval: 1m
+zap:
+  level: info
+  format: console
+  prefix: '[nms/server]'
+  director: log
+  showLine: false
+  encode-level: LowercaseColorLevelEncoder
+  stacktrace-key: stacktrace
+  log-in-console: true
