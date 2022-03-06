@@ -40,7 +40,7 @@ export default {
         n++
       }
       while (Math.round(v) > s && n < unit.length)
-      return Math.round(v) + unit[n]
+      return Math.round(v * 100) / 100 + unit[n]
     }
 
     return {

@@ -242,7 +242,7 @@ export default {
 .dashbord-line-box {
   .dashbord-line {
     background-color: #fff;
-    height: 500px;
+    height: 360px;
     width: 100%;
   }
   .dashbord-line-title {

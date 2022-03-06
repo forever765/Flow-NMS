@@ -2,6 +2,7 @@
   <div>
     <el-row :gutter="10">
       <el-col :span="12">
+        <div class="grid-content bg-purple">&nbsp;&nbsp;&nbsp;Source TopN</div>
         <el-table
           ref="table"
           v-loading="dataSource.loading"
@@ -91,6 +92,7 @@
         </el-table>
       </el-col>
       <el-col :span="12">
+        <div class="grid-content bg-purple">&nbsp;&nbsp;&nbsp;Destination TopN</div>
         <el-table
           ref="table"
           v-loading="dataSource.loading"
@@ -224,5 +226,16 @@ export default {
 <style lang="scss" scoped>
 .btn div{
   margin-left: 5px;
+}
+.bg-purple {
+  background: #00afff;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+  color:white;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
 }
 </style>
