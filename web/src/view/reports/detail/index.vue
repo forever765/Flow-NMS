@@ -53,11 +53,6 @@ export default {
             name: '类型',
             width: 230,
             key: 'class'
-          },
-          {
-            name: 'XXX',
-            width: 230,
-            key: 'shareId'
           }
         ]
       },

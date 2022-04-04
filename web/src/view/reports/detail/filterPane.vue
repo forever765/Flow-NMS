@@ -239,7 +239,6 @@ export default {
       this.$emit('filterMsg', data)
     },
     handleReset() {
-      this.listQuery['dynamicId'] = ''
       this.listQuery['class'] = ''
       this.listQuery['ipAddr'] = ''
       this.dateRange = ['', '']

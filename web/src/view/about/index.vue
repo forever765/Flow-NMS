@@ -13,7 +13,7 @@
                   <img
                     class="org-img dom-center"
                     src="@/assets/logo.png"
-                    alt="gin-vue-admin"
+                    alt="Flow-NMS"
                   >
                 </a>
               </el-col>
