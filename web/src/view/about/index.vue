@@ -4,11 +4,12 @@
       <el-col :span="12">
         <el-card>
           <template #header>
-            <el-divider>gin-vue-admin</el-divider>
+            <el-divider><b>关于Flow-NMS</b></el-divider>
           </template>
           <div>
             <el-row>
-              <el-col :span="8" :offset="8">
+              <b>本项目基于开源后台管理框架 Gin-Vue-Admin二次开发而成，衷心感谢 flipped-aurora团队的付出！</b>
+              <el-col :span="24" :offset="0">
                 <a href="https://github.com/flipped-aurora/gin-vue-admin">
                   <img
                     class="org-img dom-center"
@@ -51,18 +52,12 @@
         </el-card>
         <el-card style="margin-top: 20px">
           <template #header>
-            <div>flipped-aurora团队</div>
+            <div><b>帮助</b></div>
           </template>
           <div>
             <el-row>
-              <el-col :span="8" :offset="8">
-                <a href="https://github.com/flipped-aurora">
-                  <img
-                    class="org-img dom-center"
-                    src="@/assets/flipped-aurora.png"
-                    alt="flipped-aurora"
-                  >
-                </a>
+              <el-col :span="12" :offset="8">
+                如有任何问题，欢迎联系运维组同事！
               </el-col>
             </el-row>
             <el-row style="margin-left: 40px" :gutter="20">
@@ -79,14 +74,14 @@
       <el-col :span="12">
         <el-card>
           <template #header>
-            <div>提交记录</div>
+            <div><b>项目Git提交记录</b></div>
           </template>
           <div>
             <el-timeline>
               <el-timeline-item
                 v-for="(item,index) in dataTimeline"
                 :key="index"
-                timestamp="2018/4/12"
+                :timestamp="item.from"
                 placement="top"
               >
                 <el-card>
