@@ -7,7 +7,7 @@ aliyun-oss:
   base-path: ""
 autocode:
   transfer-restart: true
-  root: D:\Script\Flow-NMS
+  root: D:\Script\毕业设计相关\Flow-NMS
   server: /server
   server-api: /api/v1/autocode
   server-initialize: /initialize
@@ -57,6 +57,9 @@ jwt:
   expires-time: 604800
   buffer-time: 86400
   issuer: ""
+kafka_and_zk:
+  kafka_addr: nms01.home.com,nms02.home.com,nms03.home.com
+  zk_addr: nms01.home.com,nms02.home.com,nms03.home.com
 local:
   path: uploads/file
 mysql:

@@ -69,3 +69,17 @@ export const getChSinkerNaliInfo = () => {
     donNotShowLoading: true
   })
 }
+
+// @Tags system
+// @Summary 获取Kafka和Zk运行状态
+// @Security ApiKeyAuth
+// @Produce  application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
+// @Router /system/getKafkaAndZkInfo [post]
+export const getKafkaAndZkInfo = () => {
+  return service({
+    url: '/system/getKafkaAndZkInfo',
+    method: 'post',
+    donNotShowLoading: true
+  })
+}

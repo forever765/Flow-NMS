@@ -20,15 +20,15 @@
                 </li>
                 <el-tooltip class="item" effect="light" content="北京反转极光科技有限公司-技术部-前端事业群" placement="top">
                   <li>
-                    <i class="el-icon-data-analysis" />北京反转极光科技有限公司-技术部-前端事业群
+                    <i class="el-icon-data-analysis" />广州畅想未来有限公司-平台部-运维组
                   </li>
                 </el-tooltip>
                 <li>
-                  <i class="el-icon-video-camera-solid" />中国·北京市·朝阳区
+                  <i class="el-icon-video-camera-solid" />中国·广州市·天河区
                 </li>
                 <el-tooltip class="item" effect="light" content="GoLang/JavaScript/Vue/Gorm" placement="top">
                   <li>
-                    <i class="el-icon-medal-1" />GoLang/JavaScript/Vue/Gorm
+                    <i class="el-icon-medal-1" />GoLang/Python/Vue/Gorm
                   </li>
                 </el-tooltip>
 
@@ -45,14 +45,14 @@
                 <li>
                   <p class="title">密保手机</p>
                   <p class="desc">
-                    已绑定手机:1245678910
+                    已绑定手机: 192168123123
                     <a href="javascript:void(0)">立即修改</a>
                   </p>
                 </li>
                 <li>
                   <p class="title">密保邮箱</p>
                   <p class="desc">
-                    已绑定邮箱：gin-vue-admin@google.com.cn
+                    已绑定邮箱：flow-nms@nms.com
                     <a href="javascript:void(0)">立即修改</a>
                   </p>
                 </li>

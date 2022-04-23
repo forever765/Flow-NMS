@@ -7,8 +7,13 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/status"
+	"github.com/tidwall/gjson"
 	"go.uber.org/zap"
+	"io/ioutil"
+	"net/http"
 	"strconv"
+	"strings"
+	"time"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -85,4 +90,63 @@ func (systemConfigService *SystemConfigService) GetChSinkerNaliInfo() string {
 	chSinkerNaliCfg := global.GVA_CONFIG.Clickhouse_SinkerNali
 	MetricLink := fmt.Sprintf("%v:%v/metrics", chSinkerNaliCfg.Addr, strconv.Itoa(chSinkerNaliCfg.Port))
 	return status.RunProm2Json(MetricLink)
+}
+
+
+//@author: [forever765](https://github.com/forever765)
+//@function: GetChSinkerNaliInfo
+//@description: 获取ClickhouseSinkerNali信息
+//@return: server *utils.Server, err error
+
+func (systemConfigService *SystemConfigService) GetKafkaAndZkInfo() map[string]map[string]string {
+	kafkaAndZkCfg := global.GVA_CONFIG.KafkaAndZk
+	kafkaNodeList := strings.Split(kafkaAndZkCfg.KafkaAddr, ",")
+	zkNodeList := strings.Split(kafkaAndZkCfg.ZkAddr, ",")
+	result := make(map[string]map[string]string)
+	kafkaResult := make(map[string]string)
+	zkResult := make(map[string]string)
+	for _, knode := range kafkaNodeList {
+		kafkaClusterSync := getRequest(fmt.Sprintf("http://%v:8000/", knode), "kafka")
+		if kafkaClusterSync == "ok" {
+			kafkaResult[knode] = fmt.Sprintf("%v", kafkaClusterSync)
+		} else {
+			kafkaResult[knode] = fmt.Sprintf("%v", kafkaClusterSync)
+		}
+	}
+	result["kafka"] = kafkaResult
+	for _, zknode := range zkNodeList {
+		zkResp := getRequest("http://"+zknode +":12181", "zk")
+		if zkResp == "ok" {
+			zkResult[zknode] = fmt.Sprintf("%v", zkResp)
+		} else {
+			zkResult[zknode] = fmt.Sprintf("%v", zkResp)
+		}
+	}
+	result["zookeeper"] = zkResult
+	return result
+}
+
+func getRequest(url string, svc_type string) string{
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Get(url)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	result, _ := ioutil.ReadAll(resp.Body)
+	var value string
+	if svc_type == "kafka" {
+		if gjson.GetBytes(result, "status").String() == "sync"{
+			value = "success"
+		} else {
+			value = "error"
+		}
+	} else {
+		if gjson.GetBytes(result, "healthy").String() == "true" {
+			value = "success"
+		} else {
+			value = "error"
+		}
+	}
+	return value
 }
