@@ -1,17 +1,17 @@
 
 <template>
-  <div>
-    <el-upload
-      :action="`${path}/fileUploadAndDownload/upload`"
-      :headers="{ 'x-token': token }"
-      :show-file-list="false"
-      :on-success="handleImageSuccess"
-      :before-upload="beforeImageUpload"
-      :multiple="false"
-    >
-      <el-button size="mini" type="primary">压缩上传</el-button>
-    </el-upload>
-  </div>
+<!--  <div>-->
+<!--    <el-upload-->
+<!--      :action="`${path}/fileUploadAndDownload/upload`"-->
+<!--      :headers="{ 'x-token': token }"-->
+<!--      :show-file-list="false"-->
+<!--      :on-success="handleImageSuccess"-->
+<!--      :before-upload="beforeImageUpload"-->
+<!--      :multiple="false"-->
+<!--    >-->
+<!--      <el-button size="mini" type="primary">压缩上传</el-button>-->
+<!--    </el-upload>-->
+<!--  </div>-->
 </template>
 
 <script>

@@ -11,7 +11,7 @@
           :show-file-list="false"
           class="upload-btn"
         >
-          <el-button size="mini" type="primary">普通上传</el-button>
+          <el-button size="mini" type="primary">上传</el-button>
         </el-upload>
         <upload-image
           v-model="imageUrl"
@@ -72,7 +72,7 @@ import { mapGetters } from 'vuex'
 import infoList from '@/mixins/infoList'
 import { getFileList, deleteFile } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
-import CustomPic from '@/components/customPic'
+import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 export default {
   name: 'Upload',

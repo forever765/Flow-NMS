@@ -62,7 +62,7 @@ local:
 mysql:
   path: 192.168.123.213:3306
   config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: gva
+  db-name: nms_web
   username: gva
   password: 6BuDxFC6LYo2VHpDegpd6btbDjzgxpZu
   max-idle-conns: 0
