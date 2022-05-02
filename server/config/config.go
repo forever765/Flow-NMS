@@ -16,6 +16,8 @@ type Server struct {
 	Clickhouse Clickhouse `mapstructure:"clickhouse" json:"clickhouse" yaml:"clickhouse"`
 	// Clickhouse_Sinker
 	Clickhouse_SinkerNali ClickhouseSinkerNali `mapstructure:"clickhouse_sinker_nali" json:"clickhouse_sinker_nali" yaml:"clickhouse_sinker_nali"`
+	// Kafka & Zk
+	KafkaAndZk Kafka `mapstructure:"kafka_and_zk" json:"kafka_and_zk" yaml:"kafka_and_zk"`
 	// DownloadPath
 	DownloadPath DownloadPath `mapstructure:"download_path" json:"download_path" yaml:"download_path"`
 	// oss

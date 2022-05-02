@@ -18,6 +18,7 @@ func (s *SysRouter) InitSystemRouter(Router *gin.RouterGroup) {
 		sysRouter.POST("getServerInfo", systemApi.GetServerInfo)         // 获取服务器信息
 		sysRouter.POST("getClickhouseInfo", systemApi.GetClickhouseInfo) // 获取Clickhouse信息
 		sysRouter.POST("getChSinkerNaliInfo", systemApi.GetChSinkerNaliInfo)     // 获取Clickhouse_SinkerNali信息
+		sysRouter.POST("getKafkaAndZkInfo", systemApi.GetKafkaAndZkInfo)     // 获取 Kafka&Zk信息
 		sysRouter.POST("reloadSystem", systemApi.ReloadSystem)           // 重启服务
 	}
 }

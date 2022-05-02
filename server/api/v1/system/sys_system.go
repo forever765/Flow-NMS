@@ -107,3 +107,18 @@ func (s *SystemApi) GetChSinkerNaliInfo(c *gin.Context) {
 		response.OkWithDetailed(ChSinkerNaliInfo, "获取成功", c)
 	}
 }
+
+// @Tags System
+// @Summary 获取Kafka和Zk状态
+// @Security ApiKeyAuth
+// @Produce  application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /system/getKafkaAndZkInfo [post]
+func (s *SystemApi) GetKafkaAndZkInfo(c *gin.Context) {
+	if KafkaAndZkInfo := systemConfigService.GetKafkaAndZkInfo(); KafkaAndZkInfo == nil {
+		global.GVA_LOG.Error("获取失败!")
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(KafkaAndZkInfo, "获取成功", c)
+	}
+}

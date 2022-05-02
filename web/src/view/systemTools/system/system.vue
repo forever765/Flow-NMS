@@ -345,7 +345,15 @@
             <el-input v-model="config.clickhouse_sinker_nali.port" />
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item title="文件保存目录" name="16">
+        <el-collapse-item title="Kafka&Zookeeper 状态数据源配置" name="16">
+          <el-form-item label="Kafka 地址和端口（逗号分隔）">
+            <el-input v-model="config.kafka_and_zk.kafka_addr" />
+          </el-form-item>
+          <el-form-item label="Zookeeper 地址和端口（逗号分隔）">
+            <el-input v-model="config.kafka_and_zk.zk_addr" />
+          </el-form-item>
+        </el-collapse-item>
+        <el-collapse-item title="文件保存目录" name="17">
           <el-form-item label="Prom2Json文件保存目录">
             <el-input v-model="config.download_path.prom2json" />
           </el-form-item>
@@ -378,6 +386,7 @@ export default {
         redis: {},
         clickhouse: {},
         clickhouse_sinker_nali: {},
+        kafka_and_zk: {},
         download_path: {},
         qiniu: {},
         tencentCOS: {},
