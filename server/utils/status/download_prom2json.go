@@ -72,7 +72,7 @@ func DownloadProm2json() bool{
 		return false
 	} else {
 		global.GVA_LOG.Info(fmt.Sprintf("文件解压完成，路径：%v", ExePath))
-		os.Chmod("prom2json", 755)
+		os.Chmod(ExePath, 755)
 		return true
 	}
 }
