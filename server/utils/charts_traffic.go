@@ -60,8 +60,8 @@ func QueryDB(ParamsMap map[string]gjson.Result) (string) {
 			endTime = endTime + " AND etype = '86dd'"
 		}
 	}
-	subQuery1 := Db.Raw(fmt.Sprintf("SELECT toStartOfInterval(timestamp_max, INTERVAL 10 second) Time, sum(bytes)/1048576 InMBytes, sum(packets) InPackets, InMBytes*0.8 InTrafficMbps FROM (SELECT * FROM nms_data.gateway_pmacctd PREWHERE timestamp_min >= %v AND timestamp_max <= %v) WHERE loc_dst = '局域网' GROUP BY Time", startTime, endTime))
-	subQuery2 := Db.Raw(fmt.Sprintf("SELECT toStartOfInterval(timestamp_max, INTERVAL 10 second) Time, sum(bytes)/1048576 OutMBytes, sum(packets) OutPackets, OutMBytes*0.8 OutTrafficMbps FROM (SELECT * FROM nms_data.gateway_pmacctd PREWHERE timestamp_min >= %v AND timestamp_max <= %v) WHERE loc_src = '局域网' GROUP BY Time", startTime, endTime))
+	subQuery1 := Db.Raw(fmt.Sprintf("SELECT toStartOfInterval(timestamp_max, INTERVAL 10 second) Time, sum(bytes)/1048576 InMBytes, sum(packets) InPackets, InMBytes*0.8 InTrafficMbps FROM (SELECT * FROM nms_data.gateway_pmacctd PREWHERE timestamp_min >= '%v' AND timestamp_max <= '%v') WHERE loc_dst = '局域网' GROUP BY Time", startTime, endTime))
+	subQuery2 := Db.Raw(fmt.Sprintf("SELECT toStartOfInterval(timestamp_max, INTERVAL 10 second) Time, sum(bytes)/1048576 OutMBytes, sum(packets) OutPackets, OutMBytes*0.8 OutTrafficMbps FROM (SELECT * FROM nms_data.gateway_pmacctd PREWHERE timestamp_min >= '%v' AND timestamp_max <= '%v') WHERE loc_src = '局域网' GROUP BY Time", startTime, endTime))
 	global.GORM_CH.
 		Table("(?) as In, (?) as Out", subQuery1, subQuery2).
 		Select("In.Time,FLOOR(In.InTrafficMbps,2) in_traffic_mbps,FLOOR(Out.OutTrafficMbps,2) out_traffic_mbps").

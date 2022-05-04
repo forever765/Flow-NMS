@@ -5,7 +5,7 @@ type Register struct {
 	Username     string   `json:"userName"`
 	Password     string   `json:"passWord"`
 	NickName     string   `json:"nickName" gorm:"default:'QMPlusUser'"`
-	HeaderImg    string   `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
+	HeaderImg    string   `json:"headerImg" gorm:"default:'https://suifengdang.club/dl/xiao.jpeg'"`
 	AuthorityId  string   `json:"authorityId" gorm:"default:888"`
 	AuthorityIds []string `json:"authorityIds"`
 }

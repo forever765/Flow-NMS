@@ -1,6 +1,6 @@
 <template>
   <div class="dashbord-line-box">
-    <div class="dashbord-line-title">公网出口流量图</div>
+    <div class="dashbord-line-title">流量图</div>
     <div ref="echart" class="dashbord-line" />
   </div>
 </template>
